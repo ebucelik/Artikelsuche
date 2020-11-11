@@ -218,6 +218,10 @@ try{
         $queryParams .=" AND T11.MARItemType = 12";
     }
 
+    //Deactivated articles. 0 stands for No regarding NoYes Enum.
+    $queryParams .= " AND T14.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '%##%'";
+
+
     if($allVersions == 'on'){ //ALL VERSIONS PART
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                     T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
@@ -227,6 +231,9 @@ try{
                                     LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
                                     LEFT JOIN MARDesignIDRelationTable T10 ON T10.ItemId = T1.ItemId
                                     LEFT JOIN InventTable T11 ON T11.ItemId = T1.ItemId
+                                    LEFT JOIN InventDim T12 ON T12.inventBatchId = '' AND T12.InventLocationId = '' AND T12.inventSerialId = '' AND T12.InventSiteId = '' AND T12.InventSizeId = '' AND T12.wMSLocationId = ''
+                                    LEFT JOIN InventDim T13 ON T13.inventBatchId = '' AND T13.InventLocationId = '' AND T13.inventSerialId = '' AND T13.InventSiteId LIKE '%MAR%' AND T13.InventSizeId = '' AND T13.wMSLocationId = ''
+                                    LEFT JOIN InventItemSalesSetup T14 ON T14.ItemId = T1.ItemId AND T14.InventDimId = T12.inventDimId AND T14.InventDimIdDefault = T13.inventDimId
                                     WHERE $queryParams ORDER BY T1.InventStyleId");
 
         $stmt->execute();
@@ -244,6 +251,9 @@ try{
                                     LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
                                     LEFT JOIN MARDesignIDRelationTable T10 ON T10.ItemId = T1.ItemId
                                     LEFT JOIN InventTable T11 ON T11.ItemId = T1.ItemId
+                                    LEFT JOIN InventDim T12 ON T12.inventBatchId = '' AND T12.InventLocationId = '' AND T12.inventSerialId = '' AND T12.InventSiteId = '' AND T12.InventSizeId = '' AND T12.wMSLocationId = ''
+                                    LEFT JOIN InventDim T13 ON T13.inventBatchId = '' AND T13.InventLocationId = '' AND T13.inventSerialId = '' AND T13.InventSiteId LIKE '%MAR%' AND T13.InventSizeId = '' AND T13.wMSLocationId = ''
+                                    LEFT JOIN InventItemSalesSetup T14 ON T14.ItemId = T1.ItemId AND T14.InventDimId = T12.inventDimId AND T14.InventDimIdDefault = T13.inventDimId
                                     WHERE $queryParams ORDER BY T1.InventStyleId");
 
         $stmt->execute();
