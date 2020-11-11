@@ -1,0 +1,50 @@
+header {
+  text-align: center;
+  padding-top: 2.5%;
+  padding-bottom: 2.5%;
+  background-color: white;
+}
+
+nav {
+  color: white;
+  padding: 3%;
+  background-image: linear-gradient(to bottom right, #d6d6d6 0%, #fff 100%);
+  border-radius: 50px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.container {
+  width: 25% !important;
+  color: black;
+}
+
+.form-control {
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#articlesearch {
+  margin-top: 5%;
+  margin-bottom: 10%;
+  color: white;
+  padding: 5px;
+  width: 100%;
+  background-color: #d80030;
+  border: 0;
+  font-weight: bold;
+}
+
+#articlesearch:hover {
+  background-color: white;
+  color: #d80030;
+}
+
+#sendMessage {
+  border-radius: 50px;
+  text-align: center;
+  padding: 1%;
+  right: 15px;
+  top: 10%;
+  visibility: hidden;
+  color: black;
+  position: absolute;
+}

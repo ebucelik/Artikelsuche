@@ -1,0 +1,6 @@
+[21-Oct-2020 10:53:21 Europe/Berlin] mail() on [C:\xampp\htdocs\Artikelsuche\sendMailToCustomer.php:32]: To: ebucelik1@hotmail.com -- Headers:  -- Subject: Test Mail
+[21-Oct-2020 10:53:59 Europe/Berlin] mail() on [C:\xampp\htdocs\Artikelsuche\sendMailToCustomer.php:32]: To: ebucelik1@hotmail.com -- Headers:  -- Subject: Test Mail
+[21-Oct-2020 10:55:36 Europe/Berlin] mail() on [C:\xampp\htdocs\Artikelsuche\sendMailToCustomer.php:32]: To: ebucelik1@hotmail.com -- Headers:  -- Subject: Test Mail
+[21-Oct-2020 10:55:36 Europe/Berlin] mail() on [C:\xampp\htdocs\Artikelsuche\sendMailToCustomer.php:32]: To: ebucelik1@hotmail.com -- Headers:  -- Subject: Test Mail
+[21-Oct-2020 10:55:37 Europe/Berlin] mail() on [C:\xampp\htdocs\Artikelsuche\sendMailToCustomer.php:32]: To: ebucelik1@hotmail.com -- Headers:  -- Subject: Test Mail
+[21-Oct-2020 10:55:37 Europe/Berlin] mail() on [C:\xampp\htdocs\Artikelsuche\sendMailToCustomer.php:32]: To: ebucelik1@hotmail.com -- Headers:  -- Subject: Test Mail

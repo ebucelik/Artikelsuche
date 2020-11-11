@@ -1,0 +1,52 @@
+body {
+  background-color: #d6d6d6 !important;
+}
+
+header {
+  text-align: center;
+  padding-top: 2.5%;
+  padding-bottom: 2.5%;
+  background-color: white;
+}
+
+#title {
+  letter-spacing: 5px;
+}
+
+nav {
+  text-align: center;
+  color: black;
+  padding: 3%;
+}
+
+.fading {
+  display: none;
+}
+
+.link {
+  color: black;
+  text-decoration: underline;
+}
+
+#toItemSearch {
+  margin-top: 5%;
+  color: black;
+  display: none;
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px solid black;
+  padding: 0.5% 1% 0.5% 1%;
+}
+
+#toItemSearch:hover {
+  background-color: white;
+}
+
+h4 {
+  letter-spacing: 2px;
+}
+
+.container {
+  width: 50% !important;
+  padding: 5%;
+}

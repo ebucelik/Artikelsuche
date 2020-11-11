@@ -1,0 +1,91 @@
+<?php 
+require_once('submit.php');
+
+$email = "";
+$data = array();
+$imageArray = array();
+
+if(isset($_GET["email"])){
+    $email = $_GET["email"];
+}
+
+if(isset($_GET["data"])){
+    $data = json_decode($_GET["data"]);
+}
+?>
+
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mail senden</title>
+    <link href="mailForm.css" rel="stylesheet" type="text/css"/>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
+</head>
+<body>
+    <header>
+        <a href="searching.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <!-- Display contact form -->
+            <form method="post" action="" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="senderEmail">Sender:</label>
+                    <input type="email" name="senderEmail" id="senderEmail" class="form-control" value="" placeholder="Sender E-Mail Adresse" required="">
+                </div>
+                <div class="form-group">
+                    <label for="receiverEmail">Empfänger:</label>
+                    <input type="email" name="receiverEmail" id="receiverEmail" class="form-control" value="<?php echo !empty($email)?$email:''; ?>" placeholder="Empfänger E-Mail Adresse" required="">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Betreff:</label>
+                    <input type="text" name="subject" id="subject" class="form-control" value="<?php echo !empty($postData['subject'])?$postData['subject']:''; ?>" placeholder="Betreff" required="">
+                </div>
+                <div class="form-group">
+                    <label for="message">Nachricht:</label>
+                    <textarea name="message" id="message" class="form-control" placeholder="Ihre Nachricht." rows="15" required=""><?php for($i = 0; $i < count($data); $i++){
+                        for($j = 0; $j < count($data[$i]) - 1; $j++){
+                            if($data[$i][$j] && $j < count($data[$i]) - 2){
+                                echo $data[$i][$j] . " <br>\n";
+                            }else{
+                                echo $data[$i][$j] . " <br><br>\n";
+                            }
+                        }
+                        echo "\n";
+
+                        $url = $data[$i][13];
+                        $itemid = str_replace('R-Nummer: ', '', $data[$i][0]);
+                        $itemid = str_replace('/', '-', $itemid);
+                        $img = 'Uploads/' . $itemid . '.jpg';
+                        file_put_contents($img, file_get_contents($url));
+                        array_push($imageArray, $img);
+                    } ?></textarea>
+                </div>
+                <?php 
+                foreach($imageArray as $urls)
+                {
+                    echo '<input type="hidden" name="attachment[]" value="'. $urls. '">';
+                }
+                ?>
+                <div class="submit">
+                    <input type="submit" name="submit" class="btn btn-outline-light fading" id="articlesearch" value="SENDEN">
+                </div>
+            </form>
+            
+        </div>
+    </nav>
+</body>
+</html>
