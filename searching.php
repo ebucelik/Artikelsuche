@@ -2,7 +2,7 @@
 require_once('db.php');
 
 $unEqualString = "";
-$type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
+$type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
 $checkSort = false;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -43,6 +43,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(isset($_POST['withImage'])){
         $withImage = $_POST['withImage'];
+    }
+
+    if(isset($_POST['Format']) && $_POST['Format'] != ''){
+        $format = $_POST['Format'];
+    }
+
+    if(isset($_POST['Material']) && $_POST['Material'] != ''){
+        $material = $_POST['Material'];
     }
 } 
 ?>
@@ -111,6 +119,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <div class="form-group fading searchForm">
                     <label for="keyWord" class="align-self-center labelTxt">Stichwort:</label>
                     <input type="text" class="form-control searchInput" id="keyWord" placeholder="Stichwort eingeben" name="keyWord" value="<?php if($keyword != $unEqualString){echo $keyword;} ?>">
+                </div>
+                <div class="form-group fading searchForm" id="parameterContainer">
+                    <label for="selectParameter" class="align-self-center labelTxt">Weitere Parameter:</label>
+                    <select class="form-control searchInput" id="selectParameter" name="selectParameter" onchange="addInputfield()">
+                        <option></option>
+                        <option>Format</option>
+                        <option>Material</option>
+                    </select>
                 </div>
                 <div class="form-group fading">
                     <label for="allVersions">Alle Versionen:</label>

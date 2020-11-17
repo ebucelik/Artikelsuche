@@ -150,6 +150,7 @@ nav {
   height: 150px;
 }
 
+/*Start: Label next to Inputfield style*/
 .searchForm {
   display: flex;
 }
@@ -161,6 +162,15 @@ nav {
 
 .searchInput {
   width: 75% !important;
+}
+/*End: Label next to Inputfield style*/
+
+.deleteBtn {
+  border-radius: 15px;
+  border: 0;
+  background-color: transparent;
+  color: #d80030;
+  font-weight: bold;
 }
 
 /* Add Animation - Zoom in the Modal */
@@ -252,5 +262,20 @@ nav {
 
   .printImg {
     margin-top: 2%;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  /*Label above Inputfield style*/
+  .searchForm {
+    display: block;
+  }
+
+  .labelTxt {
+    width: auto;
+  }
+
+  .searchInput {
+    width: 100% !important;
   }
 }

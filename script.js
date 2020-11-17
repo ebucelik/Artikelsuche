@@ -140,3 +140,27 @@ function openImage(url, rnumber) {
   } 
 }
 
+function addInputfield() {
+  let val = document.getElementById("selectParameter").value;
+  if (val != "") {
+    let index = document.getElementById("selectParameter");
+  
+    let elem = '<div class="form-group fading searchForm" id="'+ val +'Div"><label for="' + val + '" class="align-self-center labelTxt">' + val + ':</label><input type="text" class="form-control searchInput" id="'+ val +'" placeholder="'+ val +' eingeben" name="'+ val +'" value=""><button class="deleteBtn align-self-center" onclick="deleteInputfield(this)" name="'+ val +'Div">X</button></div>';
+  
+    $('#parameterContainer').before(elem);
+  
+    index.remove(index.selectedIndex);
+  }
+}
+
+function deleteInputfield(divId) {
+  $('#' + divId.name).remove();
+  
+  let index = document.getElementById("selectParameter");
+  let option = document.createElement("option");
+  let txt = divId.name;
+  txt = txt.replace("Div", "");
+
+  option.text = txt;
+  index.add(option);
+}
