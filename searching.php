@@ -285,8 +285,8 @@ if($itemIdArray){
                 <div class="col">Kunde</div>
                 <?php if($checkSort){?><div class="col">Sorte</div><?php }?>
                 <div class="col">Stichwort</div>
-                <div class="col">FormatQuer</div>
-                <div class="col">FormatLauf</div>
+                <div class="col">Format Quer</div>
+                <div class="col">Format Lauf</div>
                 <div class="col">Stellung</div>
                 <div class="col">Auftragsnr.</div>
                 <div class="col">Maschine</div>
