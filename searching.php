@@ -77,40 +77,40 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <nav>
         <div class="container" id="inputFields">
             <form action="" method="POST">
-                <div class="form-group fading">
-                    <label for="selectType">Rolle/Bogen:</label>
-                    <select class="form-control" id="selectType" name="selectType" onchange="changeTitle()">
+                <div class="form-group fading searchForm">
+                    <label for="selectType" class="align-self-center labelTxt">Rolle/Bogen:</label>
+                    <select class="form-control searchInput" id="selectType" name="selectType" onchange="changeTitle()">
                         <option>Rollenetiketten</option>
                         <option>Bogenetiketten</option>
                     </select>
                 </div>
-                <div class="form-group fading">
-                    <label for="rNumber" id="Rnumber">R-Nummer:</label>
-                    <input type="text" class="form-control" id="rNumber" placeholder="R-Nummer eingeben" name="rNumber" value="<?php if($rNumber != $unEqualString){echo $rNumber;} ?>">
+                <div class="form-group fading searchForm">
+                    <label for="rNumber" class="align-self-center labelTxt">R-Nummer:</label>
+                    <input type="text" class="form-control searchInput" id="rNumber" placeholder="R-Nummer eingeben" name="rNumber" value="<?php if($rNumber != $unEqualString){echo $rNumber;} ?>">
                 </div>
-                <div class="form-group fading">
-                    <label for="kNumber">Kundennummer:</label>
-                    <input type="number" class="form-control" id="kNumber" placeholder="Kundennummer eingeben" name="kNumber" value="<?php if($custnumber != $unEqualString){echo $custnumber;} ?>">
+                <div class="form-group fading searchForm">
+                    <label for="kNumber" class="align-self-center labelTxt">Kundennummer:</label>
+                    <input type="number" class="form-control searchInput" id="kNumber" placeholder="Kundennummer eingeben" name="kNumber" value="<?php if($custnumber != $unEqualString){echo $custnumber;} ?>">
                 </div>
-                <div class="form-group fading">
-                    <label for="kName">Kundenname:</label>
-                    <input type="text" class="form-control" id="kName" placeholder="Kundenname eingeben" name="kName" value="<?php if($custName != $unEqualString){echo $custName;} ?>">
+                <div class="form-group fading searchForm">
+                    <label for="kName" class="align-self-center labelTxt">Kundenname:</label>
+                    <input type="text" class="form-control searchInput" id="kName" placeholder="Kundenname eingeben" name="kName" value="<?php if($custName != $unEqualString){echo $custName;} ?>">
                 </div>
-                <div class="form-group fading">
-                    <label for="kPLZ">PLZ:</label>
-                    <input type="number" class="form-control" id="kPLZ" placeholder="PLZ eingeben" name="kPLZ" value="<?php if($plz != $unEqualString){echo $plz;} ?>">
+                <div class="form-group fading searchForm">
+                    <label for="kPLZ" class="align-self-center labelTxt">PLZ:</label>
+                    <input type="number" class="form-control searchInput" id="kPLZ" placeholder="PLZ eingeben" name="kPLZ" value="<?php if($plz != $unEqualString){echo $plz;} ?>">
                 </div>
-                <div class="form-group fading">
-                    <label for="place">Ort:</label>
-                    <input type="text" class="form-control" id="place" placeholder="Ort eingeben" name="place" value="<?php if($city != $unEqualString){echo $city;} ?>">
+                <div class="form-group fading searchForm">
+                    <label for="place" class="align-self-center labelTxt">Ort:</label>
+                    <input type="text" class="form-control searchInput" id="place" placeholder="Ort eingeben" name="place" value="<?php if($city != $unEqualString){echo $city;} ?>">
                 </div>
-                <div class="form-group fading">
-                    <label for="sortNum">Sorte:</label>
-                    <input type="text" class="form-control" id="sortNum" placeholder="Sorte eingeben" name="sortNum" value="<?php if($sort != $unEqualString){echo $sort;} ?>">
+                <div class="form-group fading searchForm">
+                    <label for="sortNum" class="align-self-center labelTxt">Sorten Eindruck:</label>
+                    <input type="text" class="form-control searchInput" id="sortNum" placeholder="Sorten Eindruck eingeben" name="sortNum" value="<?php if($sort != $unEqualString){echo $sort;} ?>">
                 </div>
-                <div class="form-group fading">
-                    <label for="keyWord">Stichwort:</label>
-                    <input type="text" class="form-control" id="keyWord" placeholder="Stichwort eingeben" name="keyWord" value="<?php if($keyword != $unEqualString){echo $keyword;} ?>">
+                <div class="form-group fading searchForm">
+                    <label for="keyWord" class="align-self-center labelTxt">Stichwort:</label>
+                    <input type="text" class="form-control searchInput" id="keyWord" placeholder="Stichwort eingeben" name="keyWord" value="<?php if($keyword != $unEqualString){echo $keyword;} ?>">
                 </div>
                 <div class="form-group fading">
                     <label for="allVersions">Alle Versionen:</label>
@@ -218,9 +218,8 @@ try{
         $queryParams .=" AND T11.MARItemType = 12";
     }
 
-    //Deactivated articles. 0 stands for No regarding NoYes Enum.
-    $queryParams .= " AND T14.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '%##%'";
-
+    //Deactivated articles. 0 stands for No regarding NoYes Enum. % at the end, selects all strings that have ## at the start of the string.
+    $queryParams .= " AND T14.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
 
     if($allVersions == 'on'){ //ALL VERSIONS PART
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
@@ -283,8 +282,8 @@ if($itemIdArray){
                 <?php if($allVersions == 'on'){?><div class="col">Produktvariante</div><?php } ?>
                 <div class="col">Kundennr.</div>
                 <div class="col">Kunde</div>
-                <?php if($checkSort){?><div class="col">Sorte</div><?php }?>
-                <div class="col">Stichwort</div>
+                <?php if($checkSort){?><div class="col">Sorten Eindruck</div><?php }?>
+                <div class="col" style="flex-grow:2;">Stichwort</div>
                 <div class="col">Format Quer</div>
                 <div class="col">Format Lauf</div>
                 <div class="col">Stellung</div>
@@ -305,7 +304,7 @@ if($itemIdArray){
                 <div class="col align-self-center custvendrelation"><?php echo $v1['CustVendRelation']; ?></div>
                 <div class="col align-self-center name"><?php echo $v1['Name']; ?></div>
                 <?php if($v1['Sort']){?><div class="col align-self-center sort"><?php echo $v1['Sort']; ?></div><?php }?>
-                <div class="col align-self-center externalitemtxt"><?php echo $v1['ExternalItemTxt']; ?></div>
+                <div class="col align-self-center externalitemtxt" style="flex-grow:2;"><?php echo $v1['ExternalItemTxt']; ?></div>
                 <div class="col align-self-center lepsizew"><?php echo $v1['LEPSizeW']; ?></div>
                 <div class="col align-self-center lepsizel"><?php echo $v1['LEPSizeL']; ?></div>
                 <div class="col align-self-center tradeunitspecid"><?php echo $v1['TradeUnitSpecId']; ?></div>

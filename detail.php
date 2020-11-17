@@ -124,7 +124,7 @@ require("getDataFromDB.php");
                     </div>
                     <hr/>
                     <div class="row">
-                        <div class="col titlerow">Sorte</div>
+                        <div class="col titlerow">Sorten Eindruck</div>
                         <div class="col"><?php echo $v1['Sort'];?></div>
                     </div>
                     <hr/>

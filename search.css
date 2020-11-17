@@ -33,7 +33,7 @@ nav {
 }
 
 .container {
-  width: 25% !important;
+  width: 35% !important;
   color: black;
 }
 
@@ -148,6 +148,19 @@ nav {
   color: white;
   padding: 10px 0;
   height: 150px;
+}
+
+.searchForm {
+  display: flex;
+}
+
+.labelTxt {
+  margin: 0;
+  width: 25%;
+}
+
+.searchInput {
+  width: 75% !important;
 }
 
 /* Add Animation - Zoom in the Modal */

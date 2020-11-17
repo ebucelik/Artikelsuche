@@ -56,7 +56,10 @@ if(isset($_GET["data"])){
                 </div>
                 <div class="form-group">
                     <label for="message">Nachricht:</label>
-                    <textarea name="message" id="message" class="form-control" placeholder="Ihre Nachricht." rows="15" required=""><?php for($i = 0; $i < count($data); $i++){
+                    <textarea name="message" id="message" class="form-control" placeholder="Ihre Nachricht." rows="15" required=""><?php 
+                    echo "Sehr geehrter Kunde, <br><br>\n\nanbei senden wir Ihnen die Informationen zu Ihren Etikett(en) inkl. Bild(er).<br><br>\n\n";
+                    
+                    for($i = 0; $i < count($data); $i++){
                         for($j = 0; $j < count($data[$i]) - 1; $j++){
                             if($data[$i][$j] && $j < count($data[$i]) - 2){
                                 echo $data[$i][$j] . " <br>\n";
@@ -66,13 +69,15 @@ if(isset($_GET["data"])){
                         }
                         echo "\n";
 
-                        $url = $data[$i][13];
+                        $url = $data[$i][12];
                         $itemid = str_replace('R-Nummer: ', '', $data[$i][0]);
                         $itemid = str_replace('/', '-', $itemid);
                         $img = 'Uploads/' . $itemid . '.jpg';
                         file_put_contents($img, file_get_contents($url));
                         array_push($imageArray, $img);
-                    } ?></textarea>
+                    } 
+                    echo "Mit freundlichen Grüßen,<br>\nIhr Marzek Etiketten+Packaging Team";
+                    ?></textarea>
                 </div>
                 <?php 
                 foreach($imageArray as $urls)

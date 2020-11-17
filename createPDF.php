@@ -171,7 +171,7 @@ if($itemIdArray){
             $pdf->ln(7);
 
             $pdf->SetFont('Arial', 'I', 8);
-            $pdf->Cell(25, 10, 'Sorte');
+            $pdf->Cell(25, 10, 'Sorten Eindruck');
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(70, 10, iconv('UTF-8', 'windows-1252', $v1['Sort']));
 

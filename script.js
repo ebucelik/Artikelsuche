@@ -1,5 +1,5 @@
 let displayCheckbox = false;
-let custnum = itemid = version = prodgroupid = name = sort = externalitemtxt = lepsizew = lepsizel = tradeunitspecid = salesid = workcenters = stocklevel = image = msg = "";
+let custnum = itemid = version = prodgroupid = name = sort = externalitemtxt = lepsizew = lepsizel = tradeunitspecid = salesid = stocklevel = image = msg = "";
 
 $(document).ready(function () {
   $(".fading").fadeIn(1500);
@@ -50,9 +50,7 @@ function sendMail() {
     lepsizel = $('.lepsizel').eq(index).text();
     tradeunitspecid = $('.tradeunitspecid').eq(index).text();
     salesid = $('.salesid').eq(index).text();
-    workcenters = $('.workcenters').eq(index).text();
     stocklevel = $('.stocklevel').eq(index).text();
-    //image = $('.designjpgpreviewurl').eq(index)[0].src;
 
     $.ajax({
       type: "get",
@@ -74,10 +72,8 @@ function sendMail() {
     tmp.push("FormatLauf: " + lepsizel);
     tmp.push("Stellung: " + tradeunitspecid);
     tmp.push("Auftragsnummer: " + salesid);
-    tmp.push("Maschine(n): " + workcenters);
     tmp.push("Lagerstand: " + stocklevel);
     test.push(tmp);
-    //msg = "ItemId=" + itemid + "&CustNum=" + custnum + "&Version=" + version + "&Name=" + name + "&SalesId=" + salesid + "&Sort=" + sort + "&ExtItemTxt=" + externalitemtxt + "&LepSizeW=" + lepsizew + "&LepSizeL=" + lepsizel + "&TradeUnitSpecId=" + tradeunitspecid + "&WorkCenters=" + workcenters + "&StockLevel=" + stocklevel + "\n\n"; 
   });
 
   $.ajax({
