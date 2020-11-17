@@ -64,7 +64,7 @@ nav {
 
 #articlesearch {
   margin-top: 5%;
-  margin-bottom: 10%;
+  margin-bottom: 5%;
   color: white;
   display: none;
   padding: 5px;
@@ -80,7 +80,6 @@ nav {
 }
 
 #sendmailbtn {
-  margin-top: 2%;
   margin-bottom: 10%;
   color: white;
   display: none;
@@ -93,6 +92,18 @@ nav {
 #sendmailbtn:hover {
   background-color: white;
   color: #007bff;
+}
+
+#checkAllBtn {
+  color: white;
+  padding: 5px;
+  background-color: #d80030;
+  border: 0;
+}
+
+#checkAllBtn:hover {
+  background-color: white;
+  color: #d80030;
 }
 
 .form-group {

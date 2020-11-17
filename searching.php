@@ -123,7 +123,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <div class="form-group fading searchForm" id="parameterContainer">
                     <label for="selectParameter" class="align-self-center labelTxt">Weitere Parameter:</label>
                     <select class="form-control searchInput" id="selectParameter" name="selectParameter" onchange="addInputfield()">
-                        <option></option>
+                        <option>Parameter auswählen</option>
                         <option>Format</option>
                         <option>Material</option>
                     </select>
@@ -284,12 +284,16 @@ $conn = null;
 
 ?>
 
-<div id="dataView">
 
 <?php
-
 if($itemIdArray){
 ?>
+
+<div>
+    <button id="checkAllBtn" class="btn btn-outline-light" onclick="checkAll()">Alle Artikel auswählen</button>
+</div>
+
+<div id="dataView">
         <div class="containerRow">
             <div class="row titlerow">
                 <div class="col checkbox"></div>

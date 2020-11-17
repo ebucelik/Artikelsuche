@@ -1,5 +1,7 @@
 let displayCheckbox = false;
 let custnum = itemid = version = prodgroupid = name = sort = externalitemtxt = lepsizew = lepsizel = tradeunitspecid = salesid = stocklevel = image = msg = "";
+let state = false;
+let cntCheckedInputs = 0;
 
 $(document).ready(function () {
   $(".fading").fadeIn(1500);
@@ -21,22 +23,33 @@ $(document).ready(function () {
       displayCheckbox = true;
     });
 
-    if (displayCheckbox)
-      $('#sendmailbtn').css('display', 'block');
-    else
-      $('#sendmailbtn').css('display', 'none');
+    $('#sendmailbtn').css('display', displayCheckbox ? 'block' : 'none');
   });
 
-  $('input').filter(':checked').each(function () {
+  $('#dataView > input').filter(':checked').each(function () {
     $(this).prop("checked", false);
   });
 });
 
+function checkAll() {
+  state = !state;
+
+  $('#dataView input').each(function () {
+    $(this).prop("checked", state);
+  });
+
+  $('#sendmailbtn').css('display', state ? 'block' : 'none');
+
+  $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
+}
+
 function sendMail() {
   msg = "";
   var test = [];
+  cntCheckedInputs = 0;
 
   $('.sendMailCheck').filter(':checked').each(function () {
+    cntCheckedInputs++;
     var tmp = [];
     let index = $('.sendMailCheck').index(this);
     custnum = $('.custvendrelation').eq(index).text();
@@ -76,20 +89,19 @@ function sendMail() {
     test.push(tmp);
   });
 
-  $.ajax({
-    type: "get",
-    url: "getMailFromCustomer.php",
-    data: { CustNum: custnum },
-    success: function (email) {
-      var arrStr = JSON.stringify(test);
-      window.location.href = "sendMail.php?email=" + email + "&data=" + arrStr;
-      /*if (data != "") {
-        window.location.href = "mailto:" + data + "?body=" + encodeURIComponent(msg);
-      } else {
-        alert("Keine hinterlegte E-Mail gefunden!");
-      }*/
-    }
-  });
+  if (cntCheckedInputs > 20) {
+    alert("Achtung!\n\nSie haben die maximale Anzahn an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
+  } else {
+    $.ajax({
+      type: "get",
+      url: "getMailFromCustomer.php",
+      data: { CustNum: custnum },
+      success: function (email) {
+        var arrStr = JSON.stringify(test);
+        window.location.href = "sendMail.php?email=" + email + "&data=" + arrStr;
+      }
+    });
+  }
 }
 
 function toStart() {
@@ -142,7 +154,7 @@ function openImage(url, rnumber) {
 
 function addInputfield() {
   let val = document.getElementById("selectParameter").value;
-  if (val != "") {
+  if (val != "Parameter auswählen") {
     let index = document.getElementById("selectParameter");
   
     let elem = '<div class="form-group fading searchForm" id="'+ val +'Div"><label for="' + val + '" class="align-self-center labelTxt">' + val + ':</label><input type="text" class="form-control searchInput" id="'+ val +'" placeholder="'+ val +' eingeben" name="'+ val +'" value=""><button class="deleteBtn align-self-center" onclick="deleteInputfield(this)" name="'+ val +'Div">X</button></div>';
