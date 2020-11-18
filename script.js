@@ -90,17 +90,6 @@ function sendMailPdf() {
       });
     }
   });
-
-  /*
-  $.ajax({
-    type: "get",
-    url: "getMailFromCustomer.php",
-    data: { CustNum: custnum },
-    success: function (email) {
-      let arrStr = JSON.stringify(dataArr);
-      window.location.href = "sendMail.php?email=" + email + "&data=" + arrStr;
-    }
-  });*/
 }
 
 function sendMailJpg() {
