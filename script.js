@@ -44,17 +44,64 @@ function checkAll() {
 }
 
 function sendMailPdf() {
-  alert("send mail as PDF");
+  let dataArr = [];
+
+  $('.sendMailCheck').filter(':checked').each(function () {
+    let tmp = [];
+    let index = $('.sendMailCheck').index(this);
+    itemid = $('.itemid').eq(index).text();
+    name = $('.name').eq(index).text();
+    externalitemtxt = $('.externalitemtxt').eq(index).text();
+    lepsizew = $('.lepsizew').eq(index).text();
+    lepsizel = $('.lepsizel').eq(index).text();
+    stocklevel = $('.stocklevel').eq(index).text();
+
+    $.ajax({
+      type: "get",
+      url: "getImageUrl.php",
+      data: { ItemId: itemid },
+      success: function (image) {
+        tmp.push(image);
+      },
+      async: false
+    });
+
+    tmp.push(itemid);
+    tmp.push(externalitemtxt);
+    tmp.push(stocklevel);
+    tmp.push(lepsizew);
+    tmp.push(lepsizel);
+    dataArr.push(tmp);
+  });
+
+  $.ajax({
+    type: "get",
+    url: "createPdfForMail.php",
+    data: { Data: JSON.stringify(dataArr), Name: name },
+    success: function (test) {
+      alert(test);
+    }
+  });
+
+  /*
+  $.ajax({
+    type: "get",
+    url: "getMailFromCustomer.php",
+    data: { CustNum: custnum },
+    success: function (email) {
+      let arrStr = JSON.stringify(dataArr);
+      window.location.href = "sendMail.php?email=" + email + "&data=" + arrStr;
+    }
+  });*/
 }
 
 function sendMailJpg() {
-  msg = "";
-  var test = [];
+  let dataArr = [];
   cntCheckedInputs = 0;
 
   $('.sendMailCheck').filter(':checked').each(function () {
     cntCheckedInputs++;
-    var tmp = [];
+    let tmp = [];
     let index = $('.sendMailCheck').index(this);
     custnum = $('.custvendrelation').eq(index).text();
     itemid = $('.itemid').eq(index).text();
@@ -90,18 +137,18 @@ function sendMailJpg() {
     tmp.push("Stellung: " + tradeunitspecid);
     tmp.push("Auftragsnummer: " + salesid);
     tmp.push("Lagerstand: " + stocklevel);
-    test.push(tmp);
+    dataArr.push(tmp);
   });
 
   if (cntCheckedInputs > 20) {
-    alert("Achtung!\n\nSie haben die maximale Anzahn an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
+    alert("Achtung!\n\nSie haben die maximale Anzahl an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
   } else {
     $.ajax({
       type: "get",
       url: "getMailFromCustomer.php",
       data: { CustNum: custnum },
       success: function (email) {
-        var arrStr = JSON.stringify(test);
+        let arrStr = JSON.stringify(dataArr);
         window.location.href = "sendMail.php?email=" + email + "&data=" + arrStr;
       }
     });
