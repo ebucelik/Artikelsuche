@@ -62,7 +62,11 @@ function sendMailPdf() {
       url: "getImageUrl.php",
       data: { ItemId: itemid },
       success: function (image) {
-        tmp.push(image);
+        if (image) {
+          tmp.push(image);
+        } else {
+          tmp.push("Uploads/noimage.jpg");
+        }
       },
       async: false
     });

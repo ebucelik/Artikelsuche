@@ -29,9 +29,6 @@ $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(35, $cntYpos, iconv('UTF-8', 'windows-1252',"Nach Abzug der aktuellen Bestellung(en), lagern wir mit Stand per 18.11.2020 folgende Etiketten für Sie:"));
 $pdf->ln(10);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(35, $cntYpos, iconv('UTF-8', 'windows-1252',"Die folgende Liste enthält nur jene Etiketten, für die eine Bilddatei verfügbar ist!"));
-$pdf->ln(5);
-$pdf->SetFont('Arial', '', 10);
 $pdf->Cell(35, $cntYpos, iconv('UTF-8', 'windows-1252', "Die Etiketten sind nicht maßstabsgetreu abgebildet!"));
 $pdf->ln(15);
 
