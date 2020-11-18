@@ -44,7 +44,7 @@ function checkAll() {
 }
 
 function sendMailPdf() {
-  
+  alert("send mail as PDF");
 }
 
 function sendMailJpg() {
