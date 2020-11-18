@@ -2,6 +2,7 @@
 require_once('submit.php');
 
 $email = "";
+$pdf = "";
 $data = array();
 $imageArray = array();
 
@@ -11,6 +12,10 @@ if(isset($_GET["email"])){
 
 if(isset($_GET["data"])){
     $data = json_decode($_GET["data"]);
+}
+
+if(isset($_GET["PDF"])){
+    $pdf = $_GET["PDF"];
 }
 ?>
 
@@ -59,30 +64,40 @@ if(isset($_GET["data"])){
                     <textarea name="message" id="message" class="form-control" placeholder="Ihre Nachricht." rows="15" required=""><?php 
                     echo "Sehr geehrter Kunde, <br><br>\n\nanbei senden wir Ihnen die Informationen zu Ihren Etikett(en) inkl. Bild(er).<br><br>\n\n";
                     
-                    for($i = 0; $i < count($data); $i++){
-                        for($j = 0; $j < count($data[$i]) - 1; $j++){
-                            if($data[$i][$j] && $j < count($data[$i]) - 2){
-                                echo $data[$i][$j] . " <br>\n";
-                            }else{
-                                echo $data[$i][$j] . " <br><br>\n";
+                    if(isset($data)){
+                        for($i = 0; $i < count($data); $i++){
+                            for($j = 0; $j < count($data[$i]) - 1; $j++){
+                                if($data[$i][$j] && $j < count($data[$i]) - 2){
+                                    echo $data[$i][$j] . " <br>\n";
+                                }else{
+                                    echo $data[$i][$j] . " <br><br>\n";
+                                }
                             }
-                        }
-                        echo "\n";
-
-                        $url = $data[$i][12];
-                        $itemid = str_replace('R-Nummer: ', '', $data[$i][0]);
-                        $itemid = str_replace('/', '-', $itemid);
-                        $img = 'Uploads/' . $itemid . '.jpg';
-                        file_put_contents($img, file_get_contents($url));
-                        array_push($imageArray, $img);
-                    } 
+                            echo "\n";
+    
+                            $url = $data[$i][12];
+                            $itemid = str_replace('R-Nummer: ', '', $data[$i][0]);
+                            $itemid = str_replace('/', '-', $itemid);
+                            $img = 'Uploads/' . $itemid . '.jpg';
+                            file_put_contents($img, file_get_contents($url));
+                            array_push($imageArray, $img);
+                        } 
+                    }
                     echo "Mit freundlichen Grüßen,<br>\nIhr Marzek Etiketten+Packaging Team";
                     ?></textarea>
                 </div>
                 <?php 
-                foreach($imageArray as $urls)
-                {
-                    echo '<input type="hidden" name="attachment[]" value="'. $urls. '">';
+                if(isset($imageArray)){
+                    foreach($imageArray as $urls)
+                    {
+                        echo '<input type="hidden" name="attachment[]" value="'. $urls. '">';
+                    }
+                }
+                
+                if(isset($pdf)){
+                    $test = array();
+                    array_push($test, $pdf);
+                    echo '<input type="hidden" name="attachment[]" value="'. $pdf. '">'; 
                 }
                 ?>
                 <div class="submit">

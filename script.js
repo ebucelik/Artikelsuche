@@ -49,6 +49,7 @@ function sendMailPdf() {
   $('.sendMailCheck').filter(':checked').each(function () {
     let tmp = [];
     let index = $('.sendMailCheck').index(this);
+    custnum = $('.custvendrelation').eq(index).text();
     itemid = $('.itemid').eq(index).text();
     name = $('.name').eq(index).text();
     externalitemtxt = $('.externalitemtxt').eq(index).text();
@@ -78,8 +79,15 @@ function sendMailPdf() {
     type: "get",
     url: "createPdfForMail.php",
     data: { Data: JSON.stringify(dataArr), Name: name },
-    success: function (test) {
-      alert(test);
+    success: function () {
+      $.ajax({
+        type: "get",
+        url: "getMailFromCustomer.php",
+        data: { CustNum: custnum },
+        success: function (email) {
+          window.location.href = "sendMail.php?email=" + email + "&PDF=Uploads/" + name + ".pdf";
+        }
+      });
     }
   });
 

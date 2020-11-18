@@ -13,7 +13,7 @@ if(isset($_POST['submit'])){
     $subject = $_POST['subject'];
     $message = $_POST['message'];
     $uploadedFile = $_POST['attachment'];
-
+    
     ini_set('sendmail_from', $senderEmail);
 
     // Check whether submitted data is not empty
