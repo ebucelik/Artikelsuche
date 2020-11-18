@@ -2,7 +2,7 @@
 require_once('db.php');
 
 $unEqualString = "";
-$type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
+$type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
 $checkSort = false;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -51,6 +51,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(isset($_POST['Material']) && $_POST['Material'] != ''){
         $material = $_POST['Material'];
+    }
+
+    if(isset($_POST['stockLevel'])){
+        $stockLevel = $_POST['stockLevel'];
     }
 } 
 ?>
@@ -133,9 +137,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <input type="checkbox" class="form-control" id="allVersions" name="allVersions" style="width: 20px; height: 20px; display: unset;" <?php if($allVersions != $unEqualString){echo 'checked';} ?>>
                     <label for="withImage" style="margin-left: 3%; ">Bild vorhanden:</label>
                     <input type="checkbox" class="form-control" id="withImage" name="withImage" style="width: 20px; height: 20px; display: unset;" <?php if($withImage != $unEqualString){echo 'checked';} ?>>
+                    <label for="stockLevel" style="margin-left: 3%; ">Lagerstand:</label>
+                    <input type="checkbox" class="form-control" id="stockLevel" name="stockLevel" style="width: 20px; height: 20px; display: unset;" <?php if($stockLevel != $unEqualString){echo 'checked';} ?>>
                 </div>
                 <button type="submit" class="btn btn-outline-light fading" id="articlesearch">SUCHEN</button>
-                <button type="button" class="btn btn-primary" id="sendmailbtn" onclick="sendMail()">SENDE MAIL AN KUNDE</button>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailJpg" onclick="sendMailJpg()">SENDE MAIL ALS JPG</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailPdf" onclick="sendMailPdf()">SENDE MAIL ALS PDF</button>
+                    </div>
+                </div>
             </form>
 
             <div id="toStartBtn">
@@ -236,6 +249,14 @@ try{
 
     //Deactivated articles. 0 stands for No regarding NoYes Enum. % at the end, selects all strings that have ## at the start of the string.
     $queryParams .= " AND T14.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
+
+    if($stockLevel == "on"){
+        if($queryParams == ""){
+            $queryParams = "T1.StockLevel != 0";
+        }else{
+            $queryParams .=" AND T1.StockLevel != 0";
+        }
+    }
 
     if($allVersions == 'on'){ //ALL VERSIONS PART
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 

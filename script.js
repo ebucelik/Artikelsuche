@@ -23,7 +23,7 @@ $(document).ready(function () {
       displayCheckbox = true;
     });
 
-    $('#sendmailbtn').css('display', displayCheckbox ? 'block' : 'none');
+    $('#sendmailJpg, #sendmailPdf').css('display', displayCheckbox ? 'block' : 'none');
   });
 
   $('#dataView > input').filter(':checked').each(function () {
@@ -38,12 +38,16 @@ function checkAll() {
     $(this).prop("checked", state);
   });
 
-  $('#sendmailbtn').css('display', state ? 'block' : 'none');
+  $('#sendmailJpg, #sendmailPdf').css('display', state ? 'block' : 'none');
 
   $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
 }
 
-function sendMail() {
+function sendMailPdf() {
+  alert("PDF");
+}
+
+function sendMailJpg() {
   msg = "";
   var test = [];
   cntCheckedInputs = 0;
