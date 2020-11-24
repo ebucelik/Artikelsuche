@@ -69,8 +69,11 @@ if($itemId != $unEqualString){
     //get Invoice
     if(isset($invoiceId) && isset($invoiceDate)){
         $row = $stmt->fetch();
-        $invoiceDate = $row[0];
-        $invoiceId = $row[1];
+
+        if($row){
+            $invoiceDate = $row[0];
+            $invoiceId = $row[1];
+        }
 
         $invoiceDate = new DateTime($invoiceDate);
     }

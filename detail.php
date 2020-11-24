@@ -75,8 +75,8 @@ require("getDataFromDB.php");
                 </a>
             </div>
             <div class="col firstCols">
-                <a <?php if($invoiceId == $unEqualString){?> href="#" <?php }else{ ?> target="_blank" href="http://intern.marzek.eu:88/Startseite/Dokumentenverwaltung/Ausgangsrechnungen/<?php echo $invoiceDate->format('Y'); ?>/<?php echo $invoiceDate->format('m'); ?>/<?php echo $invoiceId; ?>_<?php echo $v1['SalesId']; ?>_<?php echo $v1['CustVendRelation']; ?>.pdf" <?php } ?> style="color: #d80030;">
-                    <button type="button" class="btn btn-lg printBtnStyle" <?php if($invoiceId == $unEqualString){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">RECHNUNG ANZEIGEN</button>
+                <a <?php if($invoiceId == $unEqualString || !$invoiceId){?> href="#" <?php }else{ ?> target="_blank" href="http://intern.marzek.eu:88/Startseite/Dokumentenverwaltung/Ausgangsrechnungen/<?php echo $invoiceDate->format('Y'); ?>/<?php echo $invoiceDate->format('m'); ?>/<?php echo $invoiceId; ?>_<?php echo $v1['SalesId']; ?>_<?php echo $v1['CustVendRelation']; ?>.pdf" <?php } ?> style="color: #d80030;">
+                    <button type="button" class="btn btn-lg printBtnStyle" <?php if($invoiceId == $unEqualString || !$invoiceId){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">RECHNUNG ANZEIGEN</button>
                 </a>
             </div>
             <div class="col firstCols">
