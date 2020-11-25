@@ -17,7 +17,7 @@ if($itemId != $unEqualString){
                             LEFT JOIN LEPCalcBoardTable T12 ON T12.BoardId = T11.LPMRZBoardId
                             LEFT JOIN LEPUnitLoad T13 ON T13.UnitLoadId = T8.UnitLoadId
                             LEFT JOIN LEPUnitLoadOptSpec T14 ON T14.RefRecId = T13.RecId
-                            LEFT JOIN CustVendExternalItem T15 ON T15.ItemId = T1.ItemId AND T15.InventDimId = T1.InventDimId
+                            LEFT JOIN CustVendExternalItem T15 ON T15.ItemId = T1.ItemId AND T15.InventDimId = T1.InventDimId AND T15.CustVendRelation = T1.CustVendRelation
                             LEFT JOIN LEPCustVendExternalItem T16 ON T16.Reference = T15.RecId
                             LEFT JOIN CustTable T17 ON T17.AccountNum = T1.CustVendRelation
                             LEFT JOIN smmBusRelSectorTable T18 ON T18.Party = T17.Party
