@@ -23,7 +23,7 @@ if($itemId != $unEqualString){
                             LEFT JOIN smmBusRelSectorTable T18 ON T18.Party = T17.Party
                             LEFT JOIN InventTable T19 ON T19.ItemId = T1.ItemId
                             LEFT JOIN DocuRef T20 ON T20.RefRecId = T19.RecId AND T20.RefTableId = 175
-                            RIGHT JOIN LEPProdToolTable T21 ON T21.ProdToolId = T11.LPMRZProdToolIdDieCut
+                            LEFT JOIN LEPProdToolTable T21 ON T21.ProdToolId = T11.LPMRZProdToolIdDieCut
                             WHERE T1.ItemId = '$itemId' AND T1.SalesIdLast = '$salesId' AND T1.InventStyleId = '$version'");
     }else{
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
