@@ -168,7 +168,8 @@ function fillItemArray($_stmt){
         'CustVendRelation' => $val['CustVendRelation'], 'Name' => $val['CustName'], 'ExternalItemTxt' => $val['ExternalItemTxt'], 
         'LEPSizeW' => intval($val['LEPSizeW']), 'LEPSizeL' => intval($val['LEPSizeL']),
         'TradeUnitSpecId' => $val['TradeUnitSpecId'], 'DesignJpgPreviewUrl' => $val['DesignJpgPreviewUrl'], 'SalesId' => $val['SalesIdLast'], 
-        'WorkCenters' => $val['WorkCenters'], 'StockLevel' => $val['StockLevel'], 'Sort' => $val['MARInprintingSortName'], 'LPMRZBoardId' => $val['LPMRZBoardId'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut']));
+        'WorkCenters' => $val['WorkCenters'], 'StockLevel' => $val['StockLevel'], 'Sort' => $val['MARInprintingSortName'], 'LPMRZBoardId' => $val['LPMRZBoardId'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut'],
+        'MARPngPath' => $val['MARPngPath']));
         
         if($val['MARInprintingSortName']){
             $GLOBALS["checkSort"] = true;
@@ -261,7 +262,7 @@ try{
     if($allVersions == 'on'){ //ALL VERSIONS PART
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                     T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                    T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
+                                    T1.MARPngPath, T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
                                     FROM MARItemSearchDataTable T1
                                     LEFT JOIN LEPItemUnitLoad T8 ON T8.ItemId = T1.ItemId 
                                     LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
@@ -281,7 +282,7 @@ try{
 
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                     T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                    T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
+                                    T1.MARPngPath, T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
                                     FROM MARItemSearchDataTable T1
                                     LEFT JOIN LEPItemUnitLoad T8 ON T8.ItemId = T1.ItemId 
                                     LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
@@ -352,7 +353,13 @@ if($itemIdArray){
                 <div class="col align-self-center salesid"><?php echo $v1['SalesId']; ?></div>
                 <div class="col align-self-center workcenters"><?php echo $v1['WorkCenters']; ?></div>
                 <div class="col align-self-center stocklevel"><?php echo $v1['StockLevel']; ?></div>
-                <div class="col align-self-center"><?php if($v1['DesignJpgPreviewUrl']){?><img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>', '<?php echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/><?php } ?></div>
+                <div class="col align-self-center">
+                    <?php if($v1['DesignJpgPreviewUrl']){ ?>
+                        <img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>', '<?php echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
+                    <?php } else if($v1['MARPngPath']){ ?>
+                        <img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>', '<?php echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
+                    <?php } ?>
+                </div>
                 <div class="col align-self-center printImg"><a target="_blank" href="createPDF.php?type=<?php echo $_POST['selectType']; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>&SimpleOrFullPDF=Full" style="color: #d80030;"><img src="Bilder/drucker.png" class="print" title="Drucken" alt="Drucken" width="35"></a></div>
             </div>
             <hr/>

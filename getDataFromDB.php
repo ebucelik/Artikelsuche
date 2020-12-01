@@ -5,6 +5,7 @@ if($itemId != $unEqualString){
     if($type == "Rollenetiketten"){
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                             T1.LEPSizeL, T1.LEPSizeW, T1.InventStyleId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.InventDimId, T1.ZipCode, T1.City, T1.MARInprintingSortName,
+                            T1.MARPngPath,
                             T9.TradeUnitSpecId, T9.TradeUnitGroupId, T9.TradeUnitId, 
                             T10.DesignJpgPreviewUrl, T11.LPMRZBoardId, T11.LPMRZProdToolIdDieCut,
                             T12.MARAdditionalDescription, T12.MARAreaWeightBas, T12.MARPaperColor, T12.MARGlue, T12.Name,
@@ -133,7 +134,8 @@ function fillItemArray($_stmt, $_type){
             'MARGlue' => $val['MARGlue'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut'], 'LPMRZMaxAllowedQty' => intval($val['LPMRZMaxAllowedQty']),
             'LPMRZMaxDiameterOuter' => intval($val['LPMRZMaxDiameterOuter']), 'TradeUnitGroupId' => $val['TradeUnitGroupId'], 'TradeUnitId' => $val['TradeUnitId'],
             'ExternalItemId' => $val['ExternalItemId'], 'ZipCode' => $val['ZipCode'], 'City' => $val['City'], 'Branche' => $val['BusinessSectorId'], 'Steuernummer' => $val['VATNum'],
-            'Sort' => $val['MARInprintingSortName'], 'createdDateTime' =>  new DateTime($val['createdDateTime']), 'CalcDesignStyleId' => $val['CalcDesignStyleId']));
+            'Sort' => $val['MARInprintingSortName'], 'createdDateTime' =>  new DateTime($val['createdDateTime']), 'CalcDesignStyleId' => $val['CalcDesignStyleId'], 
+            'MARPngPath' => $val['MARPngPath']));
         }
     }else{
         foreach($_stmt as $val){
