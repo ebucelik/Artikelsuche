@@ -214,16 +214,20 @@ require("getDataFromDB.php");
         <div class="row" style="margin-top: 2%;">
             <div class="col firstCols">
                 <div class="containerRow leftContainer">
+                    <?php if(isset($v1['LPMRZProdToolIdDieCut']) && $v1['LPMRZProdToolIdDieCut'] != ""){?>
                     <div class="row">
                         <div class="col titlerow">Stanznummer</div>
-                        <div class="col"><?php if(isset($v1['LPMRZProdToolIdDieCut'])){echo $v1['LPMRZProdToolIdDieCut'];}?></div>
+                        <div class="col"><?php echo $v1['LPMRZProdToolIdDieCut'];?></div>
                     </div>
                     <hr/>
+                    <?php } ?>
+                    <?php if(isset($v1['CalcDesignStyleId']) && $v1['CalcDesignStyleId'] != ""){ ?>
                     <div class="row">
                         <div class="col titlerow">Stanzform</div>
-                        <div class="col"><?php if(isset($v1['CalcDesignStyleId'])){echo $v1['CalcDesignStyleId'];}?></div>
+                        <div class="col"><?php echo $v1['CalcDesignStyleId']; ?></div>
                     </div>
                     <hr/>
+                    <?php } ?>
                     <div class="row">
                         <div class="col titlerow">FormatQuer</div>
                         <div class="col"><?php echo $v1['LEPSizeW'];?></div>

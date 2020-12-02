@@ -71,7 +71,7 @@ if($itemIdArray){
             $pdf->Cell(70, 10, $v1['CustVendRelation']);
 
             $pdf->SetFont('Arial', 'I', 8);
-            $pdf->Cell(12, 10, 'VAT');
+            $pdf->Cell(12, 10, 'VAD');
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(35, 10, iconv('UTF-8', 'windows-1252', $v3['ContactPerson']));
 

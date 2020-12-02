@@ -5,17 +5,16 @@ if($itemId != $unEqualString){
     if($type == "Rollenetiketten"){
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                             T1.LEPSizeL, T1.LEPSizeW, T1.InventStyleId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.InventDimId, T1.ZipCode, T1.City, T1.MARInprintingSortName,
-                            T1.MARPngPath,
+                            T1.MARPngPath, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
                             T9.TradeUnitSpecId, T9.TradeUnitGroupId, T9.TradeUnitId, 
-                            T10.DesignJpgPreviewUrl, T11.LPMRZBoardId, T11.LPMRZProdToolIdDieCut,
+                            T10.DesignJpgPreviewUrl,
                             T12.MARAdditionalDescription, T12.MARAreaWeightBas, T12.MARPaperColor, T12.MARGlue, T12.Name,
                             T14.LPMRZMaxAllowedQty, T14.LPMRZMaxDiameterOuter, T16.ExternalItemId, T17.VATNum, T18.BusinessSectorId, T20.createdDateTime, T21.CalcDesignStyleId
                             FROM MARItemSearchDataTable T1
                             LEFT JOIN LEPItemUnitLoad T8 ON T8.ItemId = T1.ItemId 
                             LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
                             LEFT JOIN MARDesignIDRelationTable T10 ON T10.ItemId = T1.ItemId
-                            LEFT JOIN LEPItemProdConfig T11 ON T11.ItemId = T1.ItemId AND T11.InventDimId = T1.InventDimId AND T11.ProdGroupId = T1.ProdGroupId
-                            LEFT JOIN LEPCalcBoardTable T12 ON T12.BoardId = T11.LPMRZBoardId
+                            LEFT JOIN LEPCalcBoardTable T12 ON T12.BoardId = T1.LPMRZBoardId
                             LEFT JOIN LEPUnitLoad T13 ON T13.UnitLoadId = T8.UnitLoadId
                             LEFT JOIN LEPUnitLoadOptSpec T14 ON T14.RefRecId = T13.RecId
                             LEFT JOIN CustVendExternalItem T15 ON T15.ItemId = T1.ItemId AND T15.InventDimId = T1.InventDimId AND T15.CustVendRelation = T1.CustVendRelation
@@ -24,7 +23,7 @@ if($itemId != $unEqualString){
                             LEFT JOIN smmBusRelSectorTable T18 ON T18.Party = T17.Party
                             LEFT JOIN InventTable T19 ON T19.ItemId = T1.ItemId
                             LEFT JOIN DocuRef T20 ON T20.RefRecId = T19.RecId AND T20.RefTableId = 175
-                            LEFT JOIN LEPProdToolTable T21 ON T21.ProdToolId = T11.LPMRZProdToolIdDieCut
+                            LEFT JOIN LEPProdToolTable T21 ON T21.ProdToolId = T1.LPMRZProdToolIdDieCut
                             WHERE T1.ItemId = '$itemId' AND T1.SalesIdLast = '$salesId' AND T1.InventStyleId = '$version'");
     }else{
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
