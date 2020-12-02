@@ -356,9 +356,9 @@ if($itemIdArray){
                 <div class="col align-self-center">
                     <?php if($v1['DesignJpgPreviewUrl']){ ?>
                         <img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>', '<?php echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
-                    <?php } else if($v1['MARPngPath']){ ?>
-                        <img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>', '<?php echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
-                    <?php } ?>
+                    <?php } //else if($v1['MARPngPath']){ ?>
+                       <!-- <img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php //echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>', '<?php //echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php //echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/> -->
+                    <?php// } ?>
                 </div>
                 <div class="col align-self-center printImg"><a target="_blank" href="createPDF.php?type=<?php echo $_POST['selectType']; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>&SimpleOrFullPDF=Full" style="color: #d80030;"><img src="Bilder/drucker.png" class="print" title="Drucken" alt="Drucken" width="35"></a></div>
             </div>

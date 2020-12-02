@@ -47,7 +47,7 @@ if($itemId != $unEqualString){
     $colorArray = fillColorArray($stmt);
 
     $stmt = $conn->prepare("SELECT TOP 1 T1.Street, T1.CountryRegionId, T4.Locator as Mail, T5.Locator as Phone, T5.Description as Mobile, T6.Locator as Fax,
-                            T7.Locator as WebSite, T9.NameAlias
+                            T7.Locator as WebSite, T10.Name as NameAlias
                             FROM LogisticsPostalAddress T1
                             LEFT JOIN CustTable T2 ON T2.AccountNum = '$custAcc'
                             LEFT JOIN DirPartyTable T3 ON T3.RecId = T2.Party
@@ -55,8 +55,9 @@ if($itemId != $unEqualString){
                             LEFT JOIN LogisticsElectronicAddress T5 ON T5.RecId = T3.PrimaryContactPhone
                             LEFT JOIN LogisticsElectronicAddress T6 ON T6.RecId = T3.PrimaryContactFax
                             LEFT JOIN LogisticsElectronicAddress T7 ON T7.RecId = T3.PrimaryContactURL
-                            LEFT JOIN HcmWorker T8 ON T8.RecId = T2.MainContactWorker
-                            LEFT JOIN DirPartyTable T9 ON T9.RecId = T8.Person
+                            LEFT JOIN smmResponsibilitiesEmplTable T8 ON T8.RefTableId = 77 AND T8.RefRecId = T2.RecId AND T8.ResponsibilityId = 'VAD'
+                            LEFT JOIN HcmWorker T9 ON T9.RecId = T8.Worker
+                            LEFT JOIN DirPartyTable T10 ON T10.RecId = T9.Person
                             WHERE T1.Location = T3.PrimaryAddressLocation ORDER BY T1.ValidFrom DESC");
 
     $stmt->execute();
