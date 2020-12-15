@@ -10,8 +10,8 @@ define('MYSQL_PASS', 'MarAx20!');
 define('MYSQL_DATABASE', 'axdev');
 */
 
-define('MYSQL_HOST', 'atw1sqln01');
-define('MYSQL_USER', 'sv_axap');
+define('MYSQL_HOST', 'atw1sqld01');
+define('MYSQL_USER', 'marzekeu\sv_axap');
 define('MYSQL_PASS', 'MarAx20!');
 define('MYSQL_DATABASE', 'axprod');
 
