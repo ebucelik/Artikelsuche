@@ -163,13 +163,13 @@ $itemIdArray = array();
 function fillItemArray($_stmt){
     $_itemIdArray = array();
 
+    //TODO: Implement 'MARPngPath' => $val['MARPngPath']
     foreach($_stmt as $val){
         array_push($_itemIdArray, array('ItemId' => $val['ItemId'], 'Version' => $val['InventStyleId'], 'InventDimId' => $val['InventDimId'], 'ProdGroupId' => $val['ProdGroupId'], 
         'CustVendRelation' => $val['CustVendRelation'], 'Name' => $val['CustName'], 'ExternalItemTxt' => $val['ExternalItemTxt'], 
         'LEPSizeW' => intval($val['LEPSizeW']), 'LEPSizeL' => intval($val['LEPSizeL']),
         'TradeUnitSpecId' => $val['TradeUnitSpecId'], 'DesignJpgPreviewUrl' => $val['DesignJpgPreviewUrl'], 'SalesId' => $val['SalesIdLast'], 
-        'WorkCenters' => $val['WorkCenters'], 'StockLevel' => $val['StockLevel'], 'Sort' => $val['MARInprintingSortName'], 'LPMRZBoardId' => $val['LPMRZBoardId'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut'],
-        'MARPngPath' => $val['MARPngPath']));
+        'WorkCenters' => $val['WorkCenters'], 'StockLevel' => $val['StockLevel'], 'Sort' => $val['MARInprintingSortName'], 'LPMRZBoardId' => $val['LPMRZBoardId'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut']));
         
         if($val['MARInprintingSortName']){
             $GLOBALS["checkSort"] = true;
@@ -260,9 +260,10 @@ try{
     }
 
     if($allVersions == 'on'){ //ALL VERSIONS PART
+        //TODO: Implement T1.MARPngPath,
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                     T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                    T1.MARPngPath, T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
+                                    T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
                                     FROM MARItemSearchDataTable T1
                                     LEFT JOIN LEPItemUnitLoad T8 ON T8.ItemId = T1.ItemId 
                                     LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
@@ -278,11 +279,12 @@ try{
         $itemIdArray = fillItemArray($stmt);
     }
     else{ //HIGHEST VERSION PART
-        $queryParams .= " AND T1.SalesIdLast IN (SELECT MAX(T11.SalesIdLast) AS style FROM MARItemSearchDataTable T11 WHERE T11.ItemId = T1.ItemId)";
-
+        $queryParams .= " AND T1.SalesIdLast IN (SELECT MAX(T11.SalesIdLast) AS style FROM MARItemSearchDataTable T11 WHERE T11.ItemId = T1.ItemId)";;
+        
+        //TODO: Implement T1.MARPngPath,
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                     T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                    T1.MARPngPath, T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
+                                    T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
                                     FROM MARItemSearchDataTable T1
                                     LEFT JOIN LEPItemUnitLoad T8 ON T8.ItemId = T1.ItemId 
                                     LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
