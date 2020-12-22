@@ -236,20 +236,20 @@ try{
 
     if($withImage == "on"){
         if($queryParams == ""){
-            $queryParams = "T10.DesignJpgPreviewUrl != ''";
+            $queryParams = "T1.DesignJpgPreviewUrl != ''";
         }else{
-            $queryParams .=" AND T10.DesignJpgPreviewUrl != ''";
+            $queryParams .=" AND T1.DesignJpgPreviewUrl != ''";
         }
     }
 
     if($type == "Rollenetiketten" && $queryParams != ""){
-        $queryParams .=" AND T11.MARItemType = 4 AND T1.InventStyleId != '' AND T1.InventDimId != '' ";
+        $queryParams .=" AND T1.MARItemType = 4 AND T1.InventStyleId != '' AND T1.InventDimId != '' ";
     }else if($queryParams != ""){
-        $queryParams .=" AND T11.MARItemType = 12";
+        $queryParams .=" AND T1.MARItemType = 12";
     }
 
     //Deactivated articles. 0 stands for No regarding NoYes Enum. % at the end, selects all strings that have ## at the start of the string.
-    $queryParams .= " AND T14.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
+    $queryParams .= " AND T1.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
 
     if($stockLevel == "on"){
         if($queryParams == ""){
@@ -284,15 +284,8 @@ try{
         //TODO: Implement T1.MARPngPath,
         $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                     T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                    T9.TradeUnitSpecId, T10.DesignJpgPreviewUrl
+                                    T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
                                     FROM MARItemSearchDataTable T1
-                                    LEFT JOIN LEPItemUnitLoad T8 ON T8.ItemId = T1.ItemId 
-                                    LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
-                                    LEFT JOIN MARDesignIDRelationTable T10 ON T10.ItemId = T1.ItemId
-                                    LEFT JOIN InventTable T11 ON T11.ItemId = T1.ItemId
-                                    LEFT JOIN InventDim T12 ON T12.inventBatchId = '' AND T12.InventLocationId = '' AND T12.inventSerialId = '' AND T12.InventSiteId = '' AND T12.InventSizeId = '' AND T12.wMSLocationId = ''
-                                    LEFT JOIN InventDim T13 ON T13.inventBatchId = '' AND T13.InventLocationId = '' AND T13.inventSerialId = '' AND T13.InventSiteId LIKE '%MAR%' AND T13.InventSizeId = '' AND T13.wMSLocationId = ''
-                                    LEFT JOIN InventItemSalesSetup T14 ON T14.ItemId = T1.ItemId AND T14.InventDimId = T12.inventDimId AND T14.InventDimIdDefault = T13.inventDimId
                                     WHERE $queryParams ORDER BY T1.InventStyleId");
 
         $stmt->execute();
