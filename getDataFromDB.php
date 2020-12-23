@@ -38,7 +38,6 @@ if($itemId != $unEqualString){
     $stmt = $conn->prepare("SELECT T1.FrontBack, T1.DeviceTypeId, T1.ColorBaseMatId, T1.ColorName, T1.LPMRZProdToolId, T1.MARDescription
                             FROM LEPItemColorSequence T1 
                             LEFT JOIN LEPItemProdConfig T2 ON T2.ItemId = '$itemId' AND T2.InventDimId = '$inventDimId' 
-                            
                             AND T2.ProdGroupId = '$prodGroupId' AND T2.LPMRZBoardId = '$lPMRZBoardId' AND T2.LPMRZProdToolIdDieCut = '$lPMRZProdToolIdDieCut'
                             WHERE T1.LEPItemProdConfig = T2.RecId ORDER BY T1.DeviceTypeId");
 
