@@ -6,15 +6,13 @@ if($itemId != $unEqualString){
         //TODO: Implement T1.MARPngPath, 
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                             T1.LEPSizeL, T1.LEPSizeW, T1.InventStyleId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.InventDimId, T1.ZipCode, T1.City, T1.MARInprintingSortName,
-                            T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                            T9.TradeUnitSpecId, T9.TradeUnitGroupId, T9.TradeUnitId, 
-                            T10.DesignJpgPreviewUrl,
+                            T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut, T1.DesignJpgPreviewUrl,
+                            T1.TradeUnitSpecId, T9.TradeUnitGroupId, T9.TradeUnitId, 
                             T12.MARAdditionalDescription, T12.MARAreaWeightBas, T12.MARPaperColor, T12.MARGlue, T12.Name,
                             T14.LPMRZMaxAllowedQty, T14.LPMRZMaxDiameterOuter, T16.ExternalItemId, T17.VATNum, T18.BusinessSectorId, T20.createdDateTime, T21.CalcDesignStyleId
                             FROM MARItemSearchDataTable T1
                             LEFT JOIN LEPItemUnitLoad T8 ON T8.ItemId = T1.ItemId 
                             LEFT JOIN LEPUnitLoadTradeUnit T9 ON T9.TradeUnitLevel = 0 AND T9.UnitLoadId = T8.UnitLoadId
-                            LEFT JOIN MARDesignIDRelationTable T10 ON T10.ItemId = T1.ItemId
                             LEFT JOIN LEPCalcBoardTable T12 ON T12.BoardId = T1.LPMRZBoardId
                             LEFT JOIN LEPUnitLoad T13 ON T13.UnitLoadId = T8.UnitLoadId
                             LEFT JOIN LEPUnitLoadOptSpec T14 ON T14.RefRecId = T13.RecId
