@@ -83,7 +83,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 <body>
     <header>
-        <a href="pages/searching.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
+        <a href="searching.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
     </header>
 
     <nav>
