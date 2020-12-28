@@ -1,5 +1,5 @@
 <?php
-require_once("db.php");
+require_once("db/db.php");
 require('FPDF/fpdf.php');
 
 $unEqualString = "";
@@ -39,7 +39,7 @@ if(isset($_GET['SimpleOrFullPDF'])){
 $itemIdArray = $colorArray = $custArray = array();
 
 //AxDev SQL queries 
-require("getDataFromDB.php");
+require("db/getDataFromDB.php");
 
 //Page is from 210 mm broad
 $pdf=new FPDF();

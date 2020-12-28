@@ -1,5 +1,5 @@
 <?php
-require_once('db.php');
+require_once('db/db.php');
 
 $unEqualString = "";
 $type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
@@ -65,7 +65,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marzek-Suche</title>
 
-    <link rel="stylesheet" href="search.css">
+    <link rel="stylesheet" href="css/searching.css">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -79,11 +79,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
 
-    <script src="script.js"></script>
+    <script src="scripts/script.js"></script>
 </head>
 <body>
     <header>
-        <a href="searching.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
+        <a href="pages/searching.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
     </header>
 
     <nav>

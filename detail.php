@@ -1,5 +1,5 @@
 <?php
-require_once("db.php");
+require_once("db/db.php");
 
 $unEqualString = "";
 $type = $itemId = $custAcc = $salesId = $version = $inventDimId = $prodGroupId = $invoiceId = $invoiceDate = $lPMRZBoardId = $lPMRZProdToolIdDieCut = $unEqualString;
@@ -35,7 +35,7 @@ if(isset($_GET['LPMRZProdToolIdDieCut'])){
 $itemIdArray = $colorArray = $custArray = $notesArray = array();
 
 //AxDev SQL queries 
-require("getDataFromDB.php");
+require("db/getDataFromDB.php");
 ?>
 
 <html lang="de">
@@ -44,7 +44,7 @@ require("getDataFromDB.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marzek-Suche</title>
 
-    <link rel="stylesheet" href="searching.css">
+    <link rel="stylesheet" href="css/detail.css">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -58,7 +58,7 @@ require("getDataFromDB.php");
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
 
-    <script src="script.js"></script>
+    <script src="scripts/script.js"></script>
 </head>
 <body>
     <header>
