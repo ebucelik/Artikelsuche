@@ -7,7 +7,6 @@ $(document).ready(function () {
         var div = $( "#kNumber" ).last();
         var offsettop = div.offset().top + 5;
         var offsetleft = div.offset().left + 452;
-        console.log(amount.length + '-knumb')
             if (amount.length < 5) {
                 $("span.kNumberalert").html("Geben Sie mindestens 5 Zahlen ein.");
             } else
@@ -21,7 +20,6 @@ $(document).ready(function () {
         var div = $( "#kPLZ" ).last();
         var offsettop = div.offset().top + 5;
         var offsetleft = div.offset().left + 452;
-        console.log(amount.length + '-plz')
             if (amount.length < 4) {
                 $("span.kPLZalert").html("Geben Sie mindestens 4 Zahlen ein.");
             } else
@@ -35,7 +33,6 @@ $(document).ready(function () {
         var div = $( "#tNumber" ).last();
         var offsettop = div.offset().top + 5;
         var offsetleft = div.offset().left + 452;
-        console.log(amount.length + '-tnumb')
             if (amount.length < 7) {
                 $("span.tNumberalert").html("Geben Sie mindestens 7 Zeichen ein.");
             } else
