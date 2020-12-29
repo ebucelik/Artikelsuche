@@ -159,14 +159,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <?php
 
 //TEST begin: Access test to images folder
-$user = 'ece';
+$user = 'marzekeu\ece';
 $password = 'Sollenau10!';
+$location = '"\\\172.16.1.5\Etiketten\jpg\200\200013\r037217"';
 
-exec('net use "\\\172.16.1.5\Etiketten\jpg\200\200013\r037217\" /user:"'.$user.'" "'.$password.'" /persistent:no');
-$files = scandir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217');
+//exec('net use "\\\172.16.1.5\Etiketten\jpg\200\200013\r037217\" /user:"'.$user.'" "'.$password.'" /persistent:no');
+system("net use \"".$location."\" ".$password." /user:".$user." /persistent:yes");
+//$dir = opendir($location);
+/*$files = scandir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217');
 echo '<pre>';
-print_r($files);
+print_r($files);*/
+
+if ( !is_dir("\\172.16.1.5\Etiketten\jpg\200\200013\r037217") )
+		die( $location. ' is not a directory' );
+
+
 //TEST end
+
+
 
 $itemIdArray = array();
 
