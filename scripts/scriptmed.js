@@ -3,44 +3,45 @@ $(document).ready(function () {
     window.location.href = "customerSearch.php";
     });
     $("#kNumber").bind("keyup keydown", function() {		
-        var amount = parseFloat($(this).val());
+        var amount = $(this).val();
         var div = $( "#kNumber" ).last();
         var offsettop = div.offset().top + 5;
         var offsetleft = div.offset().left + 452;
-        console.log(amount)
-            if (amount.length < 4) {
-                $("span.kNumberalert").html("Geben Sie mindestens 4 Stellen ein");
+        console.log(amount.length + '-knumb')
+            if (amount.length < 5) {
+                $("span.kNumberalert").html("Geben Sie mindestens 5 Zahlen ein.");
             } else
                 {
-                $("span.kNumberalert").html("Gültig");
+                $("span.kNumberalert").html("");
             }
         $('.kNumberalert').css({'position':'absolute','left' : offsetleft, 'top' : offsettop});
     });
-});
-
-/* Backup
-$(document).ready(function () {
-    $("#toCustomerSearch").click(function () {
-    window.location.href = "customerSearch.php";
-    });
-    $("#kNumber").bind("keyup keydown", function() {		
-        var amount = parseFloat($(this).val());
-        var div = $( "#kNumber" ).last();
+    $("#kPLZ").bind("keyup keydown", function() {		
+        var amount = $(this).val();
+        var div = $( "#kPLZ" ).last();
         var offsettop = div.offset().top + 5;
         var offsetleft = div.offset().left + 452;
-        //div.html( "left: " + offset.left + ", top: " + offset.top );
-        console.log(amount)
-        if (amount) {
-            if (amount < 4) {
-                $("span.kNumberalert").html("Geben Sie mindestens 4 Stellen ein");
+        console.log(amount.length + '-plz')
+            if (amount.length < 4) {
+                $("span.kPLZalert").html("Geben Sie mindestens 4 Zahlen ein.");
             } else
-            if(amount > 4) {
-                $("span.kNumberalert").html("Gültig");
+                {
+                $("span.kPLZalert").html("");
             }
-        } else {
-            $("span.kNumberalert").html("Geben Sie nur Zahlen ein");
-        }
-        $('.kNumberalert').css({'position':'absolute','left' : offsetleft, 'top' : offsettop});
+        $('.kPLZalert').css({'position':'absolute','left' : offsetleft, 'top' : offsettop});
+    });
+    $("#tNumber").bind("keyup keydown", function() {		
+        var amount = $(this).val();
+        var div = $( "#tNumber" ).last();
+        var offsettop = div.offset().top + 5;
+        var offsetleft = div.offset().left + 452;
+        console.log(amount.length + '-tnumb')
+            if (amount.length < 7) {
+                $("span.tNumberalert").html("Geben Sie mindestens 7 Zeichen ein.");
+            } else
+                {
+                $("span.tNumberalert").html("");
+            }
+        $('.tNumberalert').css({'position':'absolute','left' : offsetleft, 'top' : offsettop});
     });
 });
-*/

@@ -41,6 +41,7 @@
                 <div class="form-group fading searchForm">
                     <label for="kPLZ" class="align-self-center labelTxt">PLZ:</label>
                     <input type="number" class="form-control searchInput" id="kPLZ" placeholder="PLZ eingeben" name="kPLZ">
+                    <span class="kPLZalert"></span>
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="street" class="align-self-center labelTxt">Straße:</label>
@@ -53,6 +54,7 @@
                 <div class="form-group fading searchForm">
                     <label for="tNumber" class="align-self-center labelTxt">Telefonnummer:</label>
                     <input type="text" class="form-control searchInput" id="tNumber" placeholder="Telefonnummer eingeben" name="tNumber">
+                    <span class="tNumberalert"></span>
                 </div>             
                 <div class="form-group fading searchForm">
                     <label for="email" class="align-self-center labelTxt">E-Mail:</label>
