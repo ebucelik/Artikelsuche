@@ -164,14 +164,21 @@ $password = 'Sollenau10!';
 $location = '"\\\172.16.1.5\Etiketten\jpg\200\200013\r037217"';
 
 //exec('net use "\\\172.16.1.5\Etiketten\jpg\200\200013\r037217\" /user:"'.$user.'" "'.$password.'" /persistent:no');
-system("net use \"".$location."\" ".$password." /user:".$user." /persistent:yes");
+system("net use \"".$location."\" ".$password." /user:".$user." /persistent:no");
 //$dir = opendir($location);
 /*$files = scandir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217');
 echo '<pre>';
 print_r($files);*/
 
-if ( !is_dir("\\172.16.1.5\Etiketten\jpg\200\200013\r037217") )
-		die( $location. ' is not a directory' );
+if (is_dir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217')){
+    if($handle = opendir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217')){
+        while(($file = readdir($handle)) != false){
+            echo "filename: " . $file . "<br>";
+        }
+
+        closedir($handle);
+    }
+}
 
 
 //TEST end
