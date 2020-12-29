@@ -28,7 +28,7 @@ nav {
   text-decoration: underline;
 }
 
-#toItemSearch {
+#toItemSearch, #toCustomerSearch {
   margin-top: 5%;
   color: black;
   display: none;
