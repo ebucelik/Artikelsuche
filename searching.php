@@ -157,34 +157,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         </div>
 
 <?php
-
-//TEST begin: Access test to images folder
-$user = 'marzekeu\ece';
-$password = 'Sollenau10!';
-$location = '"\\\172.16.1.5\Etiketten\jpg\200\200013\r037217"';
-
-//exec('net use "\\\172.16.1.5\Etiketten\jpg\200\200013\r037217\" /user:"'.$user.'" "'.$password.'" /persistent:no');
-system("net use \"".$location."\" ".$password." /user:".$user." /persistent:no");
-//$dir = opendir($location);
-/*$files = scandir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217');
-echo '<pre>';
-print_r($files);*/
-
-if (is_dir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217')){
-    if($handle = opendir('\\\172.16.1.5\Etiketten\jpg\200\200013\r037217')){
-        while(($file = readdir($handle)) != false){
-            echo "filename: " . $file . "<br>";
-        }
-
-        closedir($handle);
-    }
-}
-
-
-//TEST end
-
-
-
 $itemIdArray = array();
 
 function fillItemArray($_stmt){
@@ -319,8 +291,15 @@ catch(PDOException $e) {
 
 $conn = null;
 
-?>
+//PERMISSION begin: Give access to images folder
+$user = 'marzekeu\ece';
+$password = 'Sollenau10!';
+$location = '"\\\172.16.1.5\Etiketten"';
 
+//system() outputs "Befehl wurde durchgeführt", for that reason I used exec.
+exec("net use \"".$location."\" ".$password." /user:".$user." /persistent:no");
+//PERMISSION end
+?>
 
 <?php
 if($itemIdArray){
@@ -371,9 +350,7 @@ if($itemIdArray){
                 <div class="col align-self-center">
                     <?php if($v1['DesignJpgPreviewUrl']){ ?>
                         <img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>', '<?php echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
-                    <?php } //else if($v1['MARPngPath']){ ?>
-                       <!-- <img title="Bild öffnen" class="designjpgpreviewurl" onclick="openImage('<?php //echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>', '<?php //echo $v1['ItemId']; ?>')" src="data:image/jpg;base64, <?php //echo base64_encode(file_get_contents($v1['MARPngPath'])); ?>" style="height: 50px; width: 50px; cursor: pointer;"/> -->
-                    <?php// } ?>
+                    <?php } ?>
                 </div>
                 <div class="col align-self-center printImg"><a target="_blank" href="createPDF.php?type=<?php echo $_POST['selectType']; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>&SimpleOrFullPDF=Full" style="color: #d80030;"><img src="Bilder/drucker.png" class="print" title="Drucken" alt="Drucken" width="35"></a></div>
             </div>
