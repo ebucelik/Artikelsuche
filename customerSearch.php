@@ -2,36 +2,73 @@
 require_once('db/db.php');
 
 $unequalString = '';
-$custNum = $custName = $custPLZ = $custStreet = $custPlace = $custTel = $custMail = $unequalString;
+$custNum = $custName = $custPLZ = $custStreet = $custPlace = $custTel = $custMail = $query = $unequalString;
 $custDataArray = array();
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isset($_POST['kNumber']) && $_POST['kNumber'] != ''){
         $custNum = $_POST['kNumber'];
+        $query = "T1.AccountNum LIKE '$custNum%' ";
     }
 
     if(isset($_POST['kName']) && $_POST['kName'] != ''){
         $custName = $_POST['kName'];
+
+        if($query){
+            $query .= "AND T2.Name LIKE '%$custName%' ";
+        }else{
+            $query .= "T2.Name LIKE '%$custName%' ";
+        }
     }
 
     if(isset($_POST['kPLZ']) && $_POST['kPLZ'] != ''){
         $custPLZ = $_POST['kPLZ'];
+
+        if($query){
+            $query .= "AND T3.ZipCode LIKE '$custPLZ%' ";
+        }else{
+            $query .= "T3.ZipCode LIKE '$custPLZ%' ";
+        }
     }
 
     if(isset($_POST['street']) && $_POST['street'] != ''){
         $custStreet = $_POST['street'];
+
+        if($query){
+            $query .= "AND T3.Street LIKE '%$custStreet%' ";
+        }else{
+            $query .= "T3.Street LIKE '%$custStreet%' ";
+        }
     }
 
     if(isset($_POST['place']) && $_POST['place'] != ''){
         $custPlace = $_POST['place'];
+
+        if($query){
+            $query .= "AND T3.City LIKE '%$custPlace%' ";
+        }else{
+            $query .= "T3.City LIKE '%$custPlace%' ";
+        }
     }
 
     if(isset($_POST['tNumber']) && $_POST['tNumber'] != ''){
         $custTel = $_POST['tNumber'];
+
+        if($query){
+            $query .= "AND T5.Locator LIKE '%$custTel%' ";
+        }else{
+            $query .= "T5.Locator LIKE '%$custTel%' ";
+        }
     }
 
     if(isset($_POST['email']) && $_POST['email'] != ''){
         $custMail = $_POST['email'];
+
+        if($query){
+            $query .= "AND T4.Locator LIKE '%$custMail%' ";
+        }else{
+            $query .= "T4.Locator LIKE '%$custMail%' ";
+        }
     }
 }
 ?>
@@ -103,23 +140,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         </div>
 
         <?php 
-        function executeQuery($_conn, $_custNum){
-            $stmt = $_conn->prepare("SELECT T1.AccountNum, T1.Party, T2.Name, T3.City, T3.Street, T3.CountryRegionId, T3.ZipCode, T4.Locator as Mail,
-                                    T5.Locator as Tel, T6.Locator as Fax, T7.Locator as Website
-                                    FROM CustTable T1
-                                    LEFT JOIN DirPartyTable T2 ON T2.RecId = T1.Party
-                                    LEFT JOIN LogisticsPostalAddress T3 ON T3.Location = T2.PrimaryAddressLocation AND 
-                                    T3.ValidFrom IN (SELECT MAX(T8.ValidFrom) AS valid FROM LogisticsPostalAddress T8 WHERE T8.Location = T2.PrimaryAddressLocation)
-                                    LEFT JOIN LogisticsElectronicAddress T4 ON T4.RecId = T2.PrimaryContactEmail
-                                    LEFT JOIN LogisticsElectronicAddress T5 ON T5.RecId = T2.PrimaryContactPhone
-                                    LEFT JOIN LogisticsElectronicAddress T6 ON T6.RecId = T2.PrimaryContactFax
-                                    LEFT JOIN LogisticsElectronicAddress T7 ON T7.RecId = T2.PrimaryContactURL
-                                    WHERE T1.AccountNum LIKE '$_custNum%'");
-            $stmt->execute();
-        
-            return fillCustDataToArray($stmt);
-        }
-        
         function fillCustDataToArray($_stmt){
             $_custDataArray = array();
         
@@ -133,7 +153,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         
         try{
-            $custDataArray = executeQuery($conn, $custNum);
+            $stmt = $conn->prepare("SELECT T1.AccountNum, T1.Party, T2.Name, T3.City, T3.Street, T3.CountryRegionId, T3.ZipCode, T4.Locator as Mail,
+                                    T5.Locator as Tel, T6.Locator as Fax, T7.Locator as Website
+                                    FROM CustTable T1
+                                    LEFT JOIN DirPartyTable T2 ON T2.RecId = T1.Party
+                                    LEFT JOIN LogisticsPostalAddress T3 ON T3.Location = T2.PrimaryAddressLocation AND 
+                                    T3.ValidFrom IN (SELECT MAX(T8.ValidFrom) AS valid FROM LogisticsPostalAddress T8 WHERE T8.Location = T2.PrimaryAddressLocation)
+                                    LEFT JOIN LogisticsElectronicAddress T4 ON T4.RecId = T2.PrimaryContactEmail
+                                    LEFT JOIN LogisticsElectronicAddress T5 ON T5.RecId = T2.PrimaryContactPhone
+                                    LEFT JOIN LogisticsElectronicAddress T6 ON T6.RecId = T2.PrimaryContactFax
+                                    LEFT JOIN LogisticsElectronicAddress T7 ON T7.RecId = T2.PrimaryContactURL
+                                    WHERE $query");
+            $stmt->execute();
+
+            $custDataArray = fillCustDataToArray($stmt);
         }catch(PDOException $e){
             echo "Error: " . $e->getMessage();
         }
