@@ -1,6 +1,5 @@
 <?php
 require_once('db/db.php');
-require_once('db/permissions.php');
 
 $unEqualString = "";
 $type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
@@ -291,11 +290,6 @@ catch(PDOException $e) {
 }
 
 $conn = null;
-
-//PERMISSION begin: Give access to images folder
-//system() outputs "Befehl wurde durchgeführt", for that reason I used exec.
-exec("net use \"".PATH."\" ".PASS." /user:".USER." /persistent:no");
-//PERMISSION end
 ?>
 
 <?php
