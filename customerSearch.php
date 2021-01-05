@@ -1,3 +1,41 @@
+<?php
+require_once('db/db.php');
+
+$unequalString = '';
+$custNum = $custName = $custPLZ = $custStreet = $custPlace = $custTel = $custMail = $unequalString;
+$custDataArray = array();
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if(isset($_POST['kNumber']) && $_POST['kNumber'] != ''){
+        $custNum = $_POST['kNumber'];
+    }
+
+    if(isset($_POST['kName']) && $_POST['kName'] != ''){
+        $custName = $_POST['kName'];
+    }
+
+    if(isset($_POST['kPLZ']) && $_POST['kPLZ'] != ''){
+        $custPLZ = $_POST['kPLZ'];
+    }
+
+    if(isset($_POST['street']) && $_POST['street'] != ''){
+        $custStreet = $_POST['street'];
+    }
+
+    if(isset($_POST['place']) && $_POST['place'] != ''){
+        $custPlace = $_POST['place'];
+    }
+
+    if(isset($_POST['tNumber']) && $_POST['tNumber'] != ''){
+        $custTel = $_POST['tNumber'];
+    }
+
+    if(isset($_POST['email']) && $_POST['email'] != ''){
+        $custMail = $_POST['email'];
+    }
+}
+?>
+
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -31,37 +69,109 @@
             <form action="" method="POST">
                 <div class="form-group fading searchForm">
                     <label for="kNumber" class="align-self-center labelTxt">Kundennummer:</label>
-                    <input type="number" class="form-control searchInput" id="kNumber" placeholder="Kundennummer eingeben" name="kNumber" min="4">
+                    <input type="number" class="form-control searchInput" id="kNumber" placeholder="Kundennummer eingeben" name="kNumber" min="4" value="<?php echo $custNum; ?>">
                     <span class="kNumberalert"></span>
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="kName" class="align-self-center labelTxt">Kundenname:</label>
-                    <input type="text" class="form-control searchInput" id="kName" placeholder="Kundenname eingeben" name="kName">
+                    <input type="text" class="form-control searchInput" id="kName" placeholder="Kundenname eingeben" name="kName" value="<?php echo $custName; ?>">
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="kPLZ" class="align-self-center labelTxt">PLZ:</label>
-                    <input type="number" class="form-control searchInput" id="kPLZ" placeholder="PLZ eingeben" name="kPLZ">
+                    <input type="number" class="form-control searchInput" id="kPLZ" placeholder="PLZ eingeben" name="kPLZ" value="<?php echo $custPLZ; ?>">
                     <span class="kPLZalert"></span>
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="street" class="align-self-center labelTxt">Straße:</label>
-                    <input type="text" class="form-control searchInput" id="street" placeholder="Straße eingeben" name="street">
+                    <input type="text" class="form-control searchInput" id="street" placeholder="Straße eingeben" name="street" value="<?php echo $custStreet; ?>">
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="place" class="align-self-center labelTxt">Ort:</label>
-                    <input type="text" class="form-control searchInput" id="place" placeholder="Ort eingeben" name="place">
+                    <input type="text" class="form-control searchInput" id="place" placeholder="Ort eingeben" name="place" value="<?php echo $custPlace; ?>">
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="tNumber" class="align-self-center labelTxt">Telefonnummer:</label>
-                    <input type="text" class="form-control searchInput" id="tNumber" placeholder="Telefonnummer eingeben" name="tNumber">
+                    <input type="text" class="form-control searchInput" id="tNumber" placeholder="Telefonnummer eingeben" name="tNumber" value="<?php echo $custTel; ?>">
                     <span class="tNumberalert"></span>
                 </div>             
                 <div class="form-group fading searchForm">
                     <label for="email" class="align-self-center labelTxt">E-Mail:</label>
-                    <input type="text" class="form-control searchInput" id="email" placeholder="E-Mail eingeben" name="email">
+                    <input type="text" class="form-control searchInput" id="email" placeholder="E-Mail eingeben" name="email" value="<?php echo $custMail; ?>">
                 </div>
                 <button type="submit" class="btn btn-outline-light fading" id="articlesearch">SUCHEN</button>   
             </form>
         </div>
+
+        <?php 
+        function executeQuery($_conn, $_custNum){
+            $stmt = $_conn->prepare("SELECT T1.AccountNum, T1.Party, T2.Name, T3.City, T3.Street, T3.CountryRegionId, T3.ZipCode, T4.Locator as Mail,
+                                    T5.Locator as Tel, T6.Locator as Fax, T7.Locator as Website
+                                    FROM CustTable T1
+                                    LEFT JOIN DirPartyTable T2 ON T2.RecId = T1.Party
+                                    LEFT JOIN LogisticsPostalAddress T3 ON T3.Location = T2.PrimaryAddressLocation AND 
+                                    T3.ValidFrom IN (SELECT MAX(T8.ValidFrom) AS valid FROM LogisticsPostalAddress T8 WHERE T8.Location = T2.PrimaryAddressLocation)
+                                    LEFT JOIN LogisticsElectronicAddress T4 ON T4.RecId = T2.PrimaryContactEmail
+                                    LEFT JOIN LogisticsElectronicAddress T5 ON T5.RecId = T2.PrimaryContactPhone
+                                    LEFT JOIN LogisticsElectronicAddress T6 ON T6.RecId = T2.PrimaryContactFax
+                                    LEFT JOIN LogisticsElectronicAddress T7 ON T7.RecId = T2.PrimaryContactURL
+                                    WHERE T1.AccountNum LIKE '$_custNum%'");
+            $stmt->execute();
+        
+            return fillCustDataToArray($stmt);
+        }
+        
+        function fillCustDataToArray($_stmt){
+            $_custDataArray = array();
+        
+            foreach($_stmt as $val){
+                array_push($_custDataArray, array('AccountNum' => $val['AccountNum'], 'Party' => $val['Party'], 'Name' => $val['Name'], 'City' => $val['City'],
+                            'Street' => $val['Street'], 'CountryRegionId' => $val['CountryRegionId'], 'ZipCode' => $val['ZipCode'], 'Mail' => $val['Mail'],
+                            'Tel' => $val['Tel'], 'Fax' => $val['Fax'], 'Website' => $val['Website']));
+            }
+        
+            return $_custDataArray;
+        }
+        
+        try{
+            $custDataArray = executeQuery($conn, $custNum);
+        }catch(PDOException $e){
+            echo "Error: " . $e->getMessage();
+        }
+        
+        if($custDataArray){ ?>
+            <div id="dataView">
+                <div class="containerRow">
+                    <div class="row titlerow">
+                        <div class="col">Kundennummer</div>
+                        <div class="col">Kundenname</div>
+                        <div class="col">PLZ</div>
+                        <div class="col">Straße</div>
+                        <div class="col">Ort</div>
+                        <div class="col">Tel. Nummer</div>
+                        <div class="col" style="flex-grow:2;">E-Mail</div>
+                        <div class="col">Fax</div>
+                        <div class="col">Website</div>
+                    </div>
+
+                    <?php foreach($custDataArray as $v1){?>
+                        <div class="row">
+                            <div class="col align-self-center"><?php echo $v1['AccountNum']; ?></div>
+                            <div class="col align-self-center"><?php echo $v1['Name']; ?></div>
+                            <div class="col align-self-center"><?php echo $v1['ZipCode']; ?></div>
+                            <div class="col align-self-center"><?php echo $v1['Street']; ?></div>
+                            <div class="col align-self-center"><?php echo $v1['City']; ?></div>
+                            <div class="col align-self-center"><?php echo $v1['Tel']; ?></div>
+                            <div class="col align-self-center" style="flex-grow:2;"><?php echo $v1['Mail']; ?></div>
+                            <div class="col align-self-center"><?php echo $v1['Fax']; ?></div>
+                            <div class="col align-self-center"><?php echo $v1['Website']; ?></div>
+                        </div>
+                        <hr/>
+                    <?php 
+                    }
+                    ?>
+                </div>
+            </div>
+        <?php } ?>
+
     </nav>
 </html> 
