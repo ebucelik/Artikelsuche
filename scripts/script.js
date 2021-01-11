@@ -51,16 +51,18 @@ function sendMailPdf() {
     let index = $('.sendMailCheck').index(this);
     custnum = $('.custvendrelation').eq(index).text();
     itemid = $('.itemid').eq(index).text();
+    version = $('.version').eq(index).text();
     name = $('.name').eq(index).text();
     externalitemtxt = $('.externalitemtxt').eq(index).text();
     lepsizew = $('.lepsizew').eq(index).text();
     lepsizel = $('.lepsizel').eq(index).text();
     stocklevel = $('.stocklevel').eq(index).text();
+    salesid = $('.salesid').eq(index).text();
 
     $.ajax({
       type: "get",
       url: "getImageUrl.php",
-      data: { ItemId: itemid },
+      data: { ItemId: itemid, Version: version, SalesId: salesid },
       success: function (image) {
         if (image) {
           tmp.push(image);
@@ -116,11 +118,11 @@ function sendMailJpg() {
     tradeunitspecid = $('.tradeunitspecid').eq(index).text();
     salesid = $('.salesid').eq(index).text();
     stocklevel = $('.stocklevel').eq(index).text();
-
+ 
     $.ajax({
       type: "get",
       url: "getImageUrl.php",
-      data: { ItemId: itemid },
+      data: { ItemId: itemid, Version: version, SalesId: salesid },
       success: function (image) {
         tmp.push(image);
       }

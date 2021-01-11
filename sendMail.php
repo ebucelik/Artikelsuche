@@ -79,7 +79,7 @@ if(isset($_GET["PDF"])){
                             $itemid = str_replace('R-Nummer: ', '', $data[$i][0]);
                             $itemid = str_replace('/', '-', $itemid);
                             $img = 'Uploads/' . $itemid . '.jpg';
-                            file_put_contents($img, file_get_contents($url));
+                            file_put_contents($img, @file_get_contents($url));
                             array_push($imageArray, $img);
                         } 
                     }
