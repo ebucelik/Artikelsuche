@@ -85,13 +85,13 @@ require("db/getDataFromDB.php");
                 </a>
             </div>
             <div class="col firstCols">
-                <a <?php if(isset($v1['DesignJpgPreviewUrl'])){?> target="_blank" href="createImagePDF.php?DesignJpgPreviewUrl=<?php echo $v1['DesignJpgPreviewUrl'];?>" <?php }else{?> href=""<?php } ?>>
-                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['DesignJpgPreviewUrl'])){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ALS PDF ANZEIGEN</button>
+                <a <?php if(isset($v1['DesignJpgPreviewUrl']) && @file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){?> target="_blank" href="createImagePDF.php?DesignJpgPreviewUrl=<?php echo $v1['DesignJpgPreviewUrl'];?>" <?php }else{?> href=""<?php } ?>>
+                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['DesignJpgPreviewUrl']) || @file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ALS PDF ANZEIGEN</button>
                 </a>
             </div>
             <div class="col firstCols">
-                <a <?php if(isset($v1['DesignJpgPreviewUrl'])){?> target="_blank" href="showImagePNG.php?DesignJpgPreviewUrl=<?php echo $v1['DesignJpgPreviewUrl'];?>" <?php }else{?> href=""<?php } ?>>
-                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['DesignJpgPreviewUrl'])){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ALS JPG ANZEIGEN</button>
+                <a <?php if(isset($v1['DesignJpgPreviewUrl']) && @file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){?> target="_blank" href="showImagePNG.php?DesignJpgPreviewUrl=<?php echo $v1['DesignJpgPreviewUrl'];?>" <?php }else{?> href=""<?php } ?>>
+                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['DesignJpgPreviewUrl']) || @file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ALS JPG ANZEIGEN</button>
                 </a>
             </div>
         </div>
@@ -137,7 +137,7 @@ require("db/getDataFromDB.php");
             <div class="col align-self-center firstCols" style="text-align: center;">
             <?php if($v1['DesignJpgPreviewUrl']){?>
             <figure>
-                <img src="data:image/jpg;base64, <?php echo base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); ?>" title="<?php echo $v1['ItemId'];?>" style="max-width: 30%;"/><?php }else{ ?> <img src="Bilder/noimage.png" alt="Image not found" title="Image not found" style="max-width: 40%;"> <?php }  ?>
+                <img src="<?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){ echo 'Bilder/noimage.png'; }else{ echo 'data:image/jpg;base64,' . base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); } ?>" title="<?php echo $v1['ItemId'];?>" style="max-width: 30%;"/><?php }else{ ?> <img src="Bilder/noimage.png" alt="Image not found" title="Image not found" style="max-width: 40%;"> <?php }  ?>
                 <figcaption style="color: black;"><span>Letzte Änderung am </span><?php if(isset($v1['createdDateTime'])){echo $v1['createdDateTime']->format('d.m.Y');}?></figcaption>
             </figure>
             </div>
