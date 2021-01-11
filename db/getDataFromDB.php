@@ -1,7 +1,6 @@
 <?php
 
 if($itemId != $unEqualString){
-
     if($type == "Rollenetiketten"){
         //TODO: Implement T1.MARPngPath, 
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
@@ -23,7 +22,7 @@ if($itemId != $unEqualString){
                             LEFT JOIN InventTable T19 ON T19.ItemId = T1.ItemId
                             LEFT JOIN DocuRef T20 ON T20.RefRecId = T19.RecId AND T20.RefTableId = 175
                             LEFT JOIN LEPProdToolTable T21 ON T21.ProdToolId = T1.LPMRZProdToolIdDieCut
-                            WHERE T1.ItemId = '$itemId' AND T1.SalesIdLast = '$salesId' AND T1.InventStyleId = '$version'");
+                            WHERE T1.ItemId = '$itemId' AND T1.SalesIdLast = '$salesId' AND T1.InventStyleId = '$version' AND T1.LPMRZBoardId = '$lPMRZBoardId' AND T1.LPMRZProdToolIdDieCut = '$lPMRZProdToolIdDieCut'");
     }else{
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                             T1.LEPSizeL, T1.LEPSizeW, T1.InventStyleId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.InventDimId, T1.ZipCode, T1.City, T1.MARInprintingSortName
