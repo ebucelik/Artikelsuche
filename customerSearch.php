@@ -68,8 +68,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <div class="container" id="inputFields">
             <form action="" method="POST">
                 <div class="form-group fading searchForm">
-                    <label for="kNumber" class="align-self-center labelTxt">Kundennummer:</label>
-                    <input type="number" class="form-control searchInput" id="kNumber" placeholder="Kundennummer eingeben" name="kNumber" min="4" value="<?php echo $custNum; ?>">
+                    <label for="kNumber" class="align-self-center labelTxt ">Kundennummer:</label>
+                    <input type="number" class="form-control searchInput alert2" id="kNumber" placeholder="Kundennummer eingeben" name="kNumber" min="4" value="<?php echo $custNum; ?>">
                     <span class="kNumberalert"></span>
                 </div>
                 <div class="form-group fading searchForm">
@@ -78,7 +78,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="kPLZ" class="align-self-center labelTxt">PLZ:</label>
-                    <input type="number" class="form-control searchInput" id="kPLZ" placeholder="PLZ eingeben" name="kPLZ" value="<?php echo $custPLZ; ?>">
+                    <input type="number" class="form-control searchInput alert2" id="kPLZ" placeholder="PLZ eingeben" name="kPLZ" value="<?php echo $custPLZ; ?>">
                     <span class="kPLZalert"></span>
                 </div>
                 <div class="form-group fading searchForm">
@@ -91,14 +91,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 </div>
                 <div class="form-group fading searchForm">
                     <label for="tNumber" class="align-self-center labelTxt">Telefonnummer:</label>
-                    <input type="text" class="form-control searchInput" id="tNumber" placeholder="Telefonnummer eingeben" name="tNumber" value="<?php echo $custTel; ?>">
+                    <input type="text" class="form-control searchInput alert2" id="tNumber" placeholder="Telefonnummer eingeben" name="tNumber" value="<?php echo $custTel; ?>">
                     <span class="tNumberalert"></span>
                 </div>             
                 <div class="form-group fading searchForm">
                     <label for="email" class="align-self-center labelTxt">E-Mail:</label>
                     <input type="text" class="form-control searchInput" id="email" placeholder="E-Mail eingeben" name="email" value="<?php echo $custMail; ?>">
                 </div>
-                <button type="submit" class="btn btn-outline-light fading" id="articlesearch">SUCHEN</button>   
+                <button type="submit" class="btn btn-outline-light fading customerSubmit" id="articlesearch">SUCHEN</button>   
             </form>
         </div>
 
@@ -155,7 +155,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                     <?php foreach($custDataArray as $v1){?>
                         <div class="row">
-                            <div class="col align-self-center"><?php echo $v1['AccountNum']; ?></div>
+                            <div class="col align-self-center"><a style="color: black" href="detailCustomer.php"><?php echo $v1['AccountNum']; ?></a></div>
                             <div class="col align-self-center"><?php echo $v1['Name']; ?></div>
                             <div class="col align-self-center"><?php echo $v1['ZipCode']; ?></div>
                             <div class="col align-self-center"><?php echo $v1['Street']; ?></div>
