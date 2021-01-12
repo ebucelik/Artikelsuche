@@ -1,5 +1,5 @@
 let displayCheckbox = false;
-let custnum = itemid = version = prodgroupid = name = sort = externalitemtxt = lepsizew = lepsizel = tradeunitspecid = salesid = stocklevel = image = msg = "";
+let custnum = itemid = version = prodgroupid = custNames = sort = externalitemtxt = lepsizew = lepsizel = tradeunitspecid = salesid = stocklevel = image = msg = "";
 let state = false;
 let cntCheckedInputs = 0;
 
@@ -52,7 +52,7 @@ function sendMailPdf() {
     custnum = $('.custvendrelation').eq(index).text();
     itemid = $('.itemid').eq(index).text();
     version = $('.version').eq(index).text();
-    name = $('.name').eq(index).text();
+    custNames = $('.name').eq(index).text();
     externalitemtxt = $('.externalitemtxt').eq(index).text();
     lepsizew = $('.lepsizew').eq(index).text();
     lepsizel = $('.lepsizel').eq(index).text();
@@ -82,16 +82,20 @@ function sendMailPdf() {
   });
 
   $.ajax({
-    type: "get",
+    type: "post",
     url: "createPdfForMail.php",
-    data: { Data: JSON.stringify(dataArr), Name: name },
+    data: { Data: JSON.stringify(dataArr), Name: custNames },
     success: function () {
       $.ajax({
         type: "get",
         url: "getMailFromCustomer.php",
         data: { CustNum: custnum },
         success: function (email) {
-          window.location.href = "sendMail.php?email=" + email + "&PDF=Uploads/" + name + ".pdf";
+          let form = document.getElementById("sendMailForm");
+          form.email.value = email;
+          form.data.value = "";
+          form.Pdf.value = "Uploads/" + custNames + ".pdf";
+          form.submit();
         }
       });
     }
@@ -100,17 +104,16 @@ function sendMailPdf() {
 
 function sendMailJpg() {
   let dataArr = [];
-  cntCheckedInputs = 0;
+  cntCheckedInputs = $('.sendMailCheck').filter(':checked').length;
 
   $('.sendMailCheck').filter(':checked').each(function () {
-    cntCheckedInputs++;
     let tmp = [];
     let index = $('.sendMailCheck').index(this);
     custnum = $('.custvendrelation').eq(index).text();
     itemid = $('.itemid').eq(index).text();
     version = $('.version').eq(index).text();
     prodgroupid = $('.prodgroupid').eq(index).text();
-    name = $('.name').eq(index).text();
+    custNames = $('.name').eq(index).text();
     sort = $('.sort').eq(index).text();
     externalitemtxt = $('.externalitemtxt').eq(index).text();
     lepsizew = $('.lepsizew').eq(index).text();
@@ -118,21 +121,12 @@ function sendMailJpg() {
     tradeunitspecid = $('.tradeunitspecid').eq(index).text();
     salesid = $('.salesid').eq(index).text();
     stocklevel = $('.stocklevel').eq(index).text();
- 
-    $.ajax({
-      type: "get",
-      url: "getImageUrl.php",
-      data: { ItemId: itemid, Version: version, SalesId: salesid },
-      success: function (image) {
-        tmp.push(image);
-      }
-    });
 
     tmp.push("R-Nummer: " + itemid);
     tmp.push("Kundennummer: " + custnum);
     tmp.push("Version: " + version);
     tmp.push("Produktvariante: " + prodgroupid);
-    tmp.push("Kundenname: " + name);
+    tmp.push("Kundenname: " + custNames);
     tmp.push("Sorte: " + sort);
     tmp.push("Stichwort: " + externalitemtxt);
     tmp.push("FormatQuer: " + lepsizew);
@@ -140,6 +134,17 @@ function sendMailJpg() {
     tmp.push("Stellung: " + tradeunitspecid);
     tmp.push("Auftragsnummer: " + salesid);
     tmp.push("Lagerstand: " + stocklevel);
+
+    $.ajax({
+      type: "get",
+      url: "getImageUrl.php",
+      data: { ItemId: itemid, Version: version, SalesId: salesid },
+      success: function (image) {  
+        tmp.push(image);
+      },
+      async: false
+    });
+
     dataArr.push(tmp);
   });
 
@@ -152,7 +157,12 @@ function sendMailJpg() {
       data: { CustNum: custnum },
       success: function (email) {
         let arrStr = JSON.stringify(dataArr);
-        window.location.href = "sendMail.php?email=" + email + "&data=" + arrStr;
+
+        let form = document.getElementById("sendMailForm");
+        form.email.value = email;
+        form.data.value = arrStr;
+        form.Pdf.value = "";
+        form.submit();
       }
     });
   }

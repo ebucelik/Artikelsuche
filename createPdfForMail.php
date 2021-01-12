@@ -4,14 +4,14 @@ require('FPDF/fpdf.php');
 $name = "";
 $data = array();
 
-if(isset($_GET["Name"])){
-    $name = $_GET["Name"];
+if(isset($_POST["Name"])){
+    $name = $_POST["Name"];
 }else{
     $name = date('d-m-y');
 }
 
-if(isset($_GET["Data"])){
-    $data = json_decode($_GET["Data"]);
+if(isset($_POST["Data"])){
+    $data = json_decode($_POST["Data"]);
 }
 
 //Page is from 210 mm broad

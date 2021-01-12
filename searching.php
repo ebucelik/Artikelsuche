@@ -400,6 +400,12 @@ if($itemIdArray){
             <!-- Modal Caption (Image Text) -->
             <div id="caption"></div>
         </div>
+
+        <form id="sendMailForm" method="POST" action="sendMail.php">
+            <input type="hidden" name="email" value="" />
+            <input type="hidden" name="data" value="" />
+            <input type="hidden" name="Pdf" value="" />
+        </form>
     </nav>
 </body>
 </html>

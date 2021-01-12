@@ -6,17 +6,20 @@ $pdf = "";
 $data = array();
 $imageArray = array();
 
-if(isset($_GET["email"])){
-    $email = $_GET["email"];
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if(isset($_POST["email"])){
+        $email = $_POST["email"];
+    }
+    
+    if(isset($_POST["data"])){
+        $data = json_decode($_POST["data"]);
+    }
+    
+    if(isset($_POST["Pdf"])){
+        $pdf = $_POST["Pdf"];
+    }
 }
 
-if(isset($_GET["data"])){
-    $data = json_decode($_GET["data"]);
-}
-
-if(isset($_GET["PDF"])){
-    $pdf = $_GET["PDF"];
-}
 ?>
 
 <html lang="de">
@@ -75,7 +78,7 @@ if(isset($_GET["PDF"])){
                             }
                             echo "\n";
     
-                            $url = $data[$i][12];
+                            $url = isset($data[$i][12]) ? $data[$i][12] : "";
                             $itemid = str_replace('R-Nummer: ', '', $data[$i][0]);
                             $itemid = str_replace('/', '-', $itemid);
                             $img = 'Uploads/' . $itemid . '.jpg';
