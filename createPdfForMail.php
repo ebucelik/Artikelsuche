@@ -63,7 +63,11 @@ foreach($data as $d){
     $pdf->Cell(35, $cntYpos, $d[5]);
 
     if(isset($d[0])){
-        $pdf->Cell(30, 30, $pdf->Image($d[0], 150, $pdf->GetY()-20, -350));
+        if(getimagesize($d[0])[0] > 900){
+            $pdf->Cell(30, 30, $pdf->Image($d[0], 150, $pdf->GetY()-20, -750));
+        }else{
+            $pdf->Cell(30, 30, $pdf->Image($d[0], 150, $pdf->GetY()-20, -350));
+        }
     }
 
     $pdf->ln(35);

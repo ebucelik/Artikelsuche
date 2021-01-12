@@ -429,24 +429,28 @@ if($itemIdArray){
                     $pdf->ln(40);
                     $pdf->SetLineWidth(0.5);
                     $pdf->Line(5, 175, 205, 175); 
-                    $imgYpos = 200;
+                    $imgYpos = 190;
                 }
                 else if(count($colorArray) == 4){
                     $pdf->ln(25);
                     $pdf->SetLineWidth(0.5);
                     $pdf->Line(5, 185, 205, 185); 
-                    $imgYpos = 200;      
+                    $imgYpos = 190;      
                 }else{
                     $pdf->ln(25);
                     $pdf->SetLineWidth(0.5);
                     $pdf->Line(5, 195, 205, 195);
-                    $imgYpos = 210;
+                    $imgYpos = 200;
                 }
 
                 if(isset($v1['DesignJpgPreviewUrl'])){
                     if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE)
                     {
-                        $pdf->Image($v1['DesignJpgPreviewUrl'], 125, $imgYpos, -220);
+                        if(getimagesize($v1['DesignJpgPreviewUrl'])[0] > 900){
+                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, $imgYpos, -500);
+                        }else{
+                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, $imgYpos, -220);
+                        }
                     }
                 }
 
@@ -479,7 +483,11 @@ if($itemIdArray){
                 if(isset($v1['DesignJpgPreviewUrl'])){
                     if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE)
                     {
-                        $pdf->Image($v1['DesignJpgPreviewUrl'], 125, 50, -220);
+                        if(getimagesize($v1['DesignJpgPreviewUrl'])[0] > 900){
+                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, 50, -500);
+                        }else{
+                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, 50, -220);
+                        }
                     }
                 }
                 $pdf->ln(20);
