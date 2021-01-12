@@ -64,7 +64,7 @@ foreach($data as $d){
 
     if(isset($d[0])){
         if(getimagesize($d[0])[0] > 900){
-            $pdf->Cell(30, 30, $pdf->Image($d[0], 150, $pdf->GetY()-20, -750));
+            $pdf->Cell(30, 30, $pdf->Image($d[0], 150, $pdf->GetY()-20, -850));
         }else{
             $pdf->Cell(30, 30, $pdf->Image($d[0], 150, $pdf->GetY()-20, -350));
         }

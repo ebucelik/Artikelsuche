@@ -43,8 +43,23 @@ function checkAll() {
   $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
 }
 
+function checkAllWithStock() {
+  state = !state;
+
+  $('#dataView input').each(function () {
+    if ($(this).parents('.row').find(".stocklevel").text() != "0") {
+      $(this).prop("checked", state);
+    }
+  });
+
+  $('#sendmailJpg, #sendmailPdf').css('display', state ? 'block' : 'none');
+
+  $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
+}
+
 function sendMailPdf() {
   let dataArr = [];
+  cntCheckedInputs = $('.sendMailCheck').filter(':checked').length;
 
   $('.sendMailCheck').filter(':checked').each(function () {
     let tmp = [];
@@ -81,25 +96,31 @@ function sendMailPdf() {
     dataArr.push(tmp);
   });
 
-  $.ajax({
-    type: "post",
-    url: "createPdfForMail.php",
-    data: { Data: JSON.stringify(dataArr), Name: custNames },
-    success: function () {
-      $.ajax({
-        type: "get",
-        url: "getMailFromCustomer.php",
-        data: { CustNum: custnum },
-        success: function (email) {
-          let form = document.getElementById("sendMailForm");
-          form.email.value = email;
-          form.data.value = "";
-          form.Pdf.value = "Uploads/" + custNames + ".pdf";
-          form.submit();
-        }
-      });
-    }
-  });
+  if (cntCheckedInputs > 20) {
+    alert("Achtung!\n\nSie haben die maximale Anzahl an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
+  } else if (cntCheckedInputs <= 0) {
+    alert("Achtung!\n\nSie haben " + cntCheckedInputs + " Artikel ausgewählt!");
+  } else {
+    $.ajax({
+      type: "post",
+      url: "createPdfForMail.php",
+      data: { Data: JSON.stringify(dataArr), Name: custNames },
+      success: function () {
+        $.ajax({
+          type: "get",
+          url: "getMailFromCustomer.php",
+          data: { CustNum: custnum },
+          success: function (email) {
+            let form = document.getElementById("sendMailForm");
+            form.email.value = email;
+            form.data.value = "";
+            form.Pdf.value = "Uploads/" + custNames + ".pdf";
+            form.submit();
+          }
+        });
+      }
+    });
+  }
 }
 
 function sendMailJpg() {
@@ -150,6 +171,8 @@ function sendMailJpg() {
 
   if (cntCheckedInputs > 20) {
     alert("Achtung!\n\nSie haben die maximale Anzahl an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
+  } else if (cntCheckedInputs <= 0) {
+    alert("Achtung!\n\nSie haben " + cntCheckedInputs + " Artikel ausgewählt!");
   } else {
     $.ajax({
       type: "get",

@@ -148,10 +148,10 @@ if($itemIdArray){
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(25, 10, 'R-Nummer');
                 $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(70, 10, $v1['ItemId']);
+                $pdf->Cell(117, 10, $v1['ItemId']);
 
                 $pdf->SetFont('Arial', 'I', 8);
-                $pdf->Cell(35, 10, 'Auftragsnummer');
+                $pdf->Cell(25, 10, 'Auftragsnummer');
                 $pdf->SetFont('Arial', '', 8);
                 $pdf->Cell(90, 10, $v1['SalesId']);
 
@@ -160,10 +160,10 @@ if($itemIdArray){
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(25, 10, "Stichwort");
                 $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(70, 10, iconv('UTF-8', 'windows-1252', $v1['ExternalItemTxt']));
+                $pdf->Cell(117, 10, iconv('UTF-8', 'windows-1252', $v1['ExternalItemTxt']));
 
                 $pdf->SetFont('Arial', 'I', 8);
-                $pdf->Cell(35, 10, 'Version');
+                $pdf->Cell(25, 10, 'Version');
                 $pdf->SetFont('Arial', '', 8);
                 $pdf->Cell(90, 10, $v1['Version']);
 
@@ -172,10 +172,10 @@ if($itemIdArray){
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(25, 10, 'Sorten Eindruck');
                 $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(70, 10, iconv('UTF-8', 'windows-1252', $v1['Sort']));
+                $pdf->Cell(117, 10, iconv('UTF-8', 'windows-1252', $v1['Sort']));
 
                 $pdf->SetFont('Arial', 'I', 8);
-                $pdf->Cell(35, 10, "Produktvariante");
+                $pdf->Cell(25, 10, "Produktvariante");
                 $pdf->SetFont('Arial', '', 8);
                 $pdf->Cell(90, 10, $v1['ProdGroupId']);
 
@@ -429,25 +429,25 @@ if($itemIdArray){
                     $pdf->ln(40);
                     $pdf->SetLineWidth(0.5);
                     $pdf->Line(5, 175, 205, 175); 
-                    $imgYpos = 190;
+                    $imgYpos = 200;
                 }
                 else if(count($colorArray) == 4){
                     $pdf->ln(25);
                     $pdf->SetLineWidth(0.5);
                     $pdf->Line(5, 185, 205, 185); 
-                    $imgYpos = 190;      
+                    $imgYpos = 200;      
                 }else{
                     $pdf->ln(25);
                     $pdf->SetLineWidth(0.5);
                     $pdf->Line(5, 195, 205, 195);
-                    $imgYpos = 200;
+                    $imgYpos = 210;
                 }
 
                 if(isset($v1['DesignJpgPreviewUrl'])){
                     if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE)
                     {
                         if(getimagesize($v1['DesignJpgPreviewUrl'])[0] > 900){
-                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, $imgYpos, -500);
+                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, $imgYpos, -650);
                         }else{
                             $pdf->Image($v1['DesignJpgPreviewUrl'], 125, $imgYpos, -220);
                         }
@@ -461,7 +461,7 @@ if($itemIdArray){
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(25, 10, "KundenNummer");
                 $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(40, 10, $v1['CustVendRelation']);
+                $pdf->Cell(100, 10, $v1['CustVendRelation']);
 
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(25, 10, "FirmenName");
@@ -473,7 +473,7 @@ if($itemIdArray){
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(25, 10, "Stichwort");
                 $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(40, 10, iconv('UTF-8', 'windows-1252', $v1['ExternalItemTxt']));
+                $pdf->Cell(100, 10, iconv('UTF-8', 'windows-1252', $v1['ExternalItemTxt']));
 
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(35, 10, 'Version');
@@ -484,9 +484,9 @@ if($itemIdArray){
                     if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE)
                     {
                         if(getimagesize($v1['DesignJpgPreviewUrl'])[0] > 900){
-                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, 50, -500);
+                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, 55, -650);
                         }else{
-                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, 50, -220);
+                            $pdf->Image($v1['DesignJpgPreviewUrl'], 125, 55, -220);
                         }
                     }
                 }

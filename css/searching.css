@@ -96,14 +96,16 @@ nav {
   color: #007bff;
 }
 
-#checkAllBtn {
+#checkAllBtn,
+#checkAllWithStockBtn {
   color: white;
   padding: 5px;
   background-color: #d80030;
   border: 0;
 }
 
-#checkAllBtn:hover {
+#checkAllBtn:hover,
+#checkAllWithStockBtn:hover {
   background-color: white;
   color: #d80030;
 }

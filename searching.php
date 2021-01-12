@@ -315,6 +315,7 @@ if($itemIdArray){
 <div class="row">
     <div class="col">
         <button id="checkAllBtn" class="btn btn-outline-light" onclick="checkAll()">Alle Artikel auswählen</button>
+        <button id="checkAllWithStockBtn" class="btn btn-outline-light" onclick="checkAllWithStock()">Alle Artikel mit Lagerstand auswählen</button>
     </div>
      <div class="col" style="text-align: right; color: black;">
         <h5><?php echo $itemQty . " Artikel gefunden"?></h5>
