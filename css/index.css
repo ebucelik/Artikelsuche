@@ -28,7 +28,8 @@ nav {
   text-decoration: underline;
 }
 
-#toItemSearch, #toCustomerSearch {
+#toItemSearch,
+#toCustomerSearch {
   margin-top: 5%;
   color: black;
   display: none;
@@ -47,6 +48,7 @@ h4 {
 }
 
 .container {
+  padding-top: 0 !important;
   width: 50% !important;
   padding: 5%;
 }
