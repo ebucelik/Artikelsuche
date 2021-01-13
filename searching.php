@@ -1,49 +1,146 @@
 <?php
 require_once('db/db.php');
 
+session_start();
+
 $unEqualString = "";
 $type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
+$newSearch = "false";
 $itemQty = 0;
+$itemsStart = 0;
 $checkSort = false;
+$itemIdArray = array();
+
+if(isset($_SESSION["itemIdArray"])){
+    $itemIdArray = $_SESSION["itemIdArray"];
+}
+
+if(isset($_SESSION["selectType"])){
+    $type = $_SESSION["selectType"];
+}
+
+if(isset($_SESSION["rNumber"])){
+    $rNumber = $_SESSION["rNumber"];
+}
+
+if(isset($_SESSION["kNumber"])){
+    $custnumber = $_SESSION["kNumber"];
+}
+
+if(isset($_SESSION["kName"])){
+    $custName = $_SESSION["kName"];
+}
+
+if(isset($_SESSION["kPLZ"])){
+    $plz = $_SESSION["kPLZ"];
+}
+
+if(isset($_SESSION["place"])){
+    $city = $_SESSION["place"];
+}
+
+if(isset($_SESSION["sortNum"])){
+    $sort = $_SESSION["sortNum"];
+}
+
+if(isset($_SESSION["keyWord"])){
+    $keyword = $_SESSION["keyWord"];
+}
+
+if(isset($_SESSION["allVersions"])){
+    $allVersions = $_SESSION["allVersions"];
+}
+
+if(isset($_SESSION["withImage"])){
+    $withImage = $_SESSION["withImage"];
+}else{
+    $withImage = $unEqualString;
+}
+
+if(isset($_SESSION["stockLevel"])){
+    $stockLevel = $_SESSION["stockLevel"];
+}
+
+if(isset($_SESSION["itemsStart"])){
+    $itemsStart = $_SESSION["itemsStart"];
+}
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isset($_POST['selectType']) && $_POST['selectType'] != ''){
         $type = $_POST['selectType'];
+        $_SESSION["selectType"] = $type;
     }
+
     if(isset($_POST['rNumber']) && $_POST['rNumber'] != ''){
         $rNumber = $_POST['rNumber'];
-    }  
+        $_SESSION["rNumber"] = $rNumber;
+    }else{
+        $rNumber = $unEqualString;
+        $_SESSION["rNumber"] = $rNumber;
+    }
 
     if(isset($_POST['kNumber']) && $_POST['kNumber'] != ''){
         $custnumber = $_POST['kNumber'];
+        $_SESSION["kNumber"] = $custnumber;
+    }else{
+        $custnumber = $unEqualString;
+        $_SESSION["kNumber"] = $custnumber;
     }
 
     if(isset($_POST['kName']) && $_POST['kName'] != ''){
         $custName = $_POST['kName'];
+        $_SESSION["kName"] = $custName;
+    }else{
+        $custName = $unEqualString;
+        $_SESSION["kName"] = $custName;
     }
 
     if(isset($_POST['kPLZ']) && $_POST['kPLZ'] != ''){
         $plz = $_POST['kPLZ'];
+        $_SESSION["kPLZ"] = $plz;
+    }else{
+        $plz = $unEqualString;
+        $_SESSION["kPLZ"] = $plz;
     }
 
     if(isset($_POST['place']) && $_POST['place'] != ''){
         $city = $_POST['place'];
+        $_SESSION["place"] = $city;
+    }else{
+        $city = $unEqualString;
+        $_SESSION["place"] = $city;
     }
 
     if(isset($_POST['sortNum']) && $_POST['sortNum'] != ''){
         $sort = $_POST['sortNum'];
+        $_SESSION["sortNum"] = $sort;
+    }else{
+        $sort = $unEqualString;
+        $_SESSION["sortNum"] = $sort;
     }
 
     if(isset($_POST['keyWord']) && $_POST['keyWord'] != ''){
         $keyword = $_POST['keyWord'];
+        $_SESSION["keyWord"] = $keyword;
+    }else{
+        $keyword = $unEqualString;
+        $_SESSION["keyWord"] = $keyword;
     }
 
     if(isset($_POST['allVersions'])){
         $allVersions = $_POST['allVersions'];
+        $_SESSION["allVersions"] = $allVersions;
+    }else{
+        $allVersions = $unEqualString;
+        $_SESSION["allVersions"] = $allVersions;
     }
 
     if(isset($_POST['withImage'])){
         $withImage = $_POST['withImage'];
+        $_SESSION["withImage"] = $withImage;
+    }else{
+        $withImage = $unEqualString;
+        $_SESSION["withImage"] = $withImage;
     }
 
     if(isset($_POST['Format']) && $_POST['Format'] != ''){
@@ -56,6 +153,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(isset($_POST['stockLevel'])){
         $stockLevel = $_POST['stockLevel'];
+        $_SESSION["stockLevel"] = $stockLevel;
+    }else{
+        $stockLevel = $unEqualString;
+        $_SESSION["stockLevel"] = $stockLevel;
+    }
+
+    if(isset($_POST['itemsStart'])){
+        $itemsStart = $_POST['itemsStart'];
+        $_SESSION["itemsStart"] = $itemsStart;
+    }
+
+    if(isset($_POST['newSearch'])){
+        $newSearch = $_POST['newSearch'];
     }
 } 
 ?>
@@ -141,6 +251,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <label for="stockLevel" style="margin-left: 3%; ">Lagerstand:</label>
                     <input type="checkbox" class="form-control" id="stockLevel" name="stockLevel" style="width: 20px; height: 20px; display: unset;" <?php if($stockLevel != $unEqualString){echo 'checked';} ?>>
                 </div>
+                <input type="hidden" name="itemsStart" value="0" />
+                <input type="hidden" name="newSearch" value="true" />
                 <button type="submit" class="btn btn-outline-light fading" id="articlesearch">SUCHEN</button>
                 <div class="row">
                     <div class="col">
@@ -158,7 +270,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         </div>
 
 <?php
-$itemIdArray = array();
 
 function fillItemArray($_stmt){
     $_itemIdArray = array();
@@ -179,115 +290,119 @@ function fillItemArray($_stmt){
     return $_itemIdArray;
 }
 
-try{
-    $queryParams = "";
-
-    if($rNumber != $unEqualString){
-        $queryParams = "T1.ItemId LIKE '%$rNumber%'";  
-    }
-
-    if($custnumber != $unEqualString){
-        if($queryParams == ""){
-            $queryParams = "T1.CustVendRelation = '$custnumber'";
-        }else{
-            $queryParams .=" AND T1.CustVendRelation = '$custnumber'";
+if($newSearch == "true"){
+    try{
+        $queryParams = "";
+    
+        if($rNumber != $unEqualString){
+            $queryParams = "T1.ItemId LIKE '%$rNumber%'";  
+        }
+    
+        if($custnumber != $unEqualString){
+            if($queryParams == ""){
+                $queryParams = "T1.CustVendRelation = '$custnumber'";
+            }else{
+                $queryParams .=" AND T1.CustVendRelation = '$custnumber'";
+            }
+        }
+    
+        if($custName != $unEqualString){
+            if($queryParams == ""){
+                $queryParams = "T1.CustName LIKE '%$custName%'";
+            }else{
+                $queryParams .=" AND T1.CustName LIKE '%$custName%'";
+            }
+        }
+    
+        if($plz != $unEqualString){
+            if($queryParams == ""){
+                $queryParams = "T1.ZipCode LIKE '%$plz%'";
+            }else{
+                $queryParams .=" AND T1.ZipCode LIKE '%$plz%'";
+            }
+        }
+    
+        if($city != $unEqualString){
+            if($queryParams == ""){
+                $queryParams = "T1.City LIKE '%$city%'";
+            }else{
+                $queryParams .=" AND T1.City LIKE '%$city%'";
+            }
+        }
+    
+        if($sort != $unEqualString){
+            if($queryParams == ""){
+                $queryParams = "T1.MARInprintingSortName LIKE '%$sort%'";
+            }else{
+                $queryParams .=" AND T1.MARInprintingSortName LIKE '%$sort%'";
+            }
+        }
+    
+        if($keyword != $unEqualString){
+            if($queryParams == ""){
+                $queryParams = "T1.ExternalItemTxt LIKE '%$keyword%'";
+            }else{
+                $queryParams .=" AND T1.ExternalItemTxt LIKE '%$keyword%'";
+            }
+        }
+    
+        if($withImage == "on"){
+            if($queryParams == ""){
+                $queryParams = "T1.DesignJpgPreviewUrl != ''";
+            }else{
+                $queryParams .=" AND T1.DesignJpgPreviewUrl != ''";
+            }
+        }
+    
+        if($type == "Rollenetiketten" && $queryParams != ""){
+            $queryParams .=" AND T1.MARItemType = 4 AND T1.InventStyleId != '' AND T1.InventDimId != '' ";
+        }else if($queryParams != ""){
+            $queryParams .=" AND T1.MARItemType = 12";
+        }
+    
+        //Deactivated articles. 0 stands for No regarding NoYes Enum. % at the end, selects all strings that have ## at the start of the string.
+        $queryParams .= " AND T1.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
+    
+        if($stockLevel == "on"){
+            if($queryParams == ""){
+                $queryParams = "T1.StockLevel != 0";
+            }else{
+                $queryParams .=" AND T1.StockLevel != 0";
+            }
+        }
+    
+        if($allVersions == 'on'){ //ALL VERSIONS PART
+            //TODO: Implement T1.MARPngPath,
+            $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
+                                        T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
+                                        T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
+                                        FROM MARItemSearchDataTable T1
+                                        WHERE $queryParams ORDER BY T1.InventStyleId");
+    
+            $stmt->execute();
+    
+            $itemIdArray = fillItemArray($stmt);
+            $_SESSION["itemIdArray"] = $itemIdArray;
+        }
+        else{ //HIGHEST VERSION PART
+            $queryParams .= " AND T1.SalesIdLast IN (SELECT MAX(T11.SalesIdLast) AS style FROM MARItemSearchDataTable T11 WHERE T11.ItemId = T1.ItemId)";
+            
+            //TODO: Implement T1.MARPngPath,
+            $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
+                                        T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
+                                        T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
+                                        FROM MARItemSearchDataTable T1
+                                        WHERE $queryParams ORDER BY T1.InventStyleId");
+    
+            $stmt->execute();
+    
+            $itemIdArray = fillItemArray($stmt);
+            $_SESSION["itemIdArray"] = $itemIdArray;
         }
     }
-
-    if($custName != $unEqualString){
-        if($queryParams == ""){
-            $queryParams = "T1.CustName LIKE '%$custName%'";
-        }else{
-            $queryParams .=" AND T1.CustName LIKE '%$custName%'";
-        }
+    catch(PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
-
-    if($plz != $unEqualString){
-        if($queryParams == ""){
-            $queryParams = "T1.ZipCode LIKE '%$plz%'";
-        }else{
-            $queryParams .=" AND T1.ZipCode LIKE '%$plz%'";
-        }
-    }
-
-    if($city != $unEqualString){
-        if($queryParams == ""){
-            $queryParams = "T1.City LIKE '%$city%'";
-        }else{
-            $queryParams .=" AND T1.City LIKE '%$city%'";
-        }
-    }
-
-    if($sort != $unEqualString){
-        if($queryParams == ""){
-            $queryParams = "T1.MARInprintingSortName LIKE '%$sort%'";
-        }else{
-            $queryParams .=" AND T1.MARInprintingSortName LIKE '%$sort%'";
-        }
-    }
-
-    if($keyword != $unEqualString){
-        if($queryParams == ""){
-            $queryParams = "T1.ExternalItemTxt LIKE '%$keyword%'";
-        }else{
-            $queryParams .=" AND T1.ExternalItemTxt LIKE '%$keyword%'";
-        }
-    }
-
-    if($withImage == "on"){
-        if($queryParams == ""){
-            $queryParams = "T1.DesignJpgPreviewUrl != ''";
-        }else{
-            $queryParams .=" AND T1.DesignJpgPreviewUrl != ''";
-        }
-    }
-
-    if($type == "Rollenetiketten" && $queryParams != ""){
-        $queryParams .=" AND T1.MARItemType = 4 AND T1.InventStyleId != '' AND T1.InventDimId != '' ";
-    }else if($queryParams != ""){
-        $queryParams .=" AND T1.MARItemType = 12";
-    }
-
-    //Deactivated articles. 0 stands for No regarding NoYes Enum. % at the end, selects all strings that have ## at the start of the string.
-    $queryParams .= " AND T1.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
-
-    if($stockLevel == "on"){
-        if($queryParams == ""){
-            $queryParams = "T1.StockLevel != 0";
-        }else{
-            $queryParams .=" AND T1.StockLevel != 0";
-        }
-    }
-
-    if($allVersions == 'on'){ //ALL VERSIONS PART
-        //TODO: Implement T1.MARPngPath,
-        $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
-                                    T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                    T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
-                                    FROM MARItemSearchDataTable T1
-                                    WHERE $queryParams ORDER BY T1.InventStyleId");
-
-        $stmt->execute();
-
-        $itemIdArray = fillItemArray($stmt);
-    }
-    else{ //HIGHEST VERSION PART
-        $queryParams .= " AND T1.SalesIdLast IN (SELECT MAX(T11.SalesIdLast) AS style FROM MARItemSearchDataTable T11 WHERE T11.ItemId = T1.ItemId)";
-        
-        //TODO: Implement T1.MARPngPath,
-        $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
-                                    T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                    T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
-                                    FROM MARItemSearchDataTable T1
-                                    WHERE $queryParams ORDER BY T1.InventStyleId");
-
-        $stmt->execute();
-
-        $itemIdArray = fillItemArray($stmt);
-    }
-}
-catch(PDOException $e) {
-    echo "Error: " . $e->getMessage();
 }
 
 $conn = null;
@@ -316,9 +431,13 @@ if($itemIdArray){
     <div class="col">
         <button id="checkAllBtn" class="btn btn-outline-light" onclick="checkAll()">Alle Artikel auswählen</button>
         <button id="checkAllWithStockBtn" class="btn btn-outline-light" onclick="checkAllWithStock()">Alle Artikel mit Lagerstand auswählen</button>
+        <h5 id="selectedItemQty" style="display: inline-block; color: black;"></h5>
     </div>
-     <div class="col" style="text-align: right; color: black;">
-        <h5><?php echo $itemQty . " Artikel gefunden"?></h5>
+     <div class="col" style="text-align: right;">
+        <button id="firstItems" class="btn btn-outline-light" onclick="firstItems()">Ersten 50 Artikel</button>
+        <button id="leastItems" class="btn btn-outline-light" <?php if(($itemsStart - 50) < 0){echo "disabled='disabled'";} ?> onclick="leastItems()">Letzten 50 Artikel</button>
+        <button id="nextItems" class="btn btn-outline-light" <?php if(($itemsStart + 50) > $itemQty){echo "disabled='disabled'";} ?> onclick="nextItems()">Nächsten 50 Artikel</button>
+        <h5 style="display: inline-block; color: black;"><?php echo (($itemsStart + 50) < $itemQty) ? ($itemsStart + 50) : $itemQty; echo " von " . $itemQty . " Artikel"?></h5>
     </div>
 </div>
 
@@ -375,14 +494,22 @@ if($itemIdArray){
             }
 
             if($withImage == 'on'){
-                foreach($itemIdArray as $v1)
+                $tmpItemArray = array();
+
+                $tmpItemArray = array_slice($itemIdArray, $itemsStart, 50);
+
+                foreach($tmpItemArray as $key => $v1)
                 { 
                     if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){
                         addItemsToView($v1);
                     }
                 }
             }else{
-                foreach($itemIdArray as $v1)
+                $tmpItemArray = array();
+
+                $tmpItemArray = array_slice($itemIdArray, $itemsStart, 50);
+
+                foreach($tmpItemArray as $key => $v1)
                 { 
                     addItemsToView($v1);
                 }
@@ -407,6 +534,81 @@ if($itemIdArray){
             <input type="hidden" name="data" value="" />
             <input type="hidden" name="Pdf" value="" />
         </form>
+        <form id="showNextItems" method="POST" action="searching.php">
+            <input type="hidden" name="selectType" value="" />
+            <input type="hidden" name="rNumber" value="" />
+            <input type="hidden" name="kNumber" value="" />
+            <input type="hidden" name="kName" value="" />
+            <input type="hidden" name="kPLZ" value="" />
+            <input type="hidden" name="place" value="" />
+            <input type="hidden" name="sortNum" value="" />
+            <input type="hidden" name="keyWord" value="" />
+            <input type="hidden" name="allVersions" value="" />
+            <input type="hidden" name="withImage" value="" />
+            <input type="hidden" name="stockLevel" value="" />
+            <input type="hidden" name="itemsStart" value="" />
+            <input type="hidden" name="newSearch" value="false" />
+        </form>
     </nav>
+
+    <script>
+        function nextItems(){
+            let itemsStart = <?php echo $itemsStart; ?>;
+            itemsStart = itemsStart + 50;
+
+            let showNextItems = document.getElementById("showNextItems");
+            showNextItems.selectType.value = "<?php echo $type; ?>";
+            showNextItems.rNumber.value = "<?php echo $rNumber ?>";
+            showNextItems.kNumber.value = "<?php echo $custnumber ?>";
+            showNextItems.kName.value = "<?php echo $custName ?>";
+            showNextItems.kPLZ.value = "<?php echo $plz ?>";
+            showNextItems.place.value = "<?php echo $city ?>";
+            showNextItems.sortNum.value = "<?php echo $sort ?>";
+            showNextItems.keyWord.value = "<?php echo $keyword ?>";
+            showNextItems.allVersions.value = "<?php echo $allVersions ?>";
+            showNextItems.withImage.value = "<?php echo $withImage ?>";
+            showNextItems.stockLevel.value = "<?php echo $stockLevel ?>";
+            showNextItems.itemsStart.value = itemsStart;
+            showNextItems.submit();
+        }
+
+        function leastItems(){
+            let itemsStart = <?php echo $itemsStart; ?>;
+            itemsStart = itemsStart - 50;
+            
+            let showNextItems = document.getElementById("showNextItems");
+            showNextItems.selectType.value = "<?php echo $type; ?>";
+            showNextItems.rNumber.value = "<?php echo $rNumber ?>";
+            showNextItems.kNumber.value = "<?php echo $custnumber ?>";
+            showNextItems.kName.value = "<?php echo $custName ?>";
+            showNextItems.kPLZ.value = "<?php echo $plz ?>";
+            showNextItems.place.value = "<?php echo $city ?>";
+            showNextItems.sortNum.value = "<?php echo $sort ?>";
+            showNextItems.keyWord.value = "<?php echo $keyword ?>";
+            showNextItems.allVersions.value = "<?php echo $allVersions ?>";
+            showNextItems.withImage.value = "<?php echo $withImage ?>";
+            showNextItems.stockLevel.value = "<?php echo $stockLevel ?>";
+            showNextItems.itemsStart.value = itemsStart;
+
+            showNextItems.submit();
+        }
+
+        function firstItems(){
+            let showNextItems = document.getElementById("showNextItems");
+            showNextItems.selectType.value = "<?php echo $type; ?>";
+            showNextItems.rNumber.value = "<?php echo $rNumber ?>";
+            showNextItems.kNumber.value = "<?php echo $custnumber ?>";
+            showNextItems.kName.value = "<?php echo $custName ?>";
+            showNextItems.kPLZ.value = "<?php echo $plz ?>";
+            showNextItems.place.value = "<?php echo $city ?>";
+            showNextItems.sortNum.value = "<?php echo $sort ?>";
+            showNextItems.keyWord.value = "<?php echo $keyword ?>";
+            showNextItems.allVersions.value = "<?php echo $allVersions ?>";
+            showNextItems.withImage.value = "<?php echo $withImage ?>";
+            showNextItems.stockLevel.value = "<?php echo $stockLevel ?>";
+            showNextItems.itemsStart.value = 0;
+            showNextItems.submit();
+        }
+    </script>
 </body>
 </html>

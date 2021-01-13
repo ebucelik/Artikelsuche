@@ -97,7 +97,10 @@ nav {
 }
 
 #checkAllBtn,
-#checkAllWithStockBtn {
+#checkAllWithStockBtn,
+#nextItems,
+#leastItems,
+#firstItems {
   color: white;
   padding: 5px;
   background-color: #d80030;
@@ -105,7 +108,10 @@ nav {
 }
 
 #checkAllBtn:hover,
-#checkAllWithStockBtn:hover {
+#checkAllWithStockBtn:hover,
+#nextItems:hover,
+#leastItems:hover,
+#firstItems:hover {
   background-color: white;
   color: #d80030;
 }

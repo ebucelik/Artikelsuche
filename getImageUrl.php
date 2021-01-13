@@ -19,8 +19,5 @@ $stmt = $conn->prepare("SELECT TOP 1 T1.DesignJpgPreviewUrl FROM MARItemSearchDa
 
 $stmt->execute();
 
-foreach($stmt as $val){
-    echo $val['DesignJpgPreviewUrl'];
-}
-
+echo $stmt->fetchColumn();
 ?>

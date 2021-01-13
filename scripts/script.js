@@ -4,7 +4,7 @@ let state = false;
 let cntCheckedInputs = 0;
 
 $(document).ready(function () {
-  $(".fading").fadeIn(1500);
+  $(".fading").fadeIn(1000);
 
   $("#toItemSearch").click(function () {
     window.location.href = "searching.php";
@@ -45,62 +45,81 @@ function checkAll() {
 
 function checkAllWithStock() {
   state = !state;
+  let qty = 0;
 
   $('#dataView input').each(function () {
     if ($(this).parents('.row').find(".stocklevel").text() != "0") {
       $(this).prop("checked", state);
+
+      qty++;
     }
   });
 
-  $('#sendmailJpg, #sendmailPdf').css('display', state ? 'block' : 'none');
+  if (qty > 0) {
+    $('#sendmailJpg, #sendmailPdf').css('display', state ? 'block' : 'none');
 
-  $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
+    $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
+  
+    $('#selectedItemQty').text(state ? qty + ' Artikel ausgewählt' : '');
+  }
 }
 
 function sendMailPdf() {
   let dataArr = [];
+  let imageArray = [];
+  let id = 0;
   cntCheckedInputs = $('.sendMailCheck').filter(':checked').length;
-
-  $('.sendMailCheck').filter(':checked').each(function () {
-    let tmp = [];
-    let index = $('.sendMailCheck').index(this);
-    custnum = $('.custvendrelation').eq(index).text();
-    itemid = $('.itemid').eq(index).text();
-    version = $('.version').eq(index).text();
-    custNames = $('.name').eq(index).text();
-    externalitemtxt = $('.externalitemtxt').eq(index).text();
-    lepsizew = $('.lepsizew').eq(index).text();
-    lepsizel = $('.lepsizel').eq(index).text();
-    stocklevel = $('.stocklevel').eq(index).text();
-    salesid = $('.salesid').eq(index).text();
-
-    $.ajax({
-      type: "get",
-      url: "getImageUrl.php",
-      data: { ItemId: itemid, Version: version, SalesId: salesid },
-      success: function (image) {
-        if (image) {
-          tmp.push(image);
-        } else {
-          tmp.push("Uploads/noimage.jpg");
-        }
-      },
-      async: false
-    });
-
-    tmp.push(itemid);
-    tmp.push(externalitemtxt);
-    tmp.push(stocklevel);
-    tmp.push(lepsizew);
-    tmp.push(lepsizel);
-    dataArr.push(tmp);
-  });
 
   if (cntCheckedInputs > 20) {
     alert("Achtung!\n\nSie haben die maximale Anzahl an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
   } else if (cntCheckedInputs <= 0) {
     alert("Achtung!\n\nSie haben " + cntCheckedInputs + " Artikel ausgewählt!");
   } else {
+    $('.sendMailCheck').filter(':checked').each(function () {
+      let index = $('.sendMailCheck').index(this);
+      itemid = $('.itemid').eq(index).text();
+      version = $('.version').eq(index).text();
+      salesid = $('.salesid').eq(index).text();
+
+      $.ajax({
+        type: "get",
+        url: "getImageUrl.php",
+        data: { ItemId: itemid, Version: version, SalesId: salesid },
+        success: function (image) {
+          if (image) {
+            imageArray.push(image);
+          } else {
+            imageArray.push("Uploads/noimage.jpg");
+          }
+        },
+        async: false
+      });
+    });
+
+    $('.sendMailCheck').filter(':checked').each(function () {
+      let tmp = [];
+      let index = $('.sendMailCheck').index(this);
+      custnum = $('.custvendrelation').eq(index).text();
+      itemid = $('.itemid').eq(index).text();
+      version = $('.version').eq(index).text();
+      custNames = $('.name').eq(index).text();
+      externalitemtxt = $('.externalitemtxt').eq(index).text();
+      lepsizew = $('.lepsizew').eq(index).text();
+      lepsizel = $('.lepsizel').eq(index).text();
+      stocklevel = $('.stocklevel').eq(index).text();
+      salesid = $('.salesid').eq(index).text();
+
+      tmp.push(imageArray[id]);
+      tmp.push(itemid);
+      tmp.push(externalitemtxt);
+      tmp.push(stocklevel);
+      tmp.push(lepsizew);
+      tmp.push(lepsizel);
+      dataArr.push(tmp);
+
+      id++;
+    });
+
     $.ajax({
       type: "post",
       url: "createPdfForMail.php",
@@ -127,53 +146,53 @@ function sendMailJpg() {
   let dataArr = [];
   cntCheckedInputs = $('.sendMailCheck').filter(':checked').length;
 
-  $('.sendMailCheck').filter(':checked').each(function () {
-    let tmp = [];
-    let index = $('.sendMailCheck').index(this);
-    custnum = $('.custvendrelation').eq(index).text();
-    itemid = $('.itemid').eq(index).text();
-    version = $('.version').eq(index).text();
-    prodgroupid = $('.prodgroupid').eq(index).text();
-    custNames = $('.name').eq(index).text();
-    sort = $('.sort').eq(index).text();
-    externalitemtxt = $('.externalitemtxt').eq(index).text();
-    lepsizew = $('.lepsizew').eq(index).text();
-    lepsizel = $('.lepsizel').eq(index).text();
-    tradeunitspecid = $('.tradeunitspecid').eq(index).text();
-    salesid = $('.salesid').eq(index).text();
-    stocklevel = $('.stocklevel').eq(index).text();
-
-    tmp.push("R-Nummer: " + itemid);
-    tmp.push("Kundennummer: " + custnum);
-    tmp.push("Version: " + version);
-    tmp.push("Produktvariante: " + prodgroupid);
-    tmp.push("Kundenname: " + custNames);
-    tmp.push("Sorte: " + sort);
-    tmp.push("Stichwort: " + externalitemtxt);
-    tmp.push("FormatQuer: " + lepsizew);
-    tmp.push("FormatLauf: " + lepsizel);
-    tmp.push("Stellung: " + tradeunitspecid);
-    tmp.push("Auftragsnummer: " + salesid);
-    tmp.push("Lagerstand: " + stocklevel);
-
-    $.ajax({
-      type: "get",
-      url: "getImageUrl.php",
-      data: { ItemId: itemid, Version: version, SalesId: salesid },
-      success: function (image) {  
-        tmp.push(image);
-      },
-      async: false
-    });
-
-    dataArr.push(tmp);
-  });
-
   if (cntCheckedInputs > 20) {
     alert("Achtung!\n\nSie haben die maximale Anzahl an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
   } else if (cntCheckedInputs <= 0) {
     alert("Achtung!\n\nSie haben " + cntCheckedInputs + " Artikel ausgewählt!");
   } else {
+    $('.sendMailCheck').filter(':checked').each(function () {
+      let tmp = [];
+      let index = $('.sendMailCheck').index(this);
+      custnum = $('.custvendrelation').eq(index).text();
+      itemid = $('.itemid').eq(index).text();
+      version = $('.version').eq(index).text();
+      prodgroupid = $('.prodgroupid').eq(index).text();
+      custNames = $('.name').eq(index).text();
+      sort = $('.sort').eq(index).text();
+      externalitemtxt = $('.externalitemtxt').eq(index).text();
+      lepsizew = $('.lepsizew').eq(index).text();
+      lepsizel = $('.lepsizel').eq(index).text();
+      tradeunitspecid = $('.tradeunitspecid').eq(index).text();
+      salesid = $('.salesid').eq(index).text();
+      stocklevel = $('.stocklevel').eq(index).text();
+
+      tmp.push("R-Nummer: " + itemid);
+      tmp.push("Kundennummer: " + custnum);
+      tmp.push("Version: " + version);
+      tmp.push("Produktvariante: " + prodgroupid);
+      tmp.push("Kundenname: " + custNames);
+      tmp.push("Sorte: " + sort);
+      tmp.push("Stichwort: " + externalitemtxt);
+      tmp.push("FormatQuer: " + lepsizew);
+      tmp.push("FormatLauf: " + lepsizel);
+      tmp.push("Stellung: " + tradeunitspecid);
+      tmp.push("Auftragsnummer: " + salesid);
+      tmp.push("Lagerstand: " + stocklevel);
+
+      $.ajax({
+        type: "get",
+        url: "getImageUrl.php",
+        data: { ItemId: itemid, Version: version, SalesId: salesid },
+        success: function (image) {  
+          tmp.push(image);
+        },
+        async: false
+      });
+
+      dataArr.push(tmp);
+    });
+
     $.ajax({
       type: "get",
       url: "getMailFromCustomer.php",
@@ -199,15 +218,6 @@ function toStart() {
     }, 100);
   }
 }
-
-$(window).on("load", function () {
-  let elem = document.getElementById("dataView");
-  if (elem) {
-    setTimeout(function () {
-      elem.scrollIntoView({ left: 0, block: "start", behavior: "smooth" });
-    }, 500);
-  }
-});
 
 function changeTitle() {
   let val = document.getElementById("selectType").value;
