@@ -4,7 +4,7 @@ require_once('db/db.php');
 session_start();
 
 $unEqualString = "";
-$type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
+$type = $withSalesId = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
 $newSearch = "false";
 $itemQty = 0;
 $itemsStart = 0;
@@ -63,6 +63,11 @@ if(isset($_SESSION["stockLevel"])){
 
 if(isset($_SESSION["itemsStart"])){
     $itemsStart = $_SESSION["itemsStart"];
+}
+
+if(isset($_SESSION["withSalesId"])){
+    $withSalesId = $_SESSION["withSalesId"];
+    echo $withSalesId;
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -167,6 +172,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isset($_POST['newSearch'])){
         $newSearch = $_POST['newSearch'];
     }
+
+    if(isset($_POST['withSalesId'])){
+        $withSalesId = $_POST['withSalesId'];
+        $_SESSION["withSalesId"] = $withSalesId;
+    }else{
+        $withSalesId = $unEqualString;
+        $_SESSION["withSalesId"] = $withSalesId;
+    }
 } 
 ?>
 
@@ -245,21 +258,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 </div>
                 <div class="form-group fading">
                     <label for="allVersions">Alle Versionen:</label>
-                    <input type="checkbox" class="form-control" id="allVersions" name="allVersions" style="width: 20px; height: 20px; display: unset;" <?php if($allVersions != $unEqualString){echo 'checked';} ?>>
+                    <input type="checkbox" class="form-control" id="allVersions" name="allVersions" style="width: 20px; height: 20px; display: unset;" <?php if($allVersions == 'on'){echo 'checked';} ?>>
                     <label for="withImage" style="margin-left: 3%; ">Bild vorhanden:</label>
-                    <input type="checkbox" class="form-control" id="withImage" name="withImage" style="width: 20px; height: 20px; display: unset;" <?php if($withImage != $unEqualString){echo 'checked';} ?>>
+                    <input type="checkbox" class="form-control" id="withImage" name="withImage" style="width: 20px; height: 20px; display: unset;" <?php if($withImage == 'on'){echo 'checked';} ?>>
                     <label for="stockLevel" style="margin-left: 3%; ">Lagerstand:</label>
-                    <input type="checkbox" class="form-control" id="stockLevel" name="stockLevel" style="width: 20px; height: 20px; display: unset;" <?php if($stockLevel != $unEqualString){echo 'checked';} ?>>
+                    <input type="checkbox" class="form-control" id="stockLevel" name="stockLevel" style="width: 20px; height: 20px; display: unset;" <?php if($stockLevel == 'on'){echo 'checked';} ?>>
+                    <label for="withSalesId" style="margin-left: 3%; ">Auftrag vorhanden:</label>
+                    <input type="checkbox" class="form-control" id="withSalesId" name="withSalesId" style="width: 20px; height: 20px; display: unset;" <?php if($withSalesId == 'on'){echo 'checked';} ?>>
                 </div>
                 <input type="hidden" name="itemsStart" value="0" />
                 <input type="hidden" name="newSearch" value="true" />
                 <button type="submit" class="btn btn-outline-light fading" id="articlesearch">SUCHEN</button>
                 <div class="row">
                     <div class="col">
-                        <button type="button" class=" btn-primary mailbtns" id="sendmailJpg" onclick="sendMailJpg()">SENDE MAIL ALS JPG</button>
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailJpg" onclick="sendMailJpg();">SENDE MAIL ALS JPG</button>
                     </div>
                     <div class="col">
-                        <button type="button" class=" btn-primary mailbtns" id="sendmailPdf" onclick="sendMailPdf()">SENDE MAIL ALS PDF</button>
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailPdf" onclick="sendMailPdf();">SENDE MAIL ALS PDF</button>
                     </div>
                 </div>
             </form>
@@ -370,9 +385,16 @@ if($newSearch == "true"){
                 $queryParams .=" AND T1.StockLevel != 0";
             }
         }
+
+        if($withSalesId == "on"){
+            if($queryParams == ""){
+                $queryParams = "T1.SalesIdLast != ''";
+            }else{
+                $queryParams .=" AND T1.SalesIdLast != ''";
+            }
+        }
     
         if($allVersions == 'on'){ //ALL VERSIONS PART
-            //TODO: Implement T1.MARPngPath,
             $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                         T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
                                         T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
@@ -386,8 +408,7 @@ if($newSearch == "true"){
         }
         else{ //HIGHEST VERSION PART
             $queryParams .= " AND T1.SalesIdLast IN (SELECT MAX(T11.SalesIdLast) AS style FROM MARItemSearchDataTable T11 WHERE T11.ItemId = T1.ItemId)";
-            
-            //TODO: Implement T1.MARPngPath,
+
             $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                                         T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
                                         T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
@@ -434,9 +455,9 @@ if($itemIdArray){
         <h5 id="selectedItemQty" style="display: inline-block; color: black;"></h5>
     </div>
      <div class="col" style="text-align: right;">
-        <button id="firstItems" class="btn btn-outline-light" onclick="firstItems()">Ersten 50 Artikel</button>
-        <button id="leastItems" class="btn btn-outline-light" <?php if(($itemsStart - 50) < 0){echo "disabled='disabled'";} ?> onclick="leastItems()">Letzten 50 Artikel</button>
-        <button id="nextItems" class="btn btn-outline-light" <?php if(($itemsStart + 50) > $itemQty){echo "disabled='disabled'";} ?> onclick="nextItems()">Nächsten 50 Artikel</button>
+        <button id="firstItems" class="btn btn-outline-light">Ersten 50 Artikel</button>
+        <button id="leastItems" class="btn btn-outline-light" <?php if(($itemsStart - 50) < 0){echo "disabled='disabled'";} ?>>Letzten 50 Artikel</button>
+        <button id="nextItems" class="btn btn-outline-light" <?php if(($itemsStart + 50) > $itemQty){echo "disabled='disabled'";} ?>>Nächsten 50 Artikel</button>
         <h5 style="display: inline-block; color: black;"><?php echo (($itemsStart + 50) < $itemQty) ? ($itemsStart + 50) : $itemQty; echo " von " . $itemQty . " Artikel"?></h5>
     </div>
 </div>
@@ -548,67 +569,79 @@ if($itemIdArray){
             <input type="hidden" name="stockLevel" value="" />
             <input type="hidden" name="itemsStart" value="" />
             <input type="hidden" name="newSearch" value="false" />
+            <input type="hidden" name="withSalesId" value="" />
         </form>
     </nav>
-
-    <script>
-        function nextItems(){
-            let itemsStart = <?php echo $itemsStart; ?>;
-            itemsStart = itemsStart + 50;
-
-            let showNextItems = document.getElementById("showNextItems");
-            showNextItems.selectType.value = "<?php echo $type; ?>";
-            showNextItems.rNumber.value = "<?php echo $rNumber ?>";
-            showNextItems.kNumber.value = "<?php echo $custnumber ?>";
-            showNextItems.kName.value = "<?php echo $custName ?>";
-            showNextItems.kPLZ.value = "<?php echo $plz ?>";
-            showNextItems.place.value = "<?php echo $city ?>";
-            showNextItems.sortNum.value = "<?php echo $sort ?>";
-            showNextItems.keyWord.value = "<?php echo $keyword ?>";
-            showNextItems.allVersions.value = "<?php echo $allVersions ?>";
-            showNextItems.withImage.value = "<?php echo $withImage ?>";
-            showNextItems.stockLevel.value = "<?php echo $stockLevel ?>";
-            showNextItems.itemsStart.value = itemsStart;
-            showNextItems.submit();
-        }
-
-        function leastItems(){
-            let itemsStart = <?php echo $itemsStart; ?>;
-            itemsStart = itemsStart - 50;
-            
-            let showNextItems = document.getElementById("showNextItems");
-            showNextItems.selectType.value = "<?php echo $type; ?>";
-            showNextItems.rNumber.value = "<?php echo $rNumber ?>";
-            showNextItems.kNumber.value = "<?php echo $custnumber ?>";
-            showNextItems.kName.value = "<?php echo $custName ?>";
-            showNextItems.kPLZ.value = "<?php echo $plz ?>";
-            showNextItems.place.value = "<?php echo $city ?>";
-            showNextItems.sortNum.value = "<?php echo $sort ?>";
-            showNextItems.keyWord.value = "<?php echo $keyword ?>";
-            showNextItems.allVersions.value = "<?php echo $allVersions ?>";
-            showNextItems.withImage.value = "<?php echo $withImage ?>";
-            showNextItems.stockLevel.value = "<?php echo $stockLevel ?>";
-            showNextItems.itemsStart.value = itemsStart;
-
-            showNextItems.submit();
-        }
-
-        function firstItems(){
-            let showNextItems = document.getElementById("showNextItems");
-            showNextItems.selectType.value = "<?php echo $type; ?>";
-            showNextItems.rNumber.value = "<?php echo $rNumber ?>";
-            showNextItems.kNumber.value = "<?php echo $custnumber ?>";
-            showNextItems.kName.value = "<?php echo $custName ?>";
-            showNextItems.kPLZ.value = "<?php echo $plz ?>";
-            showNextItems.place.value = "<?php echo $city ?>";
-            showNextItems.sortNum.value = "<?php echo $sort ?>";
-            showNextItems.keyWord.value = "<?php echo $keyword ?>";
-            showNextItems.allVersions.value = "<?php echo $allVersions ?>";
-            showNextItems.withImage.value = "<?php echo $withImage ?>";
-            showNextItems.stockLevel.value = "<?php echo $stockLevel ?>";
-            showNextItems.itemsStart.value = 0;
-            showNextItems.submit();
-        }
-    </script>
 </body>
 </html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function getNextItems(){
+        let itemsStart = <?php echo $itemsStart; ?>;
+        itemsStart = itemsStart + 50;
+
+        let showNextItems = document.getElementById("showNextItems");
+        showNextItems.selectType.value = "<?php echo $type; ?>";
+        showNextItems.rNumber.value = "<?php echo $rNumber; ?>";
+        showNextItems.kNumber.value = "<?php echo $custnumber; ?>";
+        showNextItems.kName.value = "<?php echo $custName; ?>";
+        showNextItems.kPLZ.value = "<?php echo $plz; ?>";
+        showNextItems.place.value = "<?php echo $city; ?>";
+        showNextItems.sortNum.value = "<?php echo $sort; ?>";
+        showNextItems.keyWord.value = "<?php echo $keyword; ?>";
+        showNextItems.allVersions.value = "<?php echo $allVersions; ?>";
+        showNextItems.withImage.value = "<?php echo $withImage; ?>";
+        showNextItems.stockLevel.value = "<?php echo $stockLevel; ?>";
+        showNextItems.withSalesId.value = "<?php echo $withSalesId; ?>";
+        showNextItems.itemsStart.value = itemsStart;
+        showNextItems.submit();
+    };
+
+    function getLeastItems(){
+        let itemsStart = <?php echo $itemsStart; ?>;
+        itemsStart = itemsStart - 50;
+        
+        let showNextItems = document.getElementById("showNextItems");
+        showNextItems.selectType.value = "<?php echo $type; ?>";
+        showNextItems.rNumber.value = "<?php echo $rNumber; ?>";
+        showNextItems.kNumber.value = "<?php echo $custnumber; ?>";
+        showNextItems.kName.value = "<?php echo $custName; ?>";
+        showNextItems.kPLZ.value = "<?php echo $plz; ?>";
+        showNextItems.place.value = "<?php echo $city; ?>";
+        showNextItems.sortNum.value = "<?php echo $sort; ?>";
+        showNextItems.keyWord.value = "<?php echo $keyword; ?>";
+        showNextItems.allVersions.value = "<?php echo $allVersions; ?>";
+        showNextItems.withImage.value = "<?php echo $withImage; ?>";
+        showNextItems.stockLevel.value = "<?php echo $stockLevel; ?>";
+        showNextItems.withSalesId.value = "<?php echo $withSalesId; ?>";
+        showNextItems.itemsStart.value = itemsStart;
+
+        showNextItems.submit();
+    };
+
+    function getFirstItems(){
+        let showNextItems = document.getElementById("showNextItems");
+        showNextItems.selectType.value = "<?php echo $type; ?>";
+        showNextItems.rNumber.value = "<?php echo $rNumber; ?>";
+        showNextItems.kNumber.value = "<?php echo $custnumber; ?>";
+        showNextItems.kName.value = "<?php echo $custName; ?>";
+        showNextItems.kPLZ.value = "<?php echo $plz; ?>";
+        showNextItems.place.value = "<?php echo $city; ?>";
+        showNextItems.sortNum.value = "<?php echo $sort; ?>";
+        showNextItems.keyWord.value = "<?php echo $keyword; ?>";
+        showNextItems.allVersions.value = "<?php echo $allVersions; ?>";
+        showNextItems.withImage.value = "<?php echo $withImage; ?>";
+        showNextItems.stockLevel.value = "<?php echo $stockLevel; ?>";
+        showNextItems.withSalesId.value = "<?php echo $withSalesId; ?>";
+        showNextItems.itemsStart.value = 0;
+        showNextItems.submit();
+    };
+
+    $.noConflict();
+    $(document).ready(function () {
+        $('#firstItems').click(getFirstItems);
+        $('#leastItems').click(getLeastItems);
+        $('#nextItems').click(getNextItems);
+    });
+</script>

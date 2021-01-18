@@ -87,7 +87,7 @@ if(isset($_POST['submit'])){
                     x.style.visibility = "visible";
                     setTimeout(function(){
                         x.style.visibility = "hidden"; 
-                        window.open("searching.php");
+                        window.location.href = "searching.php";
                     }, 500);
                    </script>
                    <?php
