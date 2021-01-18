@@ -100,7 +100,8 @@ nav {
 #checkAllWithStockBtn,
 #nextItems,
 #leastItems,
-#firstItems {
+#firstItems,
+#lastItems {
   color: white;
   padding: 5px;
   background-color: #d80030;
@@ -111,7 +112,8 @@ nav {
 #checkAllWithStockBtn:hover,
 #nextItems:hover,
 #leastItems:hover,
-#firstItems:hover {
+#firstItems:hover,
+#lastItems:hover {
   background-color: white;
   color: #d80030;
 }

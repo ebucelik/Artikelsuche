@@ -16,6 +16,18 @@ $(document).ready(function () {
     $(this).attr('src', 'Bilder/drucker.png');
   });
 
+  $('#leastItems').hover(function () {
+    $('#leftArrow').attr('src', 'Bilder/leftArrowRed.png');
+  }, function () {
+    $('#leftArrow').attr('src', 'Bilder/leftArrow.png');
+  });
+
+  $('#nextItems').hover(function () {
+    $('#rightArrow').attr('src', 'Bilder/rightArrowRed.png');
+  }, function () {
+    $('#rightArrow').attr('src', 'Bilder/rightArrow.png');
+  });
+
   $('.sendMailCheck').change(function () {
     displayCheckbox = false;
 
