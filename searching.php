@@ -67,7 +67,6 @@ if(isset($_SESSION["itemsStart"])){
 
 if(isset($_SESSION["withSalesId"])){
     $withSalesId = $_SESSION["withSalesId"];
-    echo $withSalesId;
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -455,10 +454,11 @@ if($itemIdArray){
         <h5 id="selectedItemQty" style="display: inline-block; color: black;"></h5>
     </div>
      <div class="col" style="text-align: right;">
-        <button id="firstItems" class="btn btn-outline-light">Ersten 50 Artikel</button>
-        <button id="leastItems" class="btn btn-outline-light" <?php if(($itemsStart - 50) < 0){echo "disabled='disabled'";} ?>>Letzten 50 Artikel</button>
-        <button id="nextItems" class="btn btn-outline-light" <?php if(($itemsStart + 50) > $itemQty){echo "disabled='disabled'";} ?>>Nächsten 50 Artikel</button>
-        <h5 style="display: inline-block; color: black;"><?php echo (($itemsStart + 50) < $itemQty) ? ($itemsStart + 50) : $itemQty; echo " von " . $itemQty . " Artikel"?></h5>
+        <button id="firstItems" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>>Erste Seite</button>
+        <button id="lastItems" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>>Letze Seite</button>
+        <button id="leastItems" class="btn btn-outline-light" <?php if(($itemsStart - 50) < 0){echo "disabled='disabled'";} ?>><img id="leftArrow" src="Bilder/leftArrow.png" width="25"/></button>
+        <button id="nextItems" class="btn btn-outline-light" <?php if(($itemsStart + 50) > $itemQty){echo "disabled='disabled'";} ?>><img id="rightArrow" src="Bilder/rightArrow.png" width="25"/></button>
+        <h5 style="display: inline-block; color: black;"><?php echo $itemsStart . " bis "; echo (($itemsStart + 50) < $itemQty) ? ($itemsStart + 50) : $itemQty; echo " von " . $itemQty . " Artikel"?></h5>
     </div>
 </div>
 
@@ -638,10 +638,52 @@ if($itemIdArray){
         showNextItems.submit();
     };
 
+    function getLastItems(){
+        <?php 
+        $numLen = strlen((string)$itemQty);
+        
+        $restNum = 0;
+
+        if($numLen > 2){
+            $restNum = substr((string) $itemQty, $numLen-2);
+            if($restNum > 50){
+                $secRestNum = $restNum - 50;
+                $itemsStart = $itemQty - $secRestNum;
+            }
+            else{
+                $itemsStart = $itemQty - $restNum;
+            }
+        }else if($numLen == 2 && $itemQty > 50){
+            $restNum = $itemQty - 50;
+            $itemsStart = $itemQty - $restNum;
+        }
+        ?>
+
+        let itemsStart = <?php echo $itemsStart; ?>;
+
+        let showNextItems = document.getElementById("showNextItems");
+        showNextItems.selectType.value = "<?php echo $type; ?>";
+        showNextItems.rNumber.value = "<?php echo $rNumber; ?>";
+        showNextItems.kNumber.value = "<?php echo $custnumber; ?>";
+        showNextItems.kName.value = "<?php echo $custName; ?>";
+        showNextItems.kPLZ.value = "<?php echo $plz; ?>";
+        showNextItems.place.value = "<?php echo $city; ?>";
+        showNextItems.sortNum.value = "<?php echo $sort; ?>";
+        showNextItems.keyWord.value = "<?php echo $keyword; ?>";
+        showNextItems.allVersions.value = "<?php echo $allVersions; ?>";
+        showNextItems.withImage.value = "<?php echo $withImage; ?>";
+        showNextItems.stockLevel.value = "<?php echo $stockLevel; ?>";
+        showNextItems.withSalesId.value = "<?php echo $withSalesId; ?>";
+        showNextItems.itemsStart.value = itemsStart;
+
+        showNextItems.submit();
+    };
+
     $.noConflict();
     $(document).ready(function () {
         $('#firstItems').click(getFirstItems);
         $('#leastItems').click(getLeastItems);
         $('#nextItems').click(getNextItems);
+        $('#lastItems').click(getLastItems);
     });
 </script>
