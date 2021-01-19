@@ -15,7 +15,7 @@ $(document).ready(function () {
   }, function () {
     $(this).attr('src', 'Bilder/drucker.png');
   });
-
+  
   $('#leastItems').hover(function () {
     $('#leftArrow').attr('src', 'Bilder/leftArrowRed.png');
   }, function () {
@@ -26,6 +26,42 @@ $(document).ready(function () {
     $('#rightArrow').attr('src', 'Bilder/rightArrowRed.png');
   }, function () {
     $('#rightArrow').attr('src', 'Bilder/rightArrow.png');
+  });
+
+  $('#lastItems').hover(function () {
+    $('#endRight').attr('src', 'Bilder/endRightRed.png');
+  }, function () {
+    $('#endRight').attr('src', 'Bilder/endRight.png');
+  });
+
+  $('#firstItems').hover(function () {
+    $('#endLeft').attr('src', 'Bilder/endLeftRed.png');
+  }, function () {
+    $('#endLeft').attr('src', 'Bilder/endLeft.png');
+  });
+
+  $('#leastItemsBottom').hover(function () {
+    $('#leftArrowBottom').attr('src', 'Bilder/leftArrowRed.png');
+  }, function () {
+    $('#leftArrowBottom').attr('src', 'Bilder/leftArrow.png');
+  });
+
+  $('#nextItemsBottom').hover(function () {
+    $('#rightArrowBottom').attr('src', 'Bilder/rightArrowRed.png');
+  }, function () {
+    $('#rightArrowBottom').attr('src', 'Bilder/rightArrow.png');
+  });
+
+  $('#lastItemsBottom').hover(function () {
+    $('#endRightBottom').attr('src', 'Bilder/endRightRed.png');
+  }, function () {
+    $('#endRightBottom').attr('src', 'Bilder/endRight.png');
+  });
+
+  $('#firstItemsBottom').hover(function () {
+    $('#endLeftBottom').attr('src', 'Bilder/endLeftRed.png');
+  }, function () {
+    $('#endLeftBottom').attr('src', 'Bilder/endLeft.png');
   });
 
   $('.sendMailCheck').change(function () {
@@ -41,6 +77,19 @@ $(document).ready(function () {
   $('#dataView > input').filter(':checked').each(function () {
     $(this).prop("checked", false);
   });
+
+  let sticky = $('#itemHeader').offset();
+  let width = $('#itemHeader').width();
+  
+  window.onscroll = function () {
+    if (window.pageYOffset > sticky.top) {
+      $('#itemHeader').addClass("sticky");
+      $('#itemHeader').css("width", width);
+    } else {
+      $('#itemHeader').removeClass("sticky");
+    }
+  }
+
 });
 
 function checkAll() {
@@ -92,20 +141,23 @@ function sendMailPdf() {
       itemid = $('.itemid').eq(index).text();
       version = $('.version').eq(index).text();
       salesid = $('.salesid').eq(index).text();
+      imageUrl = $('.itemImage > img').eq(index).attr('src');
 
-      $.ajax({
-        type: "get",
-        url: "getImageUrl.php",
-        data: { ItemId: itemid, Version: version, SalesId: salesid },
-        success: function (image) {
-          if (image) {
-            imageArray.push(image);
-          } else {
-            imageArray.push("Uploads/noimage.jpg");
-          }
-        },
-        async: false
-      });
+      if (imageUrl != "Bilder/noimage.png") {
+        $.ajax({
+          type: "get",
+          url: "getImageUrl.php",
+          data: { ItemId: itemid, Version: version, SalesId: salesid },
+          success: function (image) {
+            if (image) {
+              imageArray.push(image);
+            } else {
+              imageArray.push("Uploads/noimage.jpg");
+            }
+          },
+          async: false
+        });
+      }
     });
 
     $('.sendMailCheck').filter(':checked').each(function () {

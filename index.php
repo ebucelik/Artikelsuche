@@ -1,3 +1,8 @@
+<?php 
+session_start();
+session_destroy(); 
+?>
+
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -26,7 +31,7 @@
   </head>
   <body>
     <header>
-      <a href="index.html"><img src="Bilder/ArtikelsucheKundensuche.png" title="Marzek Suche" alt="Marzek Suche Bild" width="300"/></a>
+      <a href="index.php"><img src="Bilder/ArtikelsucheKundensuche.png" title="Marzek Suche" alt="Marzek Suche Bild" width="300"/></a>
     </header>
 
     <nav>
