@@ -206,7 +206,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 <body>
     <header>
-        <a href="index.html" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
+        <a href="index.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
     </header>
 
     <nav>
@@ -453,18 +453,20 @@ if($itemIdArray){
         <button id="checkAllWithStockBtn" class="btn btn-outline-light" onclick="checkAllWithStock()">Alle Artikel mit Lagerstand auswählen</button>
         <h5 id="selectedItemQty" style="display: inline-block; color: black;"></h5>
     </div>
+    <div class="col" style="text-align: center;">
+        <h5 style="display: inline-block; color: black;"><?php echo $itemsStart . " bis "; echo (($itemsStart + 50) < $itemQty) ? ($itemsStart + 50) : $itemQty; echo " von " . $itemQty . " Artikel"?></h5>
+    </div>
      <div class="col" style="text-align: right;">
-        <button id="firstItems" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>>Erste Seite</button>
-        <button id="lastItems" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>>Letze Seite</button>
+        <button id="firstItems" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>><img id="endLeft" src="Bilder/endLeft.png" width="25"/></button>
         <button id="leastItems" class="btn btn-outline-light" <?php if(($itemsStart - 50) < 0){echo "disabled='disabled'";} ?>><img id="leftArrow" src="Bilder/leftArrow.png" width="25"/></button>
         <button id="nextItems" class="btn btn-outline-light" <?php if(($itemsStart + 50) > $itemQty){echo "disabled='disabled'";} ?>><img id="rightArrow" src="Bilder/rightArrow.png" width="25"/></button>
-        <h5 style="display: inline-block; color: black;"><?php echo $itemsStart . " bis "; echo (($itemsStart + 50) < $itemQty) ? ($itemsStart + 50) : $itemQty; echo " von " . $itemQty . " Artikel"?></h5>
+        <button id="lastItems" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>><img id="endRight" src="Bilder/endRight.png" width="25"/></button>
     </div>
 </div>
 
 <div id="dataView">
         <div class="containerRow">
-            <div class="row titlerow">
+            <div class="row titlerow" id="itemHeader">
                 <div class="col checkbox"></div>
                 <div class="col">Artikelnr.</div>
                 <div class="col">Version</div>

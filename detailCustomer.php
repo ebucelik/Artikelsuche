@@ -23,7 +23,7 @@
 </head>
 <body>
     <header>
-        <a href="index.html" ><img src="Bilder/kundensuche.png" id="headerImg" title="Marzek Kundensuche" alt="Marzek Kundensuche Bild" width="400"></a>
+        <a href="index.php" ><img src="Bilder/kundensuche.png" id="headerImg" title="Marzek Kundensuche" alt="Marzek Kundensuche Bild" width="400"></a>
     </header>
 
     

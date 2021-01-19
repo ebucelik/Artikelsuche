@@ -28,6 +28,18 @@ $(document).ready(function () {
     $('#rightArrow').attr('src', 'Bilder/rightArrow.png');
   });
 
+  $('#lastItems').hover(function () {
+    $('#endRight').attr('src', 'Bilder/endRightRed.png');
+  }, function () {
+    $('#endRight').attr('src', 'Bilder/endRight.png');
+  });
+
+  $('#firstItems').hover(function () {
+    $('#endLeft').attr('src', 'Bilder/endLeftRed.png');
+  }, function () {
+    $('#endLeft').attr('src', 'Bilder/endLeft.png');
+  });
+
   $('.sendMailCheck').change(function () {
     displayCheckbox = false;
 
@@ -41,6 +53,19 @@ $(document).ready(function () {
   $('#dataView > input').filter(':checked').each(function () {
     $(this).prop("checked", false);
   });
+
+  let sticky = $('#itemHeader').offset();
+  let width = $('#itemHeader').width();
+  
+  window.onscroll = function () {
+    if (window.pageYOffset > sticky.top) {
+      $('#itemHeader').addClass("sticky");
+      $('#itemHeader').css("width", width);
+    } else {
+      $('#itemHeader').removeClass("sticky");
+    }
+  }
+
 });
 
 function checkAll() {

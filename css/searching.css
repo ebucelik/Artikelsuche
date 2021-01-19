@@ -135,6 +135,13 @@ nav {
   margin-bottom: 1%;
 }
 
+.sticky {
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  margin-top: 0;
+}
+
 #toStartBtn:hover {
   opacity: 1;
 }
