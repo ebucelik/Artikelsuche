@@ -117,20 +117,23 @@ function sendMailPdf() {
       itemid = $('.itemid').eq(index).text();
       version = $('.version').eq(index).text();
       salesid = $('.salesid').eq(index).text();
+      imageUrl = $('.itemImage > img').eq(index).attr('src');
 
-      $.ajax({
-        type: "get",
-        url: "getImageUrl.php",
-        data: { ItemId: itemid, Version: version, SalesId: salesid },
-        success: function (image) {
-          if (image) {
-            imageArray.push(image);
-          } else {
-            imageArray.push("Uploads/noimage.jpg");
-          }
-        },
-        async: false
-      });
+      if (imageUrl != "Bilder/noimage.png") {
+        $.ajax({
+          type: "get",
+          url: "getImageUrl.php",
+          data: { ItemId: itemid, Version: version, SalesId: salesid },
+          success: function (image) {
+            if (image) {
+              imageArray.push(image);
+            } else {
+              imageArray.push("Uploads/noimage.jpg");
+            }
+          },
+          async: false
+        });
+      }
     });
 
     $('.sendMailCheck').filter(':checked').each(function () {

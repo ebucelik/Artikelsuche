@@ -1,6 +1,6 @@
 <?php
 require_once('db/db.php');
-
+ini_set('session.cache_limiter', 'private');
 session_start();
 
 $unEqualString = "";
@@ -15,57 +15,57 @@ if(isset($_SESSION["itemIdArray"])){
     $itemIdArray = $_SESSION["itemIdArray"];
 }
 
-if(isset($_SESSION["selectType"])){
+if(isset($_SESSION["selectType"]) && $_SESSION["selectType"] != ''){
     $type = $_SESSION["selectType"];
 }
 
-if(isset($_SESSION["rNumber"])){
+if(isset($_SESSION["rNumber"]) && $_SESSION["rNumber"] != ''){
     $rNumber = $_SESSION["rNumber"];
 }
 
-if(isset($_SESSION["kNumber"])){
+if(isset($_SESSION["kNumber"]) && $_SESSION["kNumber"] != ''){
     $custnumber = $_SESSION["kNumber"];
 }
 
-if(isset($_SESSION["kName"])){
+if(isset($_SESSION["kName"]) && $_SESSION["kName"] != ''){
     $custName = $_SESSION["kName"];
 }
 
-if(isset($_SESSION["kPLZ"])){
+if(isset($_SESSION["kPLZ"]) && $_SESSION["kPLZ"] != ''){
     $plz = $_SESSION["kPLZ"];
 }
 
-if(isset($_SESSION["place"])){
+if(isset($_SESSION["place"]) && $_SESSION["place"] != ''){
     $city = $_SESSION["place"];
 }
 
-if(isset($_SESSION["sortNum"])){
+if(isset($_SESSION["sortNum"]) && $_SESSION["sortNum"] != ''){
     $sort = $_SESSION["sortNum"];
 }
 
-if(isset($_SESSION["keyWord"])){
+if(isset($_SESSION["keyWord"]) && $_SESSION["keyWord"] != ''){
     $keyword = $_SESSION["keyWord"];
 }
 
-if(isset($_SESSION["allVersions"])){
+if(isset($_SESSION["allVersions"]) && $_SESSION["allVersions"] != ''){
     $allVersions = $_SESSION["allVersions"];
 }
 
-if(isset($_SESSION["withImage"])){
+if(isset($_SESSION["withImage"]) && $_SESSION["withImage"] != ''){
     $withImage = $_SESSION["withImage"];
 }else{
     $withImage = $unEqualString;
 }
 
-if(isset($_SESSION["stockLevel"])){
+if(isset($_SESSION["stockLevel"]) && $_SESSION["stockLevel"] != ''){
     $stockLevel = $_SESSION["stockLevel"];
 }
 
-if(isset($_SESSION["itemsStart"])){
+if(isset($_SESSION["itemsStart"]) && $_SESSION["itemsStart"] != ''){
     $itemsStart = $_SESSION["itemsStart"];
 }
 
-if(isset($_SESSION["withSalesId"])){
+if(isset($_SESSION["withSalesId"]) && $_SESSION["withSalesId"] != ''){
     $withSalesId = $_SESSION["withSalesId"];
 }
 
@@ -215,12 +215,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <div class="form-group fading searchForm">
                     <label for="selectType" class="align-self-center labelTxt">Rolle/Bogen:</label>
                     <select class="form-control searchInput" id="selectType" name="selectType" onchange="changeTitle()">
-                        <option>Rollenetiketten</option>
-                        <option>Bogenetiketten</option>
+                        <option <?php if($type == "Rollenetiketten"){ echo "selected";} ?> >Rollenetiketten</option>
+                        <option <?php if($type == "Bogenetiketten"){ echo "selected";} ?> >Bogenetiketten</option>
                     </select>
                 </div>
                 <div class="form-group fading searchForm">
-                    <label for="rNumber" class="align-self-center labelTxt">R-Nummer:</label>
+                    <label for="rNumber" class="align-self-center labelTxt" id="Rnumber">R-Nummer:</label>
                     <input type="text" class="form-control searchInput" id="rNumber" placeholder="R-Nummer eingeben" name="rNumber" value="<?php if($rNumber != $unEqualString){echo $rNumber;} ?>">
                 </div>
                 <div class="form-group fading searchForm">
@@ -492,7 +492,7 @@ if($itemIdArray){
             ?>
                 <div class="row">
                     <div class="col align-self-center checkbox"><input type="checkbox" class="form-control sendMailCheck" style="width: 20px; height: 20px;" unchecked></div>
-                    <div class="col align-self-center itemid"><a style="color: black;" href="detail.php?type=<?php echo $_POST['selectType']; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>"><?php echo $v1['ItemId']; ?></a></div>
+                    <div class="col align-self-center itemid"><a style="color: black;" href="detail.php?type=<?php if(isset($_SESSION['selectType'])){echo $_SESSION['selectType'];} ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>"><?php echo $v1['ItemId']; ?></a></div>
                     <div class="col align-self-center version"><?php echo $v1['Version']; ?></div>
                     <?php if($GLOBALS["allVersions"] == 'on'){?><div class="col align-self-center prodgroupid"><?php echo $v1['ProdGroupId']; ?></div><?php } ?>
                     <div class="col align-self-center custvendrelation"><?php echo $v1['CustVendRelation']; ?></div>
@@ -505,12 +505,12 @@ if($itemIdArray){
                     <div class="col align-self-center salesid"><?php echo $v1['SalesId']; ?></div>
                     <div class="col align-self-center workcenters"><?php echo $v1['WorkCenters']; ?></div>
                     <div class="col align-self-center stocklevel"><?php echo $v1['StockLevel']; ?></div>
-                    <div class="col align-self-center">
+                    <div class="col align-self-center itemImage">
                         <?php if($v1['DesignJpgPreviewUrl']){ ?>
                             <img title="Bild öffnen" class="designjpgpreviewurl" <?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){ ?> onclick="openImage('<?php echo base64_encode(@file_get_contents($v1['DesignJpgPreviewUrl'])); ?>', '<?php echo $v1['ItemId']; ?>')" <?php } ?> src="<?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){ echo 'Bilder/noimage.png'; }else{ echo 'data:image/jpg;base64,' . base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); } ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
                         <?php } ?>
                     </div>
-                    <div class="col align-self-center printImg"><a target="_blank" href="createPDF.php?type=<?php echo $_POST['selectType']; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>&SimpleOrFullPDF=Full" style="color: #d80030;"><img src="Bilder/drucker.png" class="print" title="Drucken" alt="Drucken" width="35"></a></div>
+                    <div class="col align-self-center printImg"><a target="_blank" href="createPDF.php?type=<?php if(isset($_SESSION['selectType'])){echo $_SESSION['selectType'];} ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>&SimpleOrFullPDF=Full" style="color: #d80030;"><img src="Bilder/drucker.png" class="print" title="Drucken" alt="Drucken" width="35"></a></div>
                 </div>
                 <hr/>
             <?php 
