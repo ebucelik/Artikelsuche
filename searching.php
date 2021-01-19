@@ -463,84 +463,93 @@ if($itemIdArray){
         <button id="lastItems" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>><img id="endRight" src="Bilder/endRight.png" width="25"/></button>
     </div>
 </div>
-
-<div id="dataView">
-        <div class="containerRow">
-            <div class="row titlerow" id="itemHeader">
-                <div class="col checkbox"></div>
-                <div class="col">Artikelnr.</div>
-                <div class="col">Version</div>
-                <?php if($allVersions == 'on'){?><div class="col">Produktvariante</div><?php } ?>
-                <div class="col">Kundennr.</div>
-                <div class="col">Kunde</div>
-                <?php if($checkSort){?><div class="col">Sorten Eindruck</div><?php }?>
-                <div class="col" style="flex-grow:2;">Stichwort</div>
-                <div class="col">Format Quer</div>
-                <div class="col">Format Lauf</div>
-                <div class="col">Stellung</div>
-                <div class="col">Auftragsnr.</div>
-                <div class="col">Maschine</div>
-                <div class="col">Lagerstand</div>
-                <div class="col">Thumbnail</div>
-                <div class="col">Drucken</div>
-            </div>
-
-            <!-- Show data here with a foreach over the div (PHP) -->
-            <?php 
-            function addItemsToView($v1)
-            {
-            ?>
-                <div class="row">
-                    <div class="col align-self-center checkbox"><input type="checkbox" class="form-control sendMailCheck" style="width: 20px; height: 20px;" unchecked></div>
-                    <div class="col align-self-center itemid"><a style="color: black;" href="detail.php?type=<?php if(isset($_SESSION['selectType'])){echo $_SESSION['selectType'];} ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>"><?php echo $v1['ItemId']; ?></a></div>
-                    <div class="col align-self-center version"><?php echo $v1['Version']; ?></div>
-                    <?php if($GLOBALS["allVersions"] == 'on'){?><div class="col align-self-center prodgroupid"><?php echo $v1['ProdGroupId']; ?></div><?php } ?>
-                    <div class="col align-self-center custvendrelation"><?php echo $v1['CustVendRelation']; ?></div>
-                    <div class="col align-self-center name"><?php echo $v1['Name']; ?></div>
-                    <?php if($v1['Sort']){?><div class="col align-self-center sort"><?php echo $v1['Sort']; ?></div><?php }?>
-                    <div class="col align-self-center externalitemtxt" style="flex-grow:2;"><?php echo $v1['ExternalItemTxt']; ?></div>
-                    <div class="col align-self-center lepsizew"><?php echo $v1['LEPSizeW']; ?></div>
-                    <div class="col align-self-center lepsizel"><?php echo $v1['LEPSizeL']; ?></div>
-                    <div class="col align-self-center tradeunitspecid"><?php echo $v1['TradeUnitSpecId']; ?></div>
-                    <div class="col align-self-center salesid"><?php echo $v1['SalesId']; ?></div>
-                    <div class="col align-self-center workcenters"><?php echo $v1['WorkCenters']; ?></div>
-                    <div class="col align-self-center stocklevel"><?php echo $v1['StockLevel']; ?></div>
-                    <div class="col align-self-center itemImage">
-                        <?php if($v1['DesignJpgPreviewUrl']){ ?>
-                            <img title="Bild öffnen" class="designjpgpreviewurl" <?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){ ?> onclick="openImage('<?php echo base64_encode(@file_get_contents($v1['DesignJpgPreviewUrl'])); ?>', '<?php echo $v1['ItemId']; ?>')" <?php } ?> src="<?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){ echo 'Bilder/noimage.png'; }else{ echo 'data:image/jpg;base64,' . base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); } ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
-                        <?php } ?>
-                    </div>
-                    <div class="col align-self-center printImg"><a target="_blank" href="createPDF.php?type=<?php if(isset($_SESSION['selectType'])){echo $_SESSION['selectType'];} ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>&SimpleOrFullPDF=Full" style="color: #d80030;"><img src="Bilder/drucker.png" class="print" title="Drucken" alt="Drucken" width="35"></a></div>
+        <div id="dataView">
+            <div class="containerRow">
+                <div class="row titlerow" id="itemHeader">
+                    <div class="col checkbox"></div>
+                    <div class="col">Artikelnr.</div>
+                    <div class="col">Version</div>
+                    <?php if($allVersions == 'on'){?><div class="col">Produktvariante</div><?php } ?>
+                    <div class="col">Kundennr.</div>
+                    <div class="col">Kunde</div>
+                    <?php if($checkSort){?><div class="col">Sorten Eindruck</div><?php }?>
+                    <div class="col" style="flex-grow:2;">Stichwort</div>
+                    <div class="col">Format Quer</div>
+                    <div class="col">Format Lauf</div>
+                    <div class="col">Stellung</div>
+                    <div class="col">Auftragsnr.</div>
+                    <div class="col">Maschine</div>
+                    <div class="col">Lagerstand</div>
+                    <div class="col">Thumbnail</div>
+                    <div class="col">Drucken</div>
                 </div>
-                <hr/>
-            <?php 
-            }
 
-            if($withImage == 'on'){
-                $tmpItemArray = array();
+                <!-- Show data here with a foreach over the div (PHP) -->
+                <?php 
+                function addItemsToView($v1)
+                {
+                ?>
+                    <div class="row">
+                        <div class="col align-self-center checkbox"><input type="checkbox" class="form-control sendMailCheck" style="width: 20px; height: 20px;" unchecked></div>
+                        <div class="col align-self-center itemid"><a style="color: black;" href="detail.php?type=<?php if(isset($_SESSION['selectType'])){echo $_SESSION['selectType'];} ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>"><?php echo $v1['ItemId']; ?></a></div>
+                        <div class="col align-self-center version"><?php echo $v1['Version']; ?></div>
+                        <?php if($GLOBALS["allVersions"] == 'on'){?><div class="col align-self-center prodgroupid"><?php echo $v1['ProdGroupId']; ?></div><?php } ?>
+                        <div class="col align-self-center custvendrelation"><?php echo $v1['CustVendRelation']; ?></div>
+                        <div class="col align-self-center name"><?php echo $v1['Name']; ?></div>
+                        <?php if($v1['Sort']){?><div class="col align-self-center sort"><?php echo $v1['Sort']; ?></div><?php }?>
+                        <div class="col align-self-center externalitemtxt" style="flex-grow:2;"><?php echo $v1['ExternalItemTxt']; ?></div>
+                        <div class="col align-self-center lepsizew"><?php echo $v1['LEPSizeW']; ?></div>
+                        <div class="col align-self-center lepsizel"><?php echo $v1['LEPSizeL']; ?></div>
+                        <div class="col align-self-center tradeunitspecid"><?php echo $v1['TradeUnitSpecId']; ?></div>
+                        <div class="col align-self-center salesid"><?php echo $v1['SalesId']; ?></div>
+                        <div class="col align-self-center workcenters"><?php echo $v1['WorkCenters']; ?></div>
+                        <div class="col align-self-center stocklevel"><?php echo $v1['StockLevel']; ?></div>
+                        <div class="col align-self-center itemImage">
+                            <?php if($v1['DesignJpgPreviewUrl']){ ?>
+                                <img title="Bild öffnen" class="designjpgpreviewurl" <?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){ ?> onclick="openImage('<?php echo base64_encode(@file_get_contents($v1['DesignJpgPreviewUrl'])); ?>', '<?php echo $v1['ItemId']; ?>')" <?php } ?> src="<?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){ echo 'Bilder/noimage.png'; }else{ echo 'data:image/jpg;base64,' . base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); } ?>" style="height: 50px; width: 50px; cursor: pointer;"/>
+                            <?php } ?>
+                        </div>
+                        <div class="col align-self-center printImg"><a target="_blank" href="createPDF.php?type=<?php if(isset($_SESSION['selectType'])){echo $_SESSION['selectType'];} ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId'] ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut'] ?>&SimpleOrFullPDF=Full" style="color: #d80030;"><img src="Bilder/drucker.png" class="print" title="Drucken" alt="Drucken" width="35"></a></div>
+                    </div>
+                    <hr/>
+                <?php 
+                }
 
-                $tmpItemArray = array_slice($itemIdArray, $itemsStart, 50);
+                if($withImage == 'on'){
+                    $tmpItemArray = array();
 
-                foreach($tmpItemArray as $key => $v1)
-                { 
-                    if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){
+                    $tmpItemArray = array_slice($itemIdArray, $itemsStart, 50);
+
+                    foreach($tmpItemArray as $key => $v1)
+                    { 
+                        if(@file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){
+                            addItemsToView($v1);
+                        }
+                    }
+                }else{
+                    $tmpItemArray = array();
+
+                    $tmpItemArray = array_slice($itemIdArray, $itemsStart, 50);
+
+                    foreach($tmpItemArray as $key => $v1)
+                    { 
                         addItemsToView($v1);
                     }
                 }
-            }else{
-                $tmpItemArray = array();
-
-                $tmpItemArray = array_slice($itemIdArray, $itemsStart, 50);
-
-                foreach($tmpItemArray as $key => $v1)
-                { 
-                    addItemsToView($v1);
-                }
-            }
-            ?>
+                ?>
+            </div>
+            <div class="row">
+                <div class="col" style="text-align: right;">
+                    <button id="firstItemsBottom" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>><img id="endLeftBottom" src="Bilder/endLeft.png" width="25"/></button>
+                    <button id="leastItemsBottom" class="btn btn-outline-light" <?php if(($itemsStart - 50) < 0){echo "disabled='disabled'";} ?>><img id="leftArrowBottom" src="Bilder/leftArrow.png" width="25"/></button>
+                    <button id="nextItemsBottom" class="btn btn-outline-light" <?php if(($itemsStart + 50) > $itemQty){echo "disabled='disabled'";} ?>><img id="rightArrowBottom" src="Bilder/rightArrow.png" width="25"/></button>
+                    <button id="lastItemsBottom" class="btn btn-outline-light" <?php if($itemQty <= 50){echo "disabled='disabled'";} ?>><img id="endRightBottom" src="Bilder/endRight.png" width="25"/></button>
+                </div>
+            </div>
+            
+            <?php } ?>
         </div>
-        <?php } ?>
-        </div>
+
         <div id="myModal" class="modal">
             <!-- The Close Button -->
             <span class="close">×</span>
@@ -687,5 +696,10 @@ if($itemIdArray){
         $('#leastItems').click(getLeastItems);
         $('#nextItems').click(getNextItems);
         $('#lastItems').click(getLastItems);
+
+        $('#firstItemsBottom').click(getFirstItems);
+        $('#leastItemsBottom').click(getLeastItems);
+        $('#nextItemsBottom').click(getNextItems);
+        $('#lastItemsBottom').click(getLastItems);
     });
 </script>

@@ -15,7 +15,7 @@ $(document).ready(function () {
   }, function () {
     $(this).attr('src', 'Bilder/drucker.png');
   });
-
+  
   $('#leastItems').hover(function () {
     $('#leftArrow').attr('src', 'Bilder/leftArrowRed.png');
   }, function () {
@@ -38,6 +38,30 @@ $(document).ready(function () {
     $('#endLeft').attr('src', 'Bilder/endLeftRed.png');
   }, function () {
     $('#endLeft').attr('src', 'Bilder/endLeft.png');
+  });
+
+  $('#leastItemsBottom').hover(function () {
+    $('#leftArrowBottom').attr('src', 'Bilder/leftArrowRed.png');
+  }, function () {
+    $('#leftArrowBottom').attr('src', 'Bilder/leftArrow.png');
+  });
+
+  $('#nextItemsBottom').hover(function () {
+    $('#rightArrowBottom').attr('src', 'Bilder/rightArrowRed.png');
+  }, function () {
+    $('#rightArrowBottom').attr('src', 'Bilder/rightArrow.png');
+  });
+
+  $('#lastItemsBottom').hover(function () {
+    $('#endRightBottom').attr('src', 'Bilder/endRightRed.png');
+  }, function () {
+    $('#endRightBottom').attr('src', 'Bilder/endRight.png');
+  });
+
+  $('#firstItemsBottom').hover(function () {
+    $('#endLeftBottom').attr('src', 'Bilder/endLeftRed.png');
+  }, function () {
+    $('#endLeftBottom').attr('src', 'Bilder/endLeft.png');
   });
 
   $('.sendMailCheck').change(function () {

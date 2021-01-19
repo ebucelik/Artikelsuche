@@ -101,7 +101,11 @@ nav {
 #nextItems,
 #leastItems,
 #firstItems,
-#lastItems {
+#lastItems,
+#nextItemsBottom,
+#leastItemsBottom,
+#firstItemsBottom,
+#lastItemsBottom {
   color: white;
   padding: 5px;
   background-color: #d80030;
@@ -113,7 +117,11 @@ nav {
 #nextItems:hover,
 #leastItems:hover,
 #firstItems:hover,
-#lastItems:hover {
+#lastItems:hover,
+#nextItemsBottom:hover,
+#leastItemsBottom:hover,
+#firstItemsBottom:hover,
+#lastItemsBottom:hover {
   background-color: white;
   color: #d80030;
 }
@@ -140,6 +148,7 @@ nav {
   top: 0;
   z-index: 100;
   margin-top: 0;
+  border-radius: 0;
 }
 
 #toStartBtn:hover {
