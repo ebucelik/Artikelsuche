@@ -185,10 +185,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <div class="col">Fax</div>
                         <div class="col">Website</div>
                     </div>
-
+                    <!-- href="detailCustomer.php?custNum=<?php //echo $custNum; echo $v1['AccountNum']; ?>></a></div> -->
+                    <!-- <div class="col align-self-center"><a style="color: black" href="detailCustomer.php"><?php //echo $v1['AccountNum']; ?></a></div>--> 
                     <?php foreach($custDataArray as $v1){?>
                         <div class="row">
-                            <div class="col align-self-center"><a style="color: black" href="detailCustomer.php"><?php echo $v1['AccountNum']; ?></a></div>
+                            <div class="col align-self-center"><a style="color: black" href="detailCustomer.php?custNum=<?php echo $v1['AccountNum'];?>&custName=<?php echo $v1['Name'];?>&custPLZ=<?php echo $v1['ZipCode'];?>&custStreet=<?php echo $v1['Street'];?>&custPlace=<?php echo $v1['City'];?>&custTel=<?php echo $v1['Tel'];?>&custMail=<?php echo $v1['Mail'];?>&custFax=<?php echo $v1['Fax'];?>&custWebsite=<?php echo $v1['Website'];?>&"><?php echo $v1['AccountNum']; ?></a></div>
                             <div class="col align-self-center"><?php echo $v1['Name']; ?></div>
                             <div class="col align-self-center"><?php echo $v1['ZipCode']; ?></div>
                             <div class="col align-self-center"><?php echo $v1['Street']; ?></div>
@@ -205,6 +206,5 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 </div>
             </div>
         <?php } ?>
-
     </nav>
 </html> 
