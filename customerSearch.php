@@ -98,7 +98,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 <body>
     <header>
-        <a href="index.html" ><img src="Bilder/kundensuche.png" id="headerImg" title="Marzek Kundensuche" alt="Marzek Kundensuche Bild" width="400"></a>
+        <a href="index.php" ><img src="Bilder/kundensuche.png" id="headerImg" title="Marzek Kundensuche" alt="Marzek Kundensuche Bild" width="400"></a>
     </header>
 
     <nav>
@@ -174,8 +174,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if($custDataArray){ ?>
             <div id="dataView">
                 <div class="containerRow">
-                    <div class="row titlerow">
-                        <div class="col">Kundennummer</a></div>
+                    <div class="row titlerow" id="itemHeader">
+                        <div class="col">Kundennummer</div>
                         <div class="col">Kundenname</div>
                         <div class="col">PLZ</div>
                         <div class="col">Straße</div>
