@@ -1,3 +1,38 @@
+<?php
+
+$custNum = $custName = $custPLZ = $custStreet = $custPlace = $custTel = $custMail = $custFax = $custWebsite = "";
+
+    if(isset($_GET['custNum'])) {
+        $custNum = $_GET['custNum']; 
+    }
+    if(isset($_GET['custName'])) {
+        $custName = $_GET['custName']; 
+    }
+    if(isset($_GET['custPLZ'])) {
+        $custPLZ = $_GET['custPLZ']; 
+    }
+    if(isset($_GET['custStreet'])) {
+        $custStreet = $_GET['custStreet']; 
+    }
+    if(isset($_GET['custPlace'])) {
+        $custPlace = $_GET['custPlace']; 
+    }
+    if(isset($_GET['custTel'])) {
+        $custTel = $_GET['custTel']; 
+    }
+    if(isset($_GET['custMail'])) {
+        $custMail = $_GET['custMail']; 
+    }
+    if(isset($_GET['custFax'])) {
+        $custFax = $_GET['custFax']; 
+    }
+    if(isset($_GET['custWebsite'])) {
+        $custWebsite = $_GET['custWebsite']; 
+    }
+
+
+?>
+
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -32,20 +67,20 @@
                     <h2 id="custInfoTitle">Kundeninformationen</h2>
                 </div>
         
-                
+
                 <div class="row">
                     <div class="col">
                         <div class="containerRow leftContainer">
                         
                             <div class="row">
                                 <div class="col titlerow">Kundennummer</div>
-                                <div class="col">212345</div>
+                                <div class="col"><?php echo $custNum;?></div>
                             </div>
                             <hr/>
                         
                             <div class="row">
                                 <div class="col titlerow">Firmenname</div>
-                                <div class="col">Marzek Etiketten+Packaging GmbH</div>
+                                <div class="col"><?php echo $custName;?></div>
                             </div>
                             <hr/>
                         
@@ -57,7 +92,7 @@
                         
                             <div class="row">
                                 <div class="col titlerow">Straße</div>
-                                <div class="col">Marzek Straße 2</div>
+                                <div class="col"><?php echo $custStreet;?></div>
                             </div>
                             <hr/>
                             
@@ -69,7 +104,7 @@
                        
                             <div class="row">
                                 <div class="col titlerow">PLZ</div>
-                                <div class="col">2514</div>
+                                <div class="col"><?php echo $custPLZ;?></div>
                             </div>
                             <hr/>
                         
@@ -81,7 +116,7 @@
                         
                             <div class="row">
                                 <div class="col titlerow">Ort</div>
-                                <div class="col">Traiskirchen</div>
+                                <div class="col"><?php echo $custPlace;?></div>
                             </div>
                         
                         </div>
@@ -97,13 +132,13 @@
                             <hr/>
                             <div class="row">
                                 <div class="col titlerow">Telefon</div>
-                                <div class="col">0225290500</div>
+                                <div class="col"><?php echo $custTel;?></div>
                             </div>
                             
                             <hr/>
                             <div class="row">
                                 <div class="col titlerow">Fax</div>
-                                <div class="col">keins</div>
+                                <div class="col"><?php echo $custFax;?></div>
                             </div>
                             
                             <hr/>
@@ -115,13 +150,13 @@
                             <hr/>
                             <div class="row">
                                 <div class="col titlerow">E-Mail</div>
-                                <div class="col">etiketten@marzek.at</div>
+                                <div class="col"><?php echo $custMail;?></div>
                             </div>
                             
                             <hr/>
                              <div class="row">
                                 <div class="col titlerow">Website</div>
-                                <div class="col">www.marzek.at</div>
+                                <div class="col"><?php echo $custWebsite;?></div>
                             </div>
                             
                         </div>

@@ -71,6 +71,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
 }
+
+/*
+    if(isset($_GET['AccountNum'])) {
+        $custNum = $_GET['AccountNum'];
+    }
+    */
 ?>
 
 <html lang="de">
@@ -98,7 +104,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 <body>
     <header>
-        <a href="index.php" ><img src="Bilder/kundensuche.png" id="headerImg" title="Marzek Kundensuche" alt="Marzek Kundensuche Bild" width="400"></a>
+        <a href="index.html" ><img src="Bilder/kundensuche.png" id="headerImg" title="Marzek Kundensuche" alt="Marzek Kundensuche Bild" width="400"></a>
     </header>
 
     <nav>
@@ -174,8 +180,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if($custDataArray){ ?>
             <div id="dataView">
                 <div class="containerRow">
-                    <div class="row titlerow" id="itemHeader">
-                        <div class="col">Kundennummer</div>
+                    <div class="row titlerow">
+                        <div class="col">Kundennummer</a></div>
                         <div class="col">Kundenname</div>
                         <div class="col">PLZ</div>
                         <div class="col">Straße</div>
@@ -185,10 +191,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <div class="col">Fax</div>
                         <div class="col">Website</div>
                     </div>
-
+                    <!-- href="detailCustomer.php?custNum=<?php //echo $custNum; echo $v1['AccountNum']; ?>></a></div> -->
+                    <!-- <div class="col align-self-center"><a style="color: black" href="detailCustomer.php"><?php //echo $v1['AccountNum']; ?></a></div>--> 
                     <?php foreach($custDataArray as $v1){?>
                         <div class="row">
-                            <div class="col align-self-center"><a style="color: black" href="detailCustomer.php"><?php echo $v1['AccountNum']; ?></a></div>
+                            <div class="col align-self-center"><a style="color: black" href="detailCustomer.php?custNum=<?php echo $v1['AccountNum'];?>&custName=<?php echo $v1['Name'];?>&custPLZ=<?php echo $v1['ZipCode'];?>&custStreet=<?php echo $v1['Street'];?>&custPlace=<?php echo $v1['City'];?>&custTel=<?php echo $v1['Tel'];?>&custMail=<?php echo $v1['Mail'];?>&custFax=<?php echo $v1['Fax'];?>&custWebsite=<?php echo $v1['Website'];?>&"><?php echo $v1['AccountNum']; ?></a></div>
                             <div class="col align-self-center"><?php echo $v1['Name']; ?></div>
                             <div class="col align-self-center"><?php echo $v1['ZipCode']; ?></div>
                             <div class="col align-self-center"><?php echo $v1['Street']; ?></div>
@@ -205,6 +212,5 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 </div>
             </div>
         <?php } ?>
-
     </nav>
 </html> 
