@@ -100,7 +100,7 @@ if(isset($_POST['submit'])){
                     x.style.visibility = "visible";
                     setTimeout(function(){
                         x.style.visibility = "hidden"; 
-                    }, 2500);
+                    }, 500);
                    </script>
                    <?php
                     $statusMsg = 'Your contact request submission failed, please try again.';

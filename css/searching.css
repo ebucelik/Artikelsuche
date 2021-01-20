@@ -303,6 +303,16 @@ nav {
   .printImg {
     margin-top: 2%;
   }
+
+  #allItemsButtons {
+    text-align: center;
+  }
+
+  #checkAllWithStockBtn,
+  #checkAllBtn {
+    margin-top: 1%;
+    margin-bottom: 1%;
+  }
 }
 
 @media screen and (max-width: 512px) {
@@ -317,5 +327,9 @@ nav {
 
   .searchInput {
     width: 100% !important;
+  }
+
+  #withSalesIdLabel {
+    margin-left: 0 !important;
   }
 }
