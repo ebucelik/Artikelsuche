@@ -71,12 +71,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
 }
-
-/*
-    if(isset($_GET['AccountNum'])) {
-        $custNum = $_GET['AccountNum'];
-    }
-    */
 ?>
 
 <html lang="de">
