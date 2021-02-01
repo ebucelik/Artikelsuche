@@ -5,6 +5,7 @@ $email = "";
 $pdf = "";
 $data = array();
 $imageArray = array();
+$singlePdfs = array();
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isset($_POST["email"])){
@@ -13,6 +14,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     if(isset($_POST["data"])){
         $data = json_decode($_POST["data"]);
+    }
+
+    if(isset($_POST["singlePdf"])){
+        $singlePdfs = json_decode($_POST["singlePdf"]);
     }
     
     if(isset($_POST["Pdf"])){
@@ -86,6 +91,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             array_push($imageArray, $img);
                         } 
                     }
+
+                    if(isset($singlePdfs)){
+                        foreach($singlePdfs as $pdfs){
+                            file_put_contents($pdfs, @file_get_contents($pdfs));
+                            array_push($imageArray, $pdfs);
+                        }
+                    }
+
                     echo "Mit freundlichen Grüßen,<br>\nIhr Marzek Etiketten+Packaging Team";
                     ?></textarea>
                 </div>

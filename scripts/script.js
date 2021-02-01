@@ -71,7 +71,7 @@ $(document).ready(function () {
       displayCheckbox = true;
     });
 
-    $('#sendmailJpg, #sendmailPdf').css('display', displayCheckbox ? 'block' : 'none');
+    $('#sendmailJpg, #sendmailPdf, #sendmailSinglePdf').css('display', displayCheckbox ? 'block' : 'none');
   });
 
   $('#dataView > input').filter(':checked').each(function () {
@@ -99,7 +99,7 @@ function checkAll() {
     $(this).prop("checked", state);
   });
 
-  $('#sendmailJpg, #sendmailPdf').css('display', state ? 'block' : 'none');
+  $('#sendmailJpg, #sendmailPdf, #sendmailSinglePdf').css('display', state ? 'block' : 'none');
 
   $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
 }
@@ -117,11 +117,80 @@ function checkAllWithStock() {
   });
 
   if (qty > 0) {
-    $('#sendmailJpg, #sendmailPdf').css('display', state ? 'block' : 'none');
+    $('#sendmailJpg, #sendmailPdf, #sendmailSinglePdf').css('display', state ? 'block' : 'none');
 
     $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
   
     $('#selectedItemQty').text(state ? qty + ' Artikel ausgewählt' : '');
+  }
+}
+
+function sendMailSinglePdfs() {
+  let dataArr = [];
+  let imageArray = [];
+  let itemIdArray = [];
+  cntCheckedInputs = $('.sendMailCheck').filter(':checked').length;
+
+  if (cntCheckedInputs > 20) {
+    alert("Achtung!\n\nSie haben die maximale Anzahl an ausgewählten Artikeln überschritten (max. 20).\nAktuell haben Sie " + cntCheckedInputs + " Artikel ausgewählt.");
+  } else if (cntCheckedInputs <= 0) {
+    alert("Achtung!\n\nSie haben " + cntCheckedInputs + " Artikel ausgewählt!");
+  } else {
+    $('.sendMailCheck').filter(':checked').each(function () {
+      let index = $('.sendMailCheck').index(this);
+      itemid = $('.itemid').eq(index).text();
+      version = $('.version').eq(index).text();
+      salesid = $('.salesid').eq(index).text();
+      imageUrl = $('.itemImage > img').eq(index).attr('src');
+
+      if (imageUrl != "Bilder/noimage.png") {
+        $.ajax({
+          type: "get",
+          url: "getImageUrl.php",
+          data: { ItemId: itemid, Version: version, SalesId: salesid },
+          success: function (image) {
+            itemIdArray.push(itemid.replace("/", "-"));
+
+            if (image) {
+              imageArray.push(image);
+            } else {
+              imageArray.push("Uploads/noimage.jpg");
+            }
+          },
+          async: false
+        });
+      }
+    });
+
+    custnum = $('.custvendrelation').eq(0).text();
+
+    for (let i = 0; i < imageArray.length; i++){
+      $.ajax({
+        type: "post",
+        url: "createSinglePDFs.php",
+        data: { Image: imageArray[i], Name: itemIdArray[i] },
+        success: function (imgSrc) {
+          dataArr.push(imgSrc);
+        },
+        async: false
+      });
+    }
+
+    $.ajax({
+      type: "get",
+      url: "getMailFromCustomer.php",
+      data: { CustNum: custnum },
+      success: function (email) {
+        let arrStr = JSON.stringify(dataArr);
+
+        let form = document.getElementById("sendMailForm");
+        form.email.value = email;
+        form.data.value = "";
+        form.singlePdf.value = arrStr;
+        form.Pdf.value = "";
+        form.submit();
+      }
+    });
   }
 }
 
@@ -197,6 +266,7 @@ function sendMailPdf() {
             let form = document.getElementById("sendMailForm");
             form.email.value = email;
             form.data.value = "";
+            form.singlePdf.value = "";
             form.Pdf.value = "Uploads/" + custNames + ".pdf";
             form.submit();
           }
@@ -267,6 +337,7 @@ function sendMailJpg() {
         let form = document.getElementById("sendMailForm");
         form.email.value = email;
         form.data.value = arrStr;
+        form.singlePdf.value = "";
         form.Pdf.value = "";
         form.submit();
       }

@@ -283,10 +283,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <button type="submit" class="btn btn-outline-light fading" id="articlesearch">SUCHEN</button>
                 <div class="row">
                     <div class="col">
-                        <button type="button" class=" btn-primary mailbtns" id="sendmailJpg" onclick="sendMailJpg();">SENDE MAIL ALS JPG</button>
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailJpg" onclick="sendMailJpg();">EINZELNE JPG'S SENDEN</button>
                     </div>
                     <div class="col">
-                        <button type="button" class=" btn-primary mailbtns" id="sendmailPdf" onclick="sendMailPdf();">SENDE MAIL ALS PDF</button>
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailSinglePdf" onclick="sendMailSinglePdfs();">EINZELNE PDF'S SENDEN</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailPdf" onclick="sendMailPdf();">GESAMMELTES PDF SENDEN</button>
                     </div>
                 </div>
             </form>
@@ -493,7 +496,7 @@ if($itemIdArray){
                     <div class="col">Auftragsnr.</div>
                     <div class="col">Maschine</div>
                     <div class="col">Lagerstand</div>
-                    <div class="col">Thumbnail</div>
+                    <div class="col">Bild</div>
                     <div class="col">Drucken</div>
                 </div>
 
@@ -577,6 +580,7 @@ if($itemIdArray){
         <form id="sendMailForm" method="POST" action="sendMail.php">
             <input type="hidden" name="email" value="" />
             <input type="hidden" name="data" value="" />
+            <input type="hidden" name="singlePdf" value="" />
             <input type="hidden" name="Pdf" value="" />
         </form>
         <form id="showNextItems" method="POST" action="searching.php">
