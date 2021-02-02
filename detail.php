@@ -75,8 +75,8 @@ require("db/getDataFromDB.php");
                 </a>
             </div>
             <div class="col firstCols">
-                <a <?php if($invoiceDate->format('Y') >= 2017){ if($invoiceDate->format('Y') == 2017 && $invoiceDate->format('m') < 6){?>href="#"<?php } ?> target="_blank" href="http://intern.marzek.eu:88/Startseite/Dokumentenverwaltung/Ausgangsrechnungen/<?php echo $invoiceDate->format('Y'); ?>/<?php echo $invoiceDate->format('m'); ?>/<?php echo $invoiceId; ?>_<?php echo $v1['SalesId']; ?>_<?php echo $v1['CustVendRelation']; ?>.pdf" <?php }else{?> href="#" <?php } ?> style="color: #d80030;">
-                    <button type="button" class="btn btn-lg printBtnStyle" <?php if($invoiceDate->format('Y') >= 2017){ if($invoiceDate->format('Y') == 2017 && $invoiceDate->format('m') < 6){?> style="opacity: 0.5; width: 100%; cursor: not-allowed"  <?php }else{ ?> style="width: 100%;" <?php } } ?> style="opacity: 0.5; width: 100%; cursor: not-allowed">RECHNUNG ANZEIGEN</button>
+                <a style="color: #d80030;" <?php if($invoiceDate->format('Y') >= 2017){ if($invoiceDate->format('Y') == 2017 && $invoiceDate->format('m') < 6){?>href="#"<?php }else if($invoiceId != ''){?> target="_blank" href="http://intern.marzek.eu:88/Startseite/Dokumentenverwaltung/Ausgangsrechnungen/<?php echo $invoiceDate->format('Y'); ?>/<?php echo $invoiceDate->format('m'); ?>/<?php echo $invoiceId; ?>_<?php echo $v1['SalesId']; ?>_<?php echo $v1['CustVendRelation']; ?>.pdf" <?php } } ?>>
+                    <button type="button" class="btn btn-lg printBtnStyle" <?php if($invoiceDate->format('Y') >= 2017){ if($invoiceDate->format('Y') == 2017 && $invoiceDate->format('m') < 6){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php }else if($invoiceId != ''){ ?> style="width: 100%;" <?php } } ?> style="opacity: 0.5; width: 100%; cursor: not-allowed">RECHNUNG ANZEIGEN</button>
                 </a>
             </div>
             <div class="col firstCols">
