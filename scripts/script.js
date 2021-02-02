@@ -142,6 +142,7 @@ function sendMailSinglePdfs() {
       version = $('.version').eq(index).text();
       salesid = $('.salesid').eq(index).text();
       imageUrl = $('.itemImage > img').eq(index).attr('src');
+      prodgroupid = $('.prodgroupid').eq(index).text();
 
       if (imageUrl != "Bilder/noimage.png") {
         $.ajax({
@@ -149,8 +150,11 @@ function sendMailSinglePdfs() {
           url: "getImageUrl.php",
           data: { ItemId: itemid, Version: version, SalesId: salesid },
           success: function (image) {
-            itemIdArray.push(itemid.replace("/", "-"));
-
+            if (prodgroupid)
+              itemIdArray.push(itemid.replace("/", "-") + "-" + version + "-" + prodgroupid);
+            else
+              itemIdArray.push(itemid.replace("/", "-") + "-" + version);
+            
             if (image) {
               imageArray.push(image);
             } else {
