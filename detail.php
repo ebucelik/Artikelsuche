@@ -66,7 +66,7 @@ require("db/getDataFromDB.php");
     </header>
 
     <nav>
-<?php if($itemIdArray){ foreach($itemIdArray as $v1){?>
+<?php if($itemIdArray){ foreach($itemIdArray as $v1){ echo $invoiceDate->format('Y') . "/" . $invoiceDate->format('m'); ?>
 
         <div class="row" id="printBtn">
             <div class="col firstCols">
@@ -75,8 +75,8 @@ require("db/getDataFromDB.php");
                 </a>
             </div>
             <div class="col firstCols">
-                <a <?php if($invoiceId == $unEqualString || !$invoiceId){?> href="#" <?php }else{ ?> target="_blank" href="http://intern.marzek.eu:88/Startseite/Dokumentenverwaltung/Ausgangsrechnungen/<?php echo $invoiceDate->format('Y'); ?>/<?php echo $invoiceDate->format('m'); ?>/<?php echo $invoiceId; ?>_<?php echo $v1['SalesId']; ?>_<?php echo $v1['CustVendRelation']; ?>.pdf" <?php } ?> style="color: #d80030;">
-                    <button type="button" class="btn btn-lg printBtnStyle" <?php if($invoiceId == $unEqualString || !$invoiceId){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">RECHNUNG ANZEIGEN</button>
+                <a <?php if($invoiceDate->format('Y') >= 2017){ if($invoiceDate->format('Y') == 2017 && $invoiceDate->format('m') < 6){?>href="#"<?php } ?> target="_blank" href="http://intern.marzek.eu:88/Startseite/Dokumentenverwaltung/Ausgangsrechnungen/<?php echo $invoiceDate->format('Y'); ?>/<?php echo $invoiceDate->format('m'); ?>/<?php echo $invoiceId; ?>_<?php echo $v1['SalesId']; ?>_<?php echo $v1['CustVendRelation']; ?>.pdf" <?php }else{?> href="#" <?php } ?> style="color: #d80030;">
+                    <button type="button" class="btn btn-lg printBtnStyle" <?php if($invoiceDate->format('Y') >= 2017){ if($invoiceDate->format('Y') == 2017 && $invoiceDate->format('m') < 6){?> style="opacity: 0.5; width: 100%; cursor: not-allowed"  <?php }else{ ?> style="width: 100%;" <?php } } ?> style="opacity: 0.5; width: 100%; cursor: not-allowed">RECHNUNG ANZEIGEN</button>
                 </a>
             </div>
             <div class="col firstCols">
