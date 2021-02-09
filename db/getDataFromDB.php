@@ -5,7 +5,7 @@ if($itemId != $unEqualString){
         //TODO: Implement T1.MARPngPath, 
         $stmt = $conn->prepare("SELECT TOP 1 T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
                             T1.LEPSizeL, T1.LEPSizeW, T1.InventStyleId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.InventDimId, T1.ZipCode, T1.City, T1.MARInprintingSortName,
-                            T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut, T1.DesignJpgPreviewUrl,
+                            T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut, T1.DesignJpgPreviewUrl, T1.PdfUrl,
                             T1.TradeUnitSpecId, T9.TradeUnitGroupId, T9.TradeUnitId, 
                             T12.MARAdditionalDescription, T12.MARAreaWeightBas, T12.MARPaperColor, T12.MARGlue, T12.Name,
                             T14.LPMRZMaxAllowedQty, T14.LPMRZMaxDiameterOuter, T16.ExternalItemId, T17.VATNum, T18.BusinessSectorId, T20.createdDateTime, T21.CalcDesignStyleId
@@ -127,7 +127,7 @@ function fillItemArray($_stmt, $_type){
             array_push($_itemIdArray, array('ItemId' => $val['ItemId'], 'Version' => $val['InventStyleId'], 'ProdGroupId' => $val['ProdGroupId'], 
             'CustVendRelation' => $val['CustVendRelation'], 'Name' => $val['CustName'], 'ExternalItemTxt' => $val['ExternalItemTxt'], 
             'LEPSizeW' => intval($val['LEPSizeW']), 'LEPSizeL' => intval($val['LEPSizeL']),
-            'TradeUnitSpecId' => $val['TradeUnitSpecId'], 'DesignJpgPreviewUrl' => $val['DesignJpgPreviewUrl'], 'SalesId' => $val['SalesIdLast'], 
+            'TradeUnitSpecId' => $val['TradeUnitSpecId'], 'DesignJpgPreviewUrl' => $val['DesignJpgPreviewUrl'], 'PdfUrl' => $val['PdfUrl'], 'SalesId' => $val['SalesIdLast'], 
             'WorkCenters' => $val['WorkCenters'], 'StockLevel' => $val['StockLevel'], 'InventDimId' => $val['InventDimId'], 'LPMRZBoardId' => $val['LPMRZBoardId'],
             'MARAdditionalDescription' => $val['MARAdditionalDescription'], 'MARAreaWeightBas' => $val['MARAreaWeightBas'], 'MARPaperColor' => $val['MARPaperColor'], 'PaperName' => $val['Name'],
             'MARGlue' => $val['MARGlue'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut'], 'LPMRZMaxAllowedQty' => intval($val['LPMRZMaxAllowedQty']),
