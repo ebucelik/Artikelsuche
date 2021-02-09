@@ -391,7 +391,7 @@ if($newSearch == "true"){
         }
     
         //Deactivated articles. 0 stands for No regarding NoYes Enum. % at the end, selects all strings that have ## at the start of the string.
-        $queryParams .= " AND T1.Stopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
+        $queryParams .= " AND T1.ItemStopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
     
         if($stockLevel == "on"){
             if($queryParams == ""){

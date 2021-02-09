@@ -66,8 +66,8 @@ require("db/getDataFromDB.php");
     </header>
 
     <nav>
-<?php if($itemIdArray){ foreach($itemIdArray as $v1){ echo $invoiceDate->format('Y') . "/" . $invoiceDate->format('m'); ?>
-
+<?php if($itemIdArray){ foreach($itemIdArray as $v1){?>
+    
         <div class="row" id="printBtn">
             <div class="col firstCols">
                 <a target="_blank" href="createPDF.php?type=<?php echo $type; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId']; ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut']; ?>&SimpleOrFullPDF=Full" style="color: #d80030;">
@@ -85,8 +85,8 @@ require("db/getDataFromDB.php");
                 </a>
             </div>
             <div class="col firstCols">
-                <a <?php if(isset($v1['DesignJpgPreviewUrl']) && @file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){?> target="_blank" href="createImagePDF.php?DesignJpgPreviewUrl=<?php echo $v1['DesignJpgPreviewUrl'];?>" <?php }else{?> href=""<?php } ?>>
-                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['DesignJpgPreviewUrl']) || @file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ALS PDF ANZEIGEN</button>
+                <a <?php if(isset($v1['PdfUrl']) && @file_get_contents($v1['PdfUrl']) !== FALSE){?> target="_blank" href="itemPdf.php?path=<?php echo $v1['PdfUrl']; ?>" <?php }else{?> href=""<?php } ?>>
+                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['PdfUrl']) || @file_get_contents($v1['PdfUrl']) === FALSE){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ALS PDF ANZEIGEN</button>
                 </a>
             </div>
             <div class="col firstCols">

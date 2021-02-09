@@ -14,8 +14,8 @@ if(isset($_POST["Image"])){
     $image = $_POST["Image"];
 }
 
-$width = (getimagesize($image)[0] / 5);
-$height = (getimagesize($image)[1] / 5);
+$width = getimagesize($image)[0];
+$height = getimagesize($image)[1];
 
 if($width > $height){
     $pdf = new FPDF('L', 'mm', array($height, $width));
