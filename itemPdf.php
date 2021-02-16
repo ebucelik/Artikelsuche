@@ -12,5 +12,6 @@ header('Content-Transfer-Encoding: binary');
 header('Accept-Ranges: bytes'); 
 
 // Read the file 
-@readfile($path); 
+@readfile($path);
+
 ?>
