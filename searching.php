@@ -3,19 +3,6 @@ require_once('db/db.php');
 ini_set('session.cache_limiter', 'private');
 session_start();
 
-/*$options = [
-    'cost' => 11,
-];
-echo hash("sha256", "Celik123");
-echo "<br>";
-echo password_hash("Celik123", PASSWORD_BCRYPT, $options);
-echo "<br>";
-if (password_verify("Celik123", password_hash("Celik123", PASSWORD_BCRYPT, $options))) {
-    echo 'Password is valid!';
-} else {
-    echo 'Invalid password.';
-}*/
-
 $unEqualString = "";
 $type = $withSalesId = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
 $newSearch = "false";
@@ -252,10 +239,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <label for="place" class="align-self-center labelTxt">Ort:</label>
                     <input type="text" class="form-control searchInput" id="place" placeholder="Ort eingeben" name="place" value="<?php if($city != $unEqualString){echo $city;} ?>">
                 </div>
-                <div class="form-group fading searchForm">
+               <!-- <div class="form-group fading searchForm">
                     <label for="sortNum" class="align-self-center labelTxt">Sorten Eindruck:</label>
                     <input type="text" class="form-control searchInput" id="sortNum" placeholder="Sorten Eindruck eingeben" name="sortNum" value="<?php if($sort != $unEqualString){echo $sort;} ?>">
-                </div>
+                </div> -->
                 <div class="form-group fading searchForm">
                     <label for="keyWord" class="align-self-center labelTxt">Stichwort:</label>
                     <input type="text" class="form-control searchInput" id="keyWord" placeholder="Stichwort eingeben" name="keyWord" value="<?php if($keyword != $unEqualString){echo $keyword;} ?>">
@@ -306,15 +293,18 @@ function fillItemArray($_stmt){
 
     //TODO: Implement 'MARPngPath' => $val['MARPngPath']
     foreach($_stmt as $val){
-        array_push($_itemIdArray, array('ItemId' => $val['ItemId'], 'Version' => $val['InventStyleId'], 'InventDimId' => $val['InventDimId'], 'ProdGroupId' => $val['ProdGroupId'], 
-        'CustVendRelation' => $val['CustVendRelation'], 'Name' => $val['CustName'], 'ExternalItemTxt' => $val['ExternalItemTxt'], 
-        'LEPSizeW' => intval($val['LEPSizeW']), 'LEPSizeL' => intval($val['LEPSizeL']),
-        'TradeUnitSpecId' => $val['TradeUnitSpecId'], 'DesignJpgPreviewUrl' => $val['DesignJpgPreviewUrl'], 'SalesId' => $val['SalesIdLast'], 
-        'WorkCenters' => $val['WorkCenters'], 'StockLevel' => $val['StockLevel'], 'Sort' => $val['MARInprintingSortName'], 'LPMRZBoardId' => $val['LPMRZBoardId'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut']));
-        
-        if($val['MARInprintingSortName']){
-            $GLOBALS["checkSort"] = true;
+        if($val['ItemId'] != ''){
+            array_push($_itemIdArray, array('ItemId' => $val['ItemId'], 'Version' => $val['InventStyleId'], 'InventDimId' => $val['InventDimId'], 'ProdGroupId' => $val['ProdGroupId'], 
+            'CustVendRelation' => $val['CustVendRelation'], 'Name' => $val['CustName'], 'ExternalItemTxt' => $val['ExternalItemTxt'], 
+            'LEPSizeW' => intval($val['LEPSizeW']), 'LEPSizeL' => intval($val['LEPSizeL']),
+            'TradeUnitSpecId' => $val['TradeUnitSpecId'], 'DesignJpgPreviewUrl' => $val['DesignJpgPreviewUrl'], 'SalesId' => $val['SalesIdLast'], 
+            'WorkCenters' => $val['WorkCenters'], 'StockLevel' => $val['StockLevel'], 'Sort' => $val['MARInprintingSortName'], 'LPMRZBoardId' => $val['LPMRZBoardId'], 'LPMRZProdToolIdDieCut' => $val['LPMRZProdToolIdDieCut'])
+            );
         }
+        
+        /*if($val['MARInprintingSortName']){
+            $GLOBALS["checkSort"] = true;
+        }*/
     }
 
     return $_itemIdArray;
@@ -359,15 +349,7 @@ if($newSearch == "true"){
                 $queryParams .=" AND T1.City LIKE '%$city%'";
             }
         }
-    
-        if($sort != $unEqualString){
-            if($queryParams == ""){
-                $queryParams = "T1.MARInprintingSortName LIKE '%$sort%'";
-            }else{
-                $queryParams .=" AND T1.MARInprintingSortName LIKE '%$sort%'";
-            }
-        }
-    
+
         if($keyword != $unEqualString){
             if($queryParams == ""){
                 $queryParams = "T1.ExternalItemTxt LIKE '%$keyword%'";
@@ -391,20 +373,18 @@ if($newSearch == "true"){
         }
     
         //Deactivated articles. 0 stands for No regarding NoYes Enum. % at the end, selects all strings that have ## at the start of the string.
-        $queryParams .= " AND T1.ItemStopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
+        if($queryParams != $unEqualString){
+            $queryParams .= " AND T1.ItemStopped = 0 AND T1.ExternalItemTxt NOT LIKE '##%'";
+        }
     
         if($stockLevel == "on"){
-            if($queryParams == ""){
-                $queryParams = "T1.StockLevel != 0";
-            }else{
+            if($queryParams != $unEqualString){
                 $queryParams .=" AND T1.StockLevel != 0";
             }
         }
 
         if($withSalesId == "on"){
-            if($queryParams == ""){
-                $queryParams = "T1.SalesIdLast != ''";
-            }else{
+            if($queryParams != $unEqualString){
                 $queryParams .=" AND T1.SalesIdLast != ''";
             }
         }
@@ -422,21 +402,28 @@ if($newSearch == "true"){
             $_SESSION["itemIdArray"] = $itemIdArray;
         }
         else{ //HIGHEST VERSION PART
-            $queryParams .= " AND T1.SalesIdLast IN (SELECT MAX(T11.SalesIdLast) AS style FROM MARItemSearchDataTable T11 WHERE T11.ItemId = T1.ItemId)";
+            if($queryParams != $unEqualString){
+                $queryParams .= " AND T1.SalesIdLast IN (SELECT MAX(T11.SalesIdLast) AS style FROM MARItemSearchDataTable T11 WHERE T11.ItemId = T1.ItemId)";
+    
+                $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
+                                            T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, 
+                                            T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
+                                            T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
+                                            FROM MARItemSearchDataTable T1
+                                            WHERE $queryParams ORDER BY T1.InventStyleId"); 
 
-            $stmt = $conn->prepare("SELECT T1.ItemId, T1.InventStyleId, T1.ProdGroupId, T1.CustVendRelation, T1.CustName, T1.ExternalItemTxt, 
-                                        T1.LEPSizeL, T1.LEPSizeW, T1.InventDimId, T1.SalesIdLast, T1.WorkCenters, T1.StockLevel, T1.MARInprintingSortName, T1.LPMRZBoardId, T1.LPMRZProdToolIdDieCut,
-                                        T1.TradeUnitSpecId, T1.DesignJpgPreviewUrl
-                                        FROM MARItemSearchDataTable T1
-                                        WHERE $queryParams ORDER BY T1.InventStyleId");
-    
-            $stmt->execute();
-    
-            $itemIdArray = fillItemArray($stmt);
-            $_SESSION["itemIdArray"] = $itemIdArray;
+                $stmt->execute();
+                
+                $itemIdArray = fillItemArray($stmt);
+                $_SESSION["itemIdArray"] = $itemIdArray;
+            }else{
+                $itemIdArray = null;
+                $_SESSION["itemIdArray"] = $itemIdArray;
+            }
         }
     }
-    catch(PDOException $e) {
+    catch(PDOException $e) 
+    {
         echo "Error: " . $e->getMessage();
     }
 }
@@ -488,7 +475,7 @@ if($itemIdArray){
                     <?php if($allVersions == 'on'){?><div class="col">Produktvariante</div><?php } ?>
                     <div class="col">Kundennr.</div>
                     <div class="col">Kunde</div>
-                    <?php if($checkSort){?><div class="col">Sorten Eindruck</div><?php }?>
+                    <?php //if($checkSort){?><!--<div class="col">Sorten Eindruck</div>--><?php //}?>
                     <div class="col" style="flex-grow:2;">Stichwort</div>
                     <div class="col">Format Quer</div>
                     <div class="col">Format Lauf</div>
@@ -512,7 +499,7 @@ if($itemIdArray){
                         <?php if($GLOBALS["allVersions"] == 'on'){?><div class="col align-self-center prodgroupid"><?php echo $v1['ProdGroupId']; ?></div><?php } ?>
                         <div class="col align-self-center custvendrelation"><?php echo $v1['CustVendRelation']; ?></div>
                         <div class="col align-self-center name"><?php echo $v1['Name']; ?></div>
-                        <?php if($v1['Sort']){?><div class="col align-self-center sort"><?php echo $v1['Sort']; ?></div><?php }?>
+                        <?php //if($v1['Sort']){?><!-- <div class="col align-self-center sort"> <?php //echo $v1['Sort']; ?></div> --><?php //}?>
                         <div class="col align-self-center externalitemtxt" style="flex-grow:2;"><?php echo $v1['ExternalItemTxt']; ?></div>
                         <div class="col align-self-center lepsizew"><?php echo $v1['LEPSizeW']; ?></div>
                         <div class="col align-self-center lepsizel"><?php echo $v1['LEPSizeL']; ?></div>

@@ -91,7 +91,7 @@ require("db/getDataFromDB.php");
             </div>
             <div class="col firstCols">
                 <a <?php if(isset($v1['DesignJpgPreviewUrl']) && @file_get_contents($v1['DesignJpgPreviewUrl']) !== FALSE){?> target="_blank" href="showImagePNG.php?DesignJpgPreviewUrl=<?php echo $v1['DesignJpgPreviewUrl'];?>" <?php }else{?> href=""<?php } ?>>
-                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['DesignJpgPreviewUrl']) || @file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ALS JPG ANZEIGEN</button>
+                    <button type="button" class="btn btn-lg printBtnStyle" <?php if(!isset($v1['DesignJpgPreviewUrl']) || @file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){?> style="opacity: 0.5; width: 100%; cursor: not-allowed" <?php } ?> style="width: 100%;">BILD ANZEIGEN</button>
                 </a>
             </div>
         </div>
