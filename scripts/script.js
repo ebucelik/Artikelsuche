@@ -285,6 +285,11 @@ function sendMailPdf() {
       }
     });
 
+    if (dataArr.length <= 0) {
+      alert("Es wurde keine Bewegung im Lagerstand in den letzten zwei Jahren erkannt.");
+      return;
+    }
+
     $.ajax({
       type: "post",
       url: "createPdfForMail.php",
