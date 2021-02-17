@@ -198,6 +198,23 @@ function sendMailSinglePdfs() {
   }
 }
 
+function checkStockOfLastTwoYears(itemId) {
+  let result = true;
+
+  $.ajax({
+    type: "get",
+    url: "checkStockOfLastTwoYears.php",
+    data: { ItemId: itemId },
+    success: function (stock) {
+      if (stock == 0.00)
+        result = false;
+    },
+    async: false
+  });
+
+  return result;
+}
+
 function sendMailPdf() {
   let dataArr = [];
   let imageArray = [];
@@ -212,24 +229,32 @@ function sendMailPdf() {
     $('.sendMailCheck').filter(':checked').each(function () {
       let index = $('.sendMailCheck').index(this);
       itemid = $('.itemid').eq(index).text();
-      version = $('.version').eq(index).text();
-      salesid = $('.salesid').eq(index).text();
-      imageUrl = $('.itemImage > img').eq(index).attr('src');
 
-      if (imageUrl != "Bilder/noimage.png") {
-        $.ajax({
-          type: "get",
-          url: "getImageUrl.php",
-          data: { ItemId: itemid, Version: version, SalesId: salesid },
-          success: function (image) {
-            if (image) {
-              imageArray.push(image);
-            } else {
-              imageArray.push("Uploads/noimage.jpg");
-            }
-          },
-          async: false
-        });
+      if (checkStockOfLastTwoYears(itemid)) {
+        version = $('.version').eq(index).text();
+        salesid = $('.salesid').eq(index).text();
+        imageUrl = $('.itemImage > img').eq(index).attr('src');
+
+        if (imageUrl != "Bilder/noimage.png") {
+          $.ajax({
+            type: "get",
+            url: "getImageUrl.php",
+            data: { ItemId: itemid, Version: version, SalesId: salesid },
+            beforeSend: function () {
+              $('#loaderBackground').show();
+              $('.loader').show();
+              $('#loaderText').show();
+            },
+            success: function (image) {
+              if (image) {
+                imageArray.push(image);
+              } else {
+                imageArray.push("Uploads/noimage.jpg");
+              }
+            },
+            async: false
+          });
+        }
       }
     });
 
@@ -238,23 +263,26 @@ function sendMailPdf() {
       let index = $('.sendMailCheck').index(this);
       custnum = $('.custvendrelation').eq(index).text();
       itemid = $('.itemid').eq(index).text();
-      version = $('.version').eq(index).text();
-      custNames = $('.name').eq(index).text();
-      externalitemtxt = $('.externalitemtxt').eq(index).text();
-      lepsizew = $('.lepsizew').eq(index).text();
-      lepsizel = $('.lepsizel').eq(index).text();
-      stocklevel = $('.stocklevel').eq(index).text();
-      salesid = $('.salesid').eq(index).text();
 
-      tmp.push(imageArray[id]);
-      tmp.push(itemid);
-      tmp.push(externalitemtxt);
-      tmp.push(stocklevel);
-      tmp.push(lepsizew);
-      tmp.push(lepsizel);
-      dataArr.push(tmp);
+      if (checkStockOfLastTwoYears(itemid)) { 
+        version = $('.version').eq(index).text();
+        custNames = $('.name').eq(index).text();
+        externalitemtxt = $('.externalitemtxt').eq(index).text();
+        lepsizew = $('.lepsizew').eq(index).text();
+        lepsizel = $('.lepsizel').eq(index).text();
+        stocklevel = $('.stocklevel').eq(index).text();
+        salesid = $('.salesid').eq(index).text();
 
-      id++;
+        tmp.push(imageArray[id]);
+        tmp.push(itemid);
+        tmp.push(externalitemtxt);
+        tmp.push(stocklevel);
+        tmp.push(lepsizew);
+        tmp.push(lepsizel);
+        dataArr.push(tmp);
+  
+        id++;
+      }
     });
 
     $.ajax({
@@ -266,6 +294,11 @@ function sendMailPdf() {
           type: "get",
           url: "getMailFromCustomer.php",
           data: { CustNum: custnum },
+          complete: function () {
+            $('#loaderBackground').hide();
+            $('.loader').hide();
+            $('#loaderText').hide();
+          },
           success: function (email) {
             let form = document.getElementById("sendMailForm");
             form.email.value = email;
@@ -292,31 +325,17 @@ function sendMailJpg() {
     $('.sendMailCheck').filter(':checked').each(function () {
       let tmp = [];
       let index = $('.sendMailCheck').index(this);
-      custnum = $('.custvendrelation').eq(index).text();
       itemid = $('.itemid').eq(index).text();
       version = $('.version').eq(index).text();
-      prodgroupid = $('.prodgroupid').eq(index).text();
-      custNames = $('.name').eq(index).text();
-      sort = $('.sort').eq(index).text();
       externalitemtxt = $('.externalitemtxt').eq(index).text();
       lepsizew = $('.lepsizew').eq(index).text();
       lepsizel = $('.lepsizel').eq(index).text();
-      tradeunitspecid = $('.tradeunitspecid').eq(index).text();
       salesid = $('.salesid').eq(index).text();
-      stocklevel = $('.stocklevel').eq(index).text();
 
-      tmp.push("R-Nummer: " + itemid);
-      tmp.push("Kundennummer: " + custnum);
-      tmp.push("Version: " + version);
-      tmp.push("Produktvariante: " + prodgroupid);
-      tmp.push("Kundenname: " + custNames);
-      tmp.push("Sorte: " + sort);
+      tmp.push("Artikelnummer: " + itemid);
       tmp.push("Stichwort: " + externalitemtxt);
-      tmp.push("FormatQuer: " + lepsizew);
-      tmp.push("FormatLauf: " + lepsizel);
-      tmp.push("Stellung: " + tradeunitspecid);
-      tmp.push("Auftragsnummer: " + salesid);
-      tmp.push("Lagerstand: " + stocklevel);
+      tmp.push("FormatQuer: " + lepsizew + " mm");
+      tmp.push("FormatBreit: " + lepsizel + " mm");
 
       $.ajax({
         type: "get",

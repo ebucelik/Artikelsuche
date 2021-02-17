@@ -24,6 +24,49 @@ nav {
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+#loaderBackground {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.6;
+  position: fixed;
+  z-index: 9999;
+}
+
+#loaderText {
+  display: none;
+  color: white;
+  left: 46%;
+  top: 55%;
+  position: fixed;
+  z-index: 9999;
+  font-weight: bold;
+}
+
+.loader {
+  display: none;
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #d80030; /* Blue */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+  position: fixed;
+  left: 48%;
+  top: 45%;
+  z-index: 9999;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .fading {
   display: none;
 }

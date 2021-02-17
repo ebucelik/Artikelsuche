@@ -205,6 +205,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <script src="scripts/script.js"></script>
 </head>
 <body>
+    <div id="loaderBackground"></div> 
+
+    <div class="loader"></div>
+    
+    <h5 id="loaderText">PDF wird erstellt ...</h5>
+
     <header>
         <a href="index.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>
     </header>
@@ -276,7 +282,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <button type="button" class=" btn-primary mailbtns" id="sendmailSinglePdf" onclick="sendMailSinglePdfs();">EINZELNE PDF'S SENDEN</button>
                     </div>
                     <div class="col">
-                        <button type="button" class=" btn-primary mailbtns" id="sendmailPdf" onclick="sendMailPdf();">GESAMMELTES PDF SENDEN</button>
+                        <button type="button" class=" btn-primary mailbtns" id="sendmailPdf" onclick="sendMailPdf();">LAGERSTAND SENDEN</button>
                     </div>
                 </div>
             </form>
