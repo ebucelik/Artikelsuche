@@ -83,8 +83,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             }
                             echo "\n";
     
-                            $url = isset($data[$i][12]) ? $data[$i][12] : "";
-                            $itemid = str_replace('R-Nummer: ', '', $data[$i][0]);
+                            $url = isset($data[$i][4]) ? $data[$i][4] : "";
+                            $itemid = str_replace('Artikelnummer: ', '', $data[$i][0]);
                             $itemid = str_replace('/', '-', $itemid);
                             $img = 'Uploads/' . $itemid . '.jpg';
                             file_put_contents($img, @file_get_contents($url));

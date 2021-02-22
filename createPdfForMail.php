@@ -34,7 +34,7 @@ $pdf->ln(15);
 
 foreach($data as $d){
     $pdf->SetFont('Arial', 'I', 11);
-    $pdf->Cell(35, $cntYpos, "R-Nummer:");
+    $pdf->Cell(35, $cntYpos, "Artikelnummer:");
     $pdf->SetFont('Arial', '', 11);
     $pdf->Cell(35, $cntYpos, $d[1]);
     $pdf->ln(5);
@@ -58,7 +58,7 @@ foreach($data as $d){
     $pdf->ln(5);
 
     $pdf->SetFont('Arial', 'I', 11);
-    $pdf->Cell(35, $cntYpos, "Format Lauf:");
+    $pdf->Cell(35, $cntYpos, "Format Breit:");
     $pdf->SetFont('Arial', '', 11);
     $pdf->Cell(35, $cntYpos, $d[5]);
 

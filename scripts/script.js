@@ -106,23 +106,60 @@ function checkAll() {
 
 function checkAllWithStock() {
   state = !state;
-  let qty = 0;
+  let selectedItemQty = 0;
+
+  $('#loaderText').text("Artikel mit Lagerstand werden ausgewählt ...");
+
+  if (!state)
+    $('#loaderText').text("Artikel mit Lagerstand werden abgewählt ...");
+  
+  $('#loaderBackground').show();
+  $('.loader').show();
+  $('#loaderText').show();
 
   $('#dataView input').each(function () {
     if ($(this).parents('.row').find(".stocklevel").text() != "0") {
       $(this).prop("checked", state);
 
-      qty++;
+      selectedItemQty++;
+    }
+    else if (checkStockOfLastTwoYears($(this).parents('.row').find(".itemid").text())) {
+      $(this).prop("checked", state);
+
+      selectedItemQty++;
     }
   });
 
-  if (qty > 0) {
+  $('#loaderBackground').hide();
+  $('.loader').hide();
+  $('#loaderText').hide();
+
+  if (selectedItemQty > 0) {
     $('#sendmailJpg, #sendmailPdf, #sendmailSinglePdf').css('display', state ? 'block' : 'none');
 
     $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
   
-    $('#selectedItemQty').text(state ? qty + ' Artikel ausgewählt' : '');
+    $('#selectedItemQty').text(state ? selectedItemQty + ' Artikel ausgewählt' : '');
   }
+}
+
+function checkStockOfLastTwoYears(itemId) {
+  let result = true;
+
+  $.ajax({
+    type: "get",
+    url: "checkStockOfLastTwoYears.php",
+    data: { ItemId: itemId },
+    success: function (stock) {
+      console.log(stock);
+
+      if (stock == 0)
+        result = false;
+    },
+    async: false
+  });
+
+  return result;
 }
 
 function sendMailSinglePdfs() {
@@ -221,6 +258,12 @@ function sendMailPdf() {
           type: "get",
           url: "getImageUrl.php",
           data: { ItemId: itemid, Version: version, SalesId: salesid },
+          beforeSend: function () {
+            $('#loaderText').text("Gesammeltes PDF wird erstellt ...");
+            $('#loaderBackground').show();
+            $('.loader').show();
+            $('#loaderText').show();
+          },
           success: function (image) {
             if (image) {
               imageArray.push(image);
@@ -257,6 +300,11 @@ function sendMailPdf() {
       id++;
     });
 
+    if (dataArr.length <= 0) {
+      alert("Es wurde keine Bewegung im Lagerstand in den letzten zwei Jahren erkannt.");
+      return;
+    }
+
     $.ajax({
       type: "post",
       url: "createPdfForMail.php",
@@ -266,6 +314,11 @@ function sendMailPdf() {
           type: "get",
           url: "getMailFromCustomer.php",
           data: { CustNum: custnum },
+          complete: function () {
+            $('#loaderBackground').hide();
+            $('.loader').hide();
+            $('#loaderText').hide();
+          },
           success: function (email) {
             let form = document.getElementById("sendMailForm");
             form.email.value = email;
@@ -292,31 +345,17 @@ function sendMailJpg() {
     $('.sendMailCheck').filter(':checked').each(function () {
       let tmp = [];
       let index = $('.sendMailCheck').index(this);
-      custnum = $('.custvendrelation').eq(index).text();
       itemid = $('.itemid').eq(index).text();
       version = $('.version').eq(index).text();
-      prodgroupid = $('.prodgroupid').eq(index).text();
-      custNames = $('.name').eq(index).text();
-      sort = $('.sort').eq(index).text();
       externalitemtxt = $('.externalitemtxt').eq(index).text();
       lepsizew = $('.lepsizew').eq(index).text();
       lepsizel = $('.lepsizel').eq(index).text();
-      tradeunitspecid = $('.tradeunitspecid').eq(index).text();
       salesid = $('.salesid').eq(index).text();
-      stocklevel = $('.stocklevel').eq(index).text();
 
-      tmp.push("R-Nummer: " + itemid);
-      tmp.push("Kundennummer: " + custnum);
-      tmp.push("Version: " + version);
-      tmp.push("Produktvariante: " + prodgroupid);
-      tmp.push("Kundenname: " + custNames);
-      tmp.push("Sorte: " + sort);
+      tmp.push("Artikelnummer: " + itemid);
       tmp.push("Stichwort: " + externalitemtxt);
-      tmp.push("FormatQuer: " + lepsizew);
-      tmp.push("FormatLauf: " + lepsizel);
-      tmp.push("Stellung: " + tradeunitspecid);
-      tmp.push("Auftragsnummer: " + salesid);
-      tmp.push("Lagerstand: " + stocklevel);
+      tmp.push("FormatQuer: " + lepsizew + " mm");
+      tmp.push("FormatBreit: " + lepsizel + " mm");
 
       $.ajax({
         type: "get",
