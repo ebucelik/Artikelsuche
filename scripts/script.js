@@ -106,23 +106,60 @@ function checkAll() {
 
 function checkAllWithStock() {
   state = !state;
-  let qty = 0;
+  let selectedItemQty = 0;
+
+  $('#loaderText').text("Artikel mit Lagerstand werden ausgewählt ...");
+
+  if (!state)
+    $('#loaderText').text("Artikel mit Lagerstand werden abgewählt ...");
+  
+  $('#loaderBackground').show();
+  $('.loader').show();
+  $('#loaderText').show();
 
   $('#dataView input').each(function () {
     if ($(this).parents('.row').find(".stocklevel").text() != "0") {
       $(this).prop("checked", state);
 
-      qty++;
+      selectedItemQty++;
+    }
+    else if (checkStockOfLastTwoYears($(this).parents('.row').find(".itemid").text())) {
+      $(this).prop("checked", state);
+
+      selectedItemQty++;
     }
   });
 
-  if (qty > 0) {
+  $('#loaderBackground').hide();
+  $('.loader').hide();
+  $('#loaderText').hide();
+
+  if (selectedItemQty > 0) {
     $('#sendmailJpg, #sendmailPdf, #sendmailSinglePdf').css('display', state ? 'block' : 'none');
 
     $('#checkAllBtn').text(state ? 'Alle Artikel abwählen' : 'Alle Artikel auswählen');
   
-    $('#selectedItemQty').text(state ? qty + ' Artikel ausgewählt' : '');
+    $('#selectedItemQty').text(state ? selectedItemQty + ' Artikel ausgewählt' : '');
   }
+}
+
+function checkStockOfLastTwoYears(itemId) {
+  let result = true;
+
+  $.ajax({
+    type: "get",
+    url: "checkStockOfLastTwoYears.php",
+    data: { ItemId: itemId },
+    success: function (stock) {
+      console.log(stock);
+
+      if (stock == 0)
+        result = false;
+    },
+    async: false
+  });
+
+  return result;
 }
 
 function sendMailSinglePdfs() {
@@ -198,23 +235,6 @@ function sendMailSinglePdfs() {
   }
 }
 
-function checkStockOfLastTwoYears(itemId) {
-  let result = true;
-
-  $.ajax({
-    type: "get",
-    url: "checkStockOfLastTwoYears.php",
-    data: { ItemId: itemId },
-    success: function (stock) {
-      if (stock == 0.00)
-        result = false;
-    },
-    async: false
-  });
-
-  return result;
-}
-
 function sendMailPdf() {
   let dataArr = [];
   let imageArray = [];
@@ -229,32 +249,30 @@ function sendMailPdf() {
     $('.sendMailCheck').filter(':checked').each(function () {
       let index = $('.sendMailCheck').index(this);
       itemid = $('.itemid').eq(index).text();
+      version = $('.version').eq(index).text();
+      salesid = $('.salesid').eq(index).text();
+      imageUrl = $('.itemImage > img').eq(index).attr('src');
 
-      if (checkStockOfLastTwoYears(itemid)) {
-        version = $('.version').eq(index).text();
-        salesid = $('.salesid').eq(index).text();
-        imageUrl = $('.itemImage > img').eq(index).attr('src');
-
-        if (imageUrl != "Bilder/noimage.png") {
-          $.ajax({
-            type: "get",
-            url: "getImageUrl.php",
-            data: { ItemId: itemid, Version: version, SalesId: salesid },
-            beforeSend: function () {
-              $('#loaderBackground').show();
-              $('.loader').show();
-              $('#loaderText').show();
-            },
-            success: function (image) {
-              if (image) {
-                imageArray.push(image);
-              } else {
-                imageArray.push("Uploads/noimage.jpg");
-              }
-            },
-            async: false
-          });
-        }
+      if (imageUrl != "Bilder/noimage.png") {
+        $.ajax({
+          type: "get",
+          url: "getImageUrl.php",
+          data: { ItemId: itemid, Version: version, SalesId: salesid },
+          beforeSend: function () {
+            $('#loaderText').text("Gesammeltes PDF wird erstellt ...");
+            $('#loaderBackground').show();
+            $('.loader').show();
+            $('#loaderText').show();
+          },
+          success: function (image) {
+            if (image) {
+              imageArray.push(image);
+            } else {
+              imageArray.push("Uploads/noimage.jpg");
+            }
+          },
+          async: false
+        });
       }
     });
 
@@ -263,26 +281,23 @@ function sendMailPdf() {
       let index = $('.sendMailCheck').index(this);
       custnum = $('.custvendrelation').eq(index).text();
       itemid = $('.itemid').eq(index).text();
+      version = $('.version').eq(index).text();
+      custNames = $('.name').eq(index).text();
+      externalitemtxt = $('.externalitemtxt').eq(index).text();
+      lepsizew = $('.lepsizew').eq(index).text();
+      lepsizel = $('.lepsizel').eq(index).text();
+      stocklevel = $('.stocklevel').eq(index).text();
+      salesid = $('.salesid').eq(index).text();
 
-      if (checkStockOfLastTwoYears(itemid)) { 
-        version = $('.version').eq(index).text();
-        custNames = $('.name').eq(index).text();
-        externalitemtxt = $('.externalitemtxt').eq(index).text();
-        lepsizew = $('.lepsizew').eq(index).text();
-        lepsizel = $('.lepsizel').eq(index).text();
-        stocklevel = $('.stocklevel').eq(index).text();
-        salesid = $('.salesid').eq(index).text();
+      tmp.push(imageArray[id]);
+      tmp.push(itemid);
+      tmp.push(externalitemtxt);
+      tmp.push(stocklevel);
+      tmp.push(lepsizew);
+      tmp.push(lepsizel);
+      dataArr.push(tmp);
 
-        tmp.push(imageArray[id]);
-        tmp.push(itemid);
-        tmp.push(externalitemtxt);
-        tmp.push(stocklevel);
-        tmp.push(lepsizew);
-        tmp.push(lepsizel);
-        dataArr.push(tmp);
-  
-        id++;
-      }
+      id++;
     });
 
     if (dataArr.length <= 0) {

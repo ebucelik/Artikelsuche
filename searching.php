@@ -209,7 +209,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     <div class="loader"></div>
     
-    <h5 id="loaderText">PDF wird erstellt ...</h5>
+    <div id="loaderTextDiv"><h5 id="loaderText"></h5></div>
 
     <header>
         <a href="index.php" ><img src="Bilder/Version3.png" id="headerImg" title="Marzek Artikelsuche" alt="Marzek Artikelsuche Bild" width="400"></a>

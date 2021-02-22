@@ -34,13 +34,17 @@ nav {
   z-index: 9999;
 }
 
+#loaderTextDiv {
+  position: fixed;
+  top: 55%;
+  width: 100%;
+  text-align: center;
+  z-index: 9999;
+}
+
 #loaderText {
   display: none;
   color: white;
-  left: 46%;
-  top: 55%;
-  position: fixed;
-  z-index: 9999;
   font-weight: bold;
 }
 
