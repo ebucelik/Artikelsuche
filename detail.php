@@ -70,7 +70,7 @@ require("db/getDataFromDB.php");
     
         <div class="row" id="printBtn">
             <div class="col firstCols">
-                <a target="_blank" href="createPDF.php?type=<?php echo $type; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId']; ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut']; ?>&SimpleOrFullPDF=Full" style="color: #d80030;">
+                <a target="_blank" href="createPDF.php?type=<?php echo $type; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php if(isset($v1['LPMRZBoardId'])){ echo $v1['LPMRZBoardId']; } ?>&LPMRZProdToolIdDieCut=<?php if(isset($v1['LPMRZProdToolIdDieCut'])){ echo $v1['LPMRZProdToolIdDieCut']; } ?>&SimpleOrFullPDF=Full" style="color: #d80030;">
                     <button type="button" class="btn btn-lg printBtnStyle" style="width: 100%;">DRUCKANSICHT ANZEIGEN</button>
                 </a>
             </div>
@@ -80,7 +80,7 @@ require("db/getDataFromDB.php");
                 </a>
             </div>
             <div class="col firstCols">
-            <a target="_blank" href="createPDF.php?type=<?php echo $type; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php echo $v1['LPMRZBoardId']; ?>&LPMRZProdToolIdDieCut=<?php echo $v1['LPMRZProdToolIdDieCut']; ?>&SimpleOrFullPDF=Simple" style="color: #d80030;">
+            <a target="_blank" href="createPDF.php?type=<?php echo $type; ?>&ItemId=<?php echo $v1['ItemId']; ?>&CustAcc=<?php echo $v1['CustVendRelation']; ?>&SalesId=<?php echo $v1['SalesId']; ?>&Version=<?php echo $v1['Version']; ?>&InventDimId=<?php echo $v1['InventDimId']; ?>&ProdGroupId=<?php echo $v1['ProdGroupId']; ?>&LPMRZBoardId=<?php if(isset($v1['LPMRZBoardId'])){ echo $v1['LPMRZBoardId']; } ?>&LPMRZProdToolIdDieCut=<?php if(isset($v1['LPMRZProdToolIdDieCut'])){ echo $v1['LPMRZProdToolIdDieCut']; } ?>&SimpleOrFullPDF=Simple" style="color: #d80030;">
                     <button type="button" class="btn btn-lg printBtnStyle" style="width: 100%;">EINFACHE DRUCKANSICHT</button>
                 </a>
             </div>
@@ -135,7 +135,7 @@ require("db/getDataFromDB.php");
                 </div>
             </div>
             <div class="col align-self-center firstCols" style="text-align: center;">
-            <?php if($v1['DesignJpgPreviewUrl']){?>
+            <?php if(isset($v1['DesignJpgPreviewUrl']) && $v1['DesignJpgPreviewUrl']){?>
             <figure>
                 <img src="<?php if(@file_get_contents($v1['DesignJpgPreviewUrl']) === FALSE){ echo 'Bilder/noimage.png'; }else{ echo 'data:image/jpg;base64,' . base64_encode(file_get_contents($v1['DesignJpgPreviewUrl'])); } ?>" title="<?php echo $v1['ItemId'];?>" style="max-width: 30%;"/><?php }else{ ?> <img src="Bilder/noimage.png" alt="Image not found" title="Image not found" style="max-width: 40%;"> <?php }  ?>
                 <figcaption style="color: black;"><span>Letzte Änderung am </span><?php if(isset($v1['createdDateTime'])){echo $v1['createdDateTime']->format('d.m.Y');}?></figcaption>
