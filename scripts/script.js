@@ -151,8 +151,6 @@ function checkStockOfLastTwoYears(itemId) {
     url: "checkStockOfLastTwoYears.php",
     data: { ItemId: itemId },
     success: function (stock) {
-      console.log(stock);
-
       if (stock == 0)
         result = false;
     },
