@@ -126,6 +126,13 @@ nav {
   color: #d80030;
 }
 
+.noStyleButton {
+  background-color: transparent;
+  border: 0px;
+  color: white;
+  font-weight: bold;
+}
+
 .mailbtns {
   margin-bottom: 10%;
   color: white;

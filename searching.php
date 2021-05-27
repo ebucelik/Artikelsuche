@@ -4,7 +4,8 @@ ini_set('session.cache_limiter', 'private');
 session_start();
 
 $unEqualString = "";
-$type = $withSalesId = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
+$type = $rNumber = $custnumber = $custName = $plz = $city = $sort = $keyword = $allVersions = $withImage = $custNumEmail = $format = $material = $stockLevel = $unEqualString; //We need to set it to something because otherwise the SQL Statement doesn't work
+$withSalesId = "on";
 $newSearch = "false";
 $itemQty = 0;
 $itemsStart = 0;
@@ -178,6 +179,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }else{
         $withSalesId = $unEqualString;
         $_SESSION["withSalesId"] = $withSalesId;
+    }
+
+    if(isset($_POST["itemIdArray"]) && $_POST["itemIdArray"] != null){
+        $itemIdArray = json_decode($_POST["itemIdArray"], true);
+        $_SESSION["itemIdArray"] = $itemIdArray;
     }
 } 
 ?>
@@ -476,19 +482,19 @@ if($itemIdArray){
             <div class="containerRow">
                 <div class="row titlerow" id="itemHeader">
                     <div class="col checkbox"></div>
-                    <div class="col">Artikelnr.</div>
-                    <div class="col">Version</div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('ItemId')">Artikelnr.</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('Version')">Version</button></div>
                     <?php if($allVersions == 'on'){?><div class="col">Produktvariante</div><?php } ?>
-                    <div class="col">Kundennr.</div>
-                    <div class="col">Kunde</div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('CustVendRelation')">Kundennr.</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('Name')">Kunde</button></div>
                     <?php //if($checkSort){?><!--<div class="col">Sorten Eindruck</div>--><?php //}?>
-                    <div class="col" style="flex-grow:2;">Stichwort</div>
-                    <div class="col">Format Quer</div>
-                    <div class="col">Format Lauf</div>
-                    <div class="col">Stellung</div>
-                    <div class="col">Auftragsnr.</div>
-                    <div class="col">Maschine</div>
-                    <div class="col">Lagerstand</div>
+                    <div class="col" style="flex-grow:2;"><button class="noStyleButton" onclick="sortArrayByColumn('ExternalItemTxt')">Stichwort</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('LEPSizeW')">Format Quer</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('LEPSizeL')">Format Lauf</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('TradeUnitSpecId')">Stellung</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('SalesId')">Auftragsnr.</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('WorkCenters')">Maschine</button></div>
+                    <div class="col"><button class="noStyleButton" onclick="sortArrayByColumn('StockLevel')">Lagerstand</button></div>
                     <div class="col">Bild</div>
                     <div class="col">Drucken</div>
                 </div>
@@ -591,6 +597,7 @@ if($itemIdArray){
             <input type="hidden" name="itemsStart" value="" />
             <input type="hidden" name="newSearch" value="false" />
             <input type="hidden" name="withSalesId" value="" />
+            <input type="hidden" name="itemIdArray" value="" />
         </form>
     </nav>
 </body>
@@ -668,6 +675,66 @@ if($itemIdArray){
         showNextItems.stockLevel.value = "<?php echo $stockLevel; ?>";
         showNextItems.withSalesId.value = "<?php echo $withSalesId; ?>";
         showNextItems.itemsStart.value = itemsStart;
+    };
+
+    function setItemFormWithArray(showNextItems, itemsStart, itemArray){
+        showNextItems.selectType.value = "<?php echo $type; ?>";
+        showNextItems.rNumber.value = "<?php echo $rNumber; ?>";
+        showNextItems.kNumber.value = "<?php echo $custnumber; ?>";
+        showNextItems.kName.value = "<?php echo $custName; ?>";
+        showNextItems.kPLZ.value = "<?php echo $plz; ?>";
+        showNextItems.place.value = "<?php echo $city; ?>";
+        showNextItems.sortNum.value = "<?php echo $sort; ?>";
+        showNextItems.keyWord.value = "<?php echo $keyword; ?>";
+        showNextItems.allVersions.value = "<?php echo $allVersions; ?>";
+        showNextItems.withImage.value = "<?php echo $withImage; ?>";
+        showNextItems.stockLevel.value = "<?php echo $stockLevel; ?>";
+        showNextItems.withSalesId.value = "<?php echo $withSalesId; ?>";
+        showNextItems.itemIdArray.value = itemArray;
+        showNextItems.itemsStart.value = itemsStart;
+    };
+
+    function sortByKeyDesc(array, key){
+        return array.sort((a, b) => {
+            let x = a[key]
+            let y = b[key]
+
+            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+        });
+    };
+
+    function sortByKeyAsc(array, key){
+        return array.sort((a, b) => {
+            let x = a[key]
+            let y = b[key]
+
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    };
+
+    function sortArrayByColumn(sortParam){
+        let sortedArray = <?php echo json_encode($itemIdArray); ?>;
+
+        <?php 
+            if(!isset($_SESSION['ascending'])){
+                $_SESSION['ascending'] = true;
+            }  
+
+            $_SESSION['ascending'] = !$_SESSION['ascending'];
+
+            if($_SESSION['ascending']){
+        ?>
+            sortedArray = sortByKeyAsc(sortedArray, sortParam);
+       <?php } else { ?>
+            sortedArray = sortByKeyDesc(sortedArray, sortParam);
+        <?php } ?>
+
+        let itemsStart = <?php echo $itemsStart; ?>;
+
+        let showNextItems = document.getElementById("showNextItems");
+        setItemFormWithArray(showNextItems, 0, JSON.stringify(sortedArray));
+
+        showNextItems.submit();
     };
 
     $.noConflict();
